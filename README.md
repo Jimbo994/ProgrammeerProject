@@ -1,12 +1,12 @@
 ## ProgrammeerProject
 
-# StudentenSchoonmaakApp
+**StudentenSchoonmaakApp**
 
-# Benefits for the User
+**Benefits for the User**
 
-# Similar apps
+**Similar apps**
 
-# Sketch and working of the app
+**Sketch and working of the app**
 
-# Necessities & Complications
+**Necessities & Complications**
 
