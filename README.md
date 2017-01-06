@@ -7,7 +7,7 @@ If you clean there is a big chance some one else will make a big mess in the hou
 you stop cleaning. And because of this the average house is a mess. 
 The StudentenSchooonmaakApp is the solution to this!
 
-hier meer tekst.
+In the StudentenSchoonmaakApp you can make a group. You can give this group a list of tasks to do with a deadline, an additional functionality could be that tasks are assigned weekly to people from the group. In this way it is possible to see who does what in the household and you can punish a groupmember that does not fulfill his tasks. 
 
 **Benefits for the User**
 
@@ -25,8 +25,6 @@ But it does not support the use of user groups and I feel that the design and UI
 
 Another app which targets students is [WieBetaaltWat](https://play.google.com/store/apps/details?id=nl.wiebetaaltwat.webapp). It is an app where you can make a group (by inviting people by e-mail) where you can load your receipts. With this information the app calculates the expends made by you and your groupmembers. The goals of this app is to make it clear who spends money on what so the users can equilibrate on money. What I like about this app is that the design is simple, yet visually attractive, and it works great. I hope to be able to make use of this in my application as well. Also the ability of making groups is really interesting for my app.
 
-
-http://www.makeuseof.com/tag/4-android-apps-taking-care-household-chores/
 
 **Sketch and working of the app**
 
