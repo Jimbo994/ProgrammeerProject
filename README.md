@@ -32,7 +32,7 @@ Another app which targets students is [WieBetaaltWat](https://play.google.com/st
 
 **Sketch and working of the app**
 
-Dit nog invullen.
+<img src="https://github.com/Jimbo994/ProgrammeerProject/blob/master/docs/sketch%20proposal.jpg" height="534" width="300"/>
 
 **Necessities & Complications**
 
