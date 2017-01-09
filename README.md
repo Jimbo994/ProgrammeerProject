@@ -34,6 +34,8 @@ Another app which targets students is [WieBetaaltWat](https://play.google.com/st
 
 <img src="https://github.com/Jimbo994/ProgrammeerProject/blob/master/docs/sketch%20proposal.jpg" height="534" width="1000"/>
 
+The basic plan is to make an activity (and activities or fragments belonging to it) in which you can sign in, sign up or change your password. Once signed you arrive in a activity where you can edit your account and perhaps other things in a navigation drawer. You can also add people to your house by clicking on a menu bar button. And you can add topics to your house using another botton. The idea is to add people by inviting them by mail. When you click on a topic you will enter another list in which you can add tasks (see sketch) which can be checked by people in the group.
+
 **Necessities & Complications**
 
 This app will need a database to store information of users, groups and tasks of these groups. Also multiple users of the same group should be able to acces this data. This will be a big challenge to overcome and perhaps the biggest. I am planning on using FireBase as a database and on first sight it seems that FireBase offers support for groups and e-mail activation. But this might be the biggest problem that has to be overcome in the construction of this application. 
