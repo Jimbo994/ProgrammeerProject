@@ -42,3 +42,15 @@ This app will need a database to store information of users, groups and tasks of
 
 WieBetaaltWat makes uses of account activition using email and also inviting other people by sending email. I would really like it if my app had this possibility as well. But I do not know how I can implement this yet. This is going to be a problem as well.
 
+**Decomposing the Problem**
+
+The problems that need to be overcome in order to complete this app can be divided in several parts.
+One part is the the registration and authentication of users to a database.  And how other users can be invited and added to a group.
+I think this will be the hardest part of the project.
+
+The second part is the making of tasks and subtasks for a group. This is similar to making a to do list into a to do list.
+
+The third part will be adding addition functionalities like a score board or adding a functionality where users can post pictures of their work. 
+
+The fourth part is overall design.
+
