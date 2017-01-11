@@ -7,4 +7,5 @@ Checken for feasibility of planned functionalities.
 
 #day3
 Getting to know the group.
-Finishing of DESIGN.md
+Finished of DESIGN.md.
+Started on Login Activities.
