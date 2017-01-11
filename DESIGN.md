@@ -65,32 +65,32 @@ There is going to be a FireBaseHelper which will do all reading/writing to the d
 
 **Rough structure of database**
 
-  {
-  "groups": {
-    "Studenthouse1": {
-      "joe": true,
-      "sally": true
-    },
-    "Studenthouse2": {
-      "joe": true,
-      "fred": true
-    }
-  },
-  "data": {
-    "kitchen": {
-      "group": "Studenthouse1"
-      "tasks": "dishes", etc.
-      /* data accessible only by the "Studenthouse1" group */
-    },
-    "Bathroom": {
-      "group": "Studenthouse2"
-      /* data accessible only by the "beta" group */
-    },
-    "Living room": {
-      "group": "Studenthouse1"
-      /* more data accessible by the "alpha" group */
-    }
-  }
-  }
+  { <br>
+  "groups": {<br>
+    "Studenthouse1": {<br>
+      "joe": true,<br>
+      "sally": true<br>
+    },<br>
+    "Studenthouse2": {<br>
+      "joe": true,<br>
+      "fred": true<br>
+    }<br>
+  },<br>
+  "data": {<br>
+    "kitchen": {<br>
+      "group": "Studenthouse1"<br>
+      "tasks": "dishes", etc.<br>
+      /* data accessible only by the "Studenthouse1" group */<br>
+    },<br>
+    "Bathroom": {<br>
+      "group": "Studenthouse2"<br>
+      /* data accessible only by the "beta" group */<br>
+    },<br>
+    "Living room": {<br>
+      "group": "Studenthouse1"<br>
+      /* more data accessible by the "alpha" group */<br>
+    }<br>
+  }<br>
+  }<br>
 
 
