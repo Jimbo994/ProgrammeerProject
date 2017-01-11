@@ -52,6 +52,7 @@ When a item on the listview is clicked another activity will be opened showing t
 The idea is to make this activity and get it to work in this form to start with. But there are plans to make this activity more interesting by adding assignment of users and adding deadlines to tasks.
 
 *TaskActivity*
+
 In this Activity the tasks belonging to an item can be seen and checked by a user when done. It should be apparent what user clicked what task. Again this is the starting point. I want to expand functionalities but for know this is how im going to implement it.
 
 <img src="https://github.com/Jimbo994/ProgrammeerProject/blob/master/docs/Design%20Huistaken.jpg" height="1000" width="1000"/>
@@ -63,8 +64,8 @@ In this Activity the tasks belonging to an item can be seen and checked by a use
 There is going to be a FireBaseHelper which will do all reading/writing to the database.
 
 **Rough structure of database**
-''''
-{
+
+  {
   "groups": {
     "Studenthouse1": {
       "joe": true,
@@ -90,6 +91,6 @@ There is going to be a FireBaseHelper which will do all reading/writing to the d
       /* more data accessible by the "alpha" group */
     }
   }
-}
-''''
+  }
+
 
