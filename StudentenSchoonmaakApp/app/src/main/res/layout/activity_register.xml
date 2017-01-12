@@ -19,7 +19,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="39dp"
         android:hint="@string/e_mail"
-        android:id="@+id/RegisterEmail" />
+        android:id="@+id/field_register_email" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -27,11 +27,11 @@
         android:inputType="textPersonName"
         android:hint="@string/voornaam"
         android:ems="10"
-        android:layout_below="@+id/RegisterEmail"
-        android:layout_alignRight="@+id/RegisterEmail"
-        android:layout_alignEnd="@+id/RegisterEmail"
+        android:layout_below="@+id/field_register_email"
+        android:layout_alignRight="@+id/field_register_email"
+        android:layout_alignEnd="@+id/field_register_email"
         android:layout_marginTop="18dp"
-        android:id="@+id/RegisterName" />
+        android:id="@+id/field_register_name" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -40,10 +40,10 @@
         android:hint="@string/achternaam"
         android:ems="10"
         android:layout_marginTop="14dp"
-        android:id="@+id/RegisterLastName"
-        android:layout_below="@+id/RegisterName"
-        android:layout_alignLeft="@+id/RegisterName"
-        android:layout_alignStart="@+id/RegisterName" />
+        android:id="@+id/field_register_lastname"
+        android:layout_below="@+id/field_register_name"
+        android:layout_alignLeft="@+id/field_register_name"
+        android:layout_alignStart="@+id/field_register_name" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -51,30 +51,30 @@
         android:inputType="textPassword"
         android:ems="10"
         android:hint="@string/wachtwoord"
-        android:layout_below="@+id/RegisterName"
-        android:layout_alignLeft="@+id/RegisterName"
-        android:layout_alignStart="@+id/RegisterName"
+        android:layout_below="@+id/field_register_lastname"
+        android:layout_alignLeft="@+id/field_register_lastname"
+        android:layout_alignStart="@+id/field_register_lastname"
         android:layout_marginTop="65dp"
-        android:id="@+id/RegisterPassword" />
+        android:id="@+id/field_register_password" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:hint="@string/herhaal_wachtwoord"
-        android:layout_below="@+id/RegisterPassword"
-        android:layout_alignRight="@+id/RegisterPassword"
-        android:layout_alignEnd="@+id/RegisterPassword"
-        android:layout_marginTop="17dp"
-        android:id="@+id/RegisterPasswordConfirm" />
+    <!--<EditText-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:inputType="textPassword"-->
+        <!--android:ems="10"-->
+        <!--android:hint="@string/herhaal_wachtwoord"-->
+        <!--android:layout_below="@+id/field_register_password"-->
+        <!--android:layout_alignRight="@+id/field_register_password"-->
+        <!--android:layout_alignEnd="@+id/field_register_password"-->
+        <!--android:layout_marginTop="17dp"-->
+        <!--android:id="@+id/field_register_passwordconfirm" />-->
 
     <Button
         android:text="@string/maak_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/RegisterPasswordConfirm"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
-        android:id="@+id/RegisterButton" />
+        android:layout_marginTop="35dp"
+        android:id="@+id/register_button"
+        android:layout_below="@+id/field_register_password"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

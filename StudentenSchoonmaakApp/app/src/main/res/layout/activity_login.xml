@@ -19,19 +19,19 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="86dp"
         android:hint="@string/e_mail"
-        android:id="@+id/LoginEmail" />
+        android:id="@+id/field_login_email" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:ems="10"
-        android:layout_below="@+id/LoginEmail"
-        android:layout_alignRight="@+id/LoginEmail"
-        android:layout_alignEnd="@+id/LoginEmail"
+        android:layout_below="@+id/field_login_email"
+        android:layout_alignRight="@+id/field_login_email"
+        android:layout_alignEnd="@+id/field_login_email"
         android:layout_marginTop="20dp"
         android:hint="@string/wachtwoord"
-        android:id="@+id/LoginPassword" />
+        android:id="@+id/field_login_password" />
 
     <Button
         android:text="@string/inloggen"
@@ -39,25 +39,25 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/LoginButton" />
+        android:id="@+id/login_button" />
 
     <TextView
         android:text="@string/nog_geen_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/WacthwoordVergeten"
-        android:layout_toRightOf="@+id/LoginButton"
-        android:layout_toEndOf="@+id/LoginButton"
+        android:layout_below="@+id/password_forgotten"
+        android:layout_toRightOf="@+id/login_button"
+        android:layout_toEndOf="@+id/login_button"
         android:layout_marginTop="19dp"
-        android:id="@+id/Registreren" />
+        android:id="@+id/register" />
 
     <TextView
         android:text="@string/wachtwoord_vergeten"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="67dp"
-        android:id="@+id/WacthwoordVergeten"
-        android:layout_below="@+id/LoginButton"
-        android:layout_alignLeft="@+id/Registreren"
-        android:layout_alignStart="@+id/Registreren" />
+        android:id="@+id/password_forgotten"
+        android:layout_below="@+id/login_button"
+        android:layout_alignLeft="@+id/register"
+        android:layout_alignStart="@+id/register" />
 </RelativeLayout>

@@ -14,6 +14,8 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="auth_gefaald">Authenticatie mislukt</string>
+    <string name="laden">Laden...</string>
     <string name="inloggen">Inloggen</string>
     <string name="wachtwoord">Wachtwoord</string>
     <string name="e_mail">E-mail</string>
@@ -24,4 +26,10 @@
     <string name="herhaal_wachtwoord">Herhaal Wachtwoord</string>
     <string name="maak_account">Maak account</string>
     <string name="herstel_mijn_wachtwoord">Herstel mijn wachtwoord</string>
+    <string name="title_activity_home_screen">HomeScreenActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>
