@@ -16,3 +16,6 @@ Coded login, registration and password recovery with Firebase. Added activation 
 Made all activities for prototype
 
 #day5 
+Presentation
+Struggled with reading writing to database and its structure.
+Did research into recyclerviews.
