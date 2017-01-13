@@ -9,3 +9,10 @@ Checken for feasibility of planned functionalities.
 Getting to know the group.
 Finished of DESIGN.md.
 Started on Login Activities.
+
+#day4
+Worked on prototype. 
+Coded login, registration and password recovery with Firebase. Added activation e-mail and password reset e-mail support.
+Made all activities for prototype
+
+#day5 
