@@ -1,5 +1,6 @@
 package mprog.nl.studentenschoonmaakapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -12,15 +13,19 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.jar.Attributes;
+
 public class InviteActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "InviteActivity";
 
+    private ArrayList<String> mMembers;
     private EditText mNameField;
     private EditText mEmailField;
 
     public String name;
-    public String email;
 
     // [START declare_auth&database]
     private DatabaseReference mDatabase;
@@ -37,6 +42,9 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
+
+        // ArrayList
+        mMembers = new ArrayList<String>();
 
         //Views
         mNameField = (EditText) findViewById(R.id.field_invite_name);
@@ -70,8 +78,11 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
         if (!validateForm()) {
             return;
         } else {
+            String Email = mEmailField.toString();
+            String name = mNameField.toString();
+            mMembers.add(Email);
+            mMembers.add(name);
             Toast.makeText(this, "Goed gedaan", Toast.LENGTH_SHORT).show();
-
         }
     }
 
@@ -80,6 +91,9 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
         int i = view.getId();
         if (i == R.id.confirm_invite_button) {
             invite();
+            Intent intent = new Intent(InviteActivity.this, MakeGroupActivity.class);
+            intent.putExtra("MemberList", mMembers);
+            startActivity(intent);
             }
         }
 
