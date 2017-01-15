@@ -34,4 +34,9 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_group">GroupActivity</string>
     <string name="title_activity_group_detail">GroupDetailActivity</string>
+    <string name="title_activity_make_group">MakeGroupActivity</string>
+    <string name="groepsnaam">Groepsnaam</string>
+    <string name="groep_wachtwoord">Groep Wachtwoord</string>
+    <string name="bijnaam">Bijnaam</string>
+    <string name="e_mailadres">E-mailadres</string>
 </resources>
