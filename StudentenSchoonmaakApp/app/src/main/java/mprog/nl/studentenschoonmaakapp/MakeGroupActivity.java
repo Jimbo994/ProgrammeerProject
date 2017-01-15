@@ -6,17 +6,16 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class MakeGroupActivity extends AppCompatActivity implements View.OnClickListener {
 
-
-    private ArrayList<String> text;
+    private ArrayList<String> mMemberList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,14 +29,14 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
         findViewById(R.id.save_button).setOnClickListener(this);
 
         // ListView
-        ListView MemberList = (ListView) findViewById(R.id.MemberList);
+        final ListView MemberList = (ListView) findViewById(R.id.MemberList);
 
         // ArrayList
-        text = (ArrayList<String>) getIntent().getStringArrayListExtra("MemberList");
+        mMemberList = getIntent().getStringArrayListExtra("MemberList");
 
         //ArrayAdapter
-        ArrayAdapter arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, text);
-        if (text != null){
+        final ArrayAdapter arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mMemberList);
+        if (mMemberList != null){
             MemberList.setAdapter(arrayAdapter);
         }
 
@@ -48,10 +47,25 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
                 startActivity(new Intent(MakeGroupActivity.this, InviteActivity.class));
             }
         });
+
+        MemberList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            public boolean onItemLongClick(AdapterView<?> arg0, View v,
+                                           int index, long arg3) {
+                mMemberList.remove(index);
+                arrayAdapter.notifyDataSetChanged();
+                return false;
+            }
+        });
+
     }
 
-    private void writeNewUser() {
+    private void writeNewGroup() {
         Toast.makeText(this, "Goed gedaan", Toast.LENGTH_SHORT).show();
+
+        // hier moet de groep aangemaakt worden in de firebase
+        // hier moeten ook alle emails verstuurd worden.
+
     }
 
     @Override
@@ -60,7 +74,7 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
         if (i == R.id.cancel_button) {
             finish();
         } else if (i == R.id.save_button) {
-            writeNewUser();
+            writeNewGroup();
         }
     }
 }
