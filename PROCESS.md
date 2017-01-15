@@ -19,3 +19,13 @@ Made all activities for prototype
 Presentation
 Struggled with reading writing to database and its structure.
 Did research into recyclerviews.
+
+#day 6
+Enjoyed my saturday
+
+#day 7
+Made Activites: InviteActivity, MakeGroupActivity, ProfileActivity
+It is now possible to add people through name and email.
+Spend a lot of time to push data from InviteActivity to MakeGroupActivity but finally succeeded.
+Now tommorow I will finally make it possible to save the group and send all members a mail and write the group into the database.
+
