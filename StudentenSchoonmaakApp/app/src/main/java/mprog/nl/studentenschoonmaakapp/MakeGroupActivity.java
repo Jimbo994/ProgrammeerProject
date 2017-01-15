@@ -13,7 +13,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
 public class MakeGroupActivity extends AppCompatActivity implements View.OnClickListener {
 
 
@@ -54,7 +53,6 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
     private void writeNewUser() {
         Toast.makeText(this, "Goed gedaan", Toast.LENGTH_SHORT).show();
     }
-
 
     @Override
     public void onClick(View view) {

@@ -78,11 +78,11 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
         if (!validateForm()) {
             return;
         } else {
-            String Email = mEmailField.toString();
-            String name = mNameField.toString();
-            mMembers.add(Email);
-            mMembers.add(name);
+            String email = mEmailField.getText().toString();
+            String name = mNameField.getText().toString();
+            mMembers.add(name + ", " + email);
             Toast.makeText(this, "Goed gedaan", Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
 
