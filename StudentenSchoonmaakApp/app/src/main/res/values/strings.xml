@@ -40,4 +40,8 @@
     <string name="bijnaam">Bijnaam</string>
     <string name="e_mailadres">E-mailadres</string>
     <string name="lid_toevoegen">Lid toevoegen</string>
+    <string name="verwijder">Verwijder</string>
+    <string name="wijzig">Wijzig</string>
+    <string name="lid_wijzigen">Lid wijzigen</string>
+    <string name="deelnemers">Deelnemers</string>
 </resources>
