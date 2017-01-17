@@ -39,4 +39,5 @@
     <string name="groep_wachtwoord">Groep Wachtwoord</string>
     <string name="bijnaam">Bijnaam</string>
     <string name="e_mailadres">E-mailadres</string>
+    <string name="lid_toevoegen">Lid toevoegen</string>
 </resources>

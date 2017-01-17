@@ -1,6 +1,8 @@
 package mprog.nl.studentenschoonmaakapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -19,6 +21,7 @@ import java.util.jar.Attributes;
 
 public class InviteActivity extends AppCompatActivity implements View.OnClickListener {
 
+    public static final String MY_PREFS_NAME = "MemberList";
     private static final String TAG = "InviteActivity";
 
     private ArrayList<String> mMembers;
@@ -32,6 +35,9 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
     private FirebaseAuth mAuth;
     // [END declare_auth&database]
 
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,9 +45,13 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
         getSupportActionBar().setTitle("Deelnemer Toevoegen");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+//        TinyDB tinydb = new TinyDB(context);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
+
+        preferences = getSharedPreferences(MY_PREFS_NAME, Context.MODE_PRIVATE);
+        editor = preferences.edit();
 
         // ArrayList
         mMembers = new ArrayList<String>();
@@ -73,16 +83,18 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void invite() {
-
         Log.d(TAG, "Inviting...");
         if (!validateForm()) {
             return;
         } else {
             String email = mEmailField.getText().toString();
             String name = mNameField.getText().toString();
-            mMembers.add(name + ", " + email);
+            editor.putString("name", name);
+            editor.putString("Email", email);
+            editor.commit();
+
+            //mMembers.add(name + ", " + email);
             Toast.makeText(this, "Goed gedaan", Toast.LENGTH_SHORT).show();
-            finish();
         }
     }
 
@@ -92,7 +104,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
         if (i == R.id.confirm_invite_button) {
             invite();
             Intent intent = new Intent(InviteActivity.this, MakeGroupActivity.class);
-            intent.putExtra("MemberList", mMembers);
+            //intent.putExtra("MemberList", mMembers);
             startActivity(intent);
             }
         }
@@ -100,6 +112,8 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public boolean onSupportNavigateUp(){
+        Intent intent = new Intent(InviteActivity.this, MakeGroupActivity.class);
+        startActivity(intent);
         finish();
         return true;
     }
