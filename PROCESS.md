@@ -33,3 +33,9 @@ Now tommorow I will finally make it possible to save the group and send all memb
 So where I thought I was pushing data from InviteActivity to MakeGroupActivity.
 I forgot about the fact that when I add a member in InviteActivity and send it to MakeGroupActivity. I want to be able to add another person in InviteActivity. But when that happens MakeGroupActivity is closed and then I lose the members I already had send to that activity. I tried to work around it with sharedpreferences but this seemed unneccesarily difficult because I want to be able to send a arraylist and not just strings. This morning I realised I can just stay in MakeGroupActicity and on clicking the add member putton I can just use a AlertDialog instead of a complete new activity.
 I will work on this Tommorow.
+
+#day 8
+Custom dialogs made, made start to sending out invitation emails for groupmembers you want to add and also writing to database.
+
+#day 9
+
