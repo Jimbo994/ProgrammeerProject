@@ -36,7 +36,6 @@
             android:name=".MakeGroupActivity"
             android:label="@string/title_activity_make_group"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".InviteActivity" />
         <activity android:name=".MyAccountActivity"></activity>
     </application>
 

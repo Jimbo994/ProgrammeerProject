@@ -18,9 +18,9 @@ import java.util.ArrayList;
 public class MyAdapter extends BaseAdapter {
 
     private Context context;
-    private ArrayList<Member> members;
+    private ArrayList<User> members;
 
-    public MyAdapter(Context context, ArrayList<Member> members) {
+    public MyAdapter(Context context, ArrayList<User> members) {
         this.context = context;
         this.members = members;
     }
