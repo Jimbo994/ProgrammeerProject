@@ -38,4 +38,5 @@ I will work on this Tommorow.
 Custom dialogs made, made start to sending out invitation emails for groupmembers you want to add and also writing to database.
 
 #day 9
-
+Struggled entire day with asynchronous firebase actions in a for loop...  Made some progress but still not where i should be.
+Once this works other implementations should be easy.
