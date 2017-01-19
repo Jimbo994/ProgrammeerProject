@@ -15,7 +15,7 @@ public class GroupDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_group_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Keuken");
+        getSupportActionBar().setTitle("Taken");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

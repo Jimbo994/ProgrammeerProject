@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content_home_screen"
@@ -11,7 +11,24 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="mprog.nl.studentenschoonmaakapp.HomeScreenActivity"
-    tools:showIn="@layout/app_bar_home_screen">
+    tools:showIn="@layout/app_bar_home_screen"
+    android:orientation="vertical">
 
 
-</RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:text="Mijn groepen"
+        android:ems="10"
+        android:id="@+id/editText"
+        android:textSize="30dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+
+    <ListView
+        android:id="@+id/listview_mygroups"
+        android:layout_width="match_parent"
+        android:paddingTop="50dp"
+        android:layout_height="350dp"
+        />
+
+</LinearLayout>

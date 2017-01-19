@@ -1,7 +1,6 @@
 package mprog.nl.studentenschoonmaakapp;
 
 import android.app.Dialog;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -25,11 +24,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import mprog.nl.studentenschoonmaakapp.models.MyAdapter;
+import mprog.nl.studentenschoonmaakapp.models.Post;
 import mprog.nl.studentenschoonmaakapp.models.User;
 
 public class MakeGroupActivity extends AppCompatActivity implements View.OnClickListener {
@@ -45,6 +47,10 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
     ArrayList<User> mMemberList;
     User user;
     String name;
+
+    ArrayList<FirebaseUser> mUid;
+
+    List<Future<?>> users;
 
     EditText mNameField;
     EditText mEmailField;
@@ -67,6 +73,7 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
         // ListView
         final ListView MemberList = (ListView) findViewById(R.id.MemberList);
 
+        ArrayList<Future<?>> bla;
         // ArrayList
         //mMemberList = getIntent().getStringArrayListExtra("MemberList");
 
@@ -222,7 +229,10 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
             // Usage:
             List<Future<?>> members = new ArrayList<>();
             for (User u : mMemberList) {
-                members.add(MemberRegister(u));
+//                members.add(MemberRegister(u));
+//                members.add(WriteUserdatabse(u));
+                members.add(SendMail(u));
+
             }
             for (Future<?> member : members){
                 try {
@@ -234,67 +244,12 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
                 }
             }
         }
+
+        WriteGroup();
     }
 
-    private void WriteGroup() {
-        Toast.makeText(MakeGroupActivity.this, "Nu nog de groep schrijven en de leden erin zetten",
-                Toast.LENGTH_SHORT).show();
-    }
-
-    Future<?> MemberRegister(User u) {
-            Log.d(TAG, "signIn:onComplete:" + u.getEmail());
-
-            String email = u.getEmail();
-            name = u.getName();
-
-            Toast.makeText(MakeGroupActivity.this, "Email =" + email,
-                    Toast.LENGTH_SHORT).show();
-
-             mAuth.createUserWithEmailAndPassword(email, "blablabla")
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-
-                        Toast.makeText(MakeGroupActivity.this, "Auth gelukt",
-                                Toast.LENGTH_SHORT).show();
-
-                        Log.d(TAG, "createUser:onComplete:" + task.isSuccessful());
-
-                        if (task.isSuccessful()) {
-                            List<Future<?>> users= new ArrayList<>();
-                                users.add(onAuthSuccess(task.getResult().getUser()));
-                            for (Future<?> user : users){
-                                try {
-                                    user.get(); // await completion
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                } catch (ExecutionException e) {
-                                    e.printStackTrace();
-                                }
-                            Toast.makeText(MakeGroupActivity.this, "Registreren",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                        }else {
-                            Toast.makeText(MakeGroupActivity.this, "Registreren mislukt.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-
-        return new AsyncResult<>();
-        }
-
-    Future<?> onAuthSuccess(FirebaseUser user) {
-
-        // Write new user
-        //writeNewUser(user.getUid(), name, "undefined", user.getEmail());
-        String uid = user.getUid();
-        String email = user.getEmail();
-
-        User user2 = new User(name, "undefined", email);
-        mDatabase.child("users").child(uid).setValue(user2);
-
-        assert email != null;
+    private Future<?> SendMail(User u) {
+        String email = u.getEmail();
         mAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -312,6 +267,101 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
         return new AsyncResult<>();
     }
 
+    private void WriteGroup() {
+
+        // get uid
+        final String uid_current_user = mAuth.getCurrentUser().getUid();
+
+        // get timestamp
+        Long tsLong = System.currentTimeMillis()/1000;
+        final String timestamp = tsLong.toString();
+
+        final String group = mGroupnameField.getText().toString();
+
+        // maak unieke groep id
+        final String groupid = uid_current_user + timestamp;
+
+        //Maak groep aan
+        DatabaseReference groupref = FirebaseDatabase.getInstance().getReference().child("groups");
+        groupref.child(groupid).setValue(group);
+
+        //leden toevoegen aan groep
+        DatabaseReference userref = FirebaseDatabase.getInstance().getReference().child("users").child(uid_current_user).child("groups");
+        String key = userref.push().getKey();
+
+        Post post = new Post(group, groupid);
+        Map<String, Object> postvalues = post.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+
+        childUpdates.put(key, postvalues);
+        userref.updateChildren(childUpdates);
+
+
+        DatabaseReference groupref2 = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child(group);
+        for (User u : mMemberList){
+            String email = u.getEmail();
+            groupref2.child("members").push().setValue(email);
+        }
+
+        // Hier weer loopen over mMemberList en emails toevoegen
+    }
+
+    Future<?> MemberRegister(User u) {
+        Log.d(TAG, "signIn:onComplete:" + u.getEmail());
+        String email = u.getEmail();
+        name = u.getName();
+
+        users = new ArrayList<>();
+
+        Toast.makeText(MakeGroupActivity.this, "Email =" + email,
+                Toast.LENGTH_SHORT).show();
+            mAuth.createUserWithEmailAndPassword(email, "blablabla")
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+
+//                           mUid.add(task.getResult().getUser());
+
+                            Toast.makeText(MakeGroupActivity.this, "Auth gelukt",
+                                    Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "createUser:onComplete:" + task.isSuccessful());
+
+                            if (task.isSuccessful()) {
+                                users.add(onAuthSuccess(task.getResult().getUser()));
+                                for (Future<?> user : users) {
+                                    try {
+                                        user.get(); // await completion
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    } catch (ExecutionException e) {
+                                        e.printStackTrace();
+                                    }
+                                    Toast.makeText(MakeGroupActivity.this, "Registreren",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Toast.makeText(MakeGroupActivity.this, "Registreren mislukt.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                    });
+        return new AsyncResult<>();
+        }
+
+    Future<?> onAuthSuccess(FirebaseUser user) {
+
+
+        String uid = user.getUid();
+        String email = user.getEmail();
+
+        User user2 = new User(name, "undefined", email);
+        mDatabase.child("users").child(uid).setValue(user2);
+
+        return new AsyncResult<>();
+    }
+
         // [START basic_write]
         //public void writeNewUser(String uid, String name, String lastname, String email) {
             //User user = new User(name, lastname, email);
@@ -320,6 +370,8 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
         //}
         // [END basic_write]
 }
+
+
 
 
 

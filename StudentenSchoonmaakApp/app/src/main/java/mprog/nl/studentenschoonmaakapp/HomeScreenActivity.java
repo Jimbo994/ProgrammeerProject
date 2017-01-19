@@ -11,16 +11,32 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import mprog.nl.studentenschoonmaakapp.models.FireBaseHelper;
 
 public class HomeScreenActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    // [START declare_auth]
-//    private FirebaseAuth mAuth;
-    // [END declare_auth]
+    FirebaseAuth mAuth;
+
+    private DatabaseReference mDatabase;
+
+    FireBaseHelper mHelper;
+
+    ListView mGroups;
+
+    ArrayAdapter<String> mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,10 +44,31 @@ public class HomeScreenActivity extends AppCompatActivity
         setContentView(R.layout.activity_home_screen);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Mijn Groepen");
 
-        // [START initialize_auth]
-//        mAuth = FirebaseAuth.getInstance();
-        // [END initialize_auth]
+        mAuth = FirebaseAuth.getInstance();
+
+        final String uid_current_user = mAuth.getCurrentUser().getUid();
+
+        mGroups = (ListView) findViewById(R.id.listview_mygroups);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(uid_current_user).child("groups");
+
+        mHelper = new FireBaseHelper(mDatabase);
+
+        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mHelper.retrieve());
+
+        mGroups.setAdapter(mAdapter);
+
+        mGroups.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent groupdetail = new Intent (getApplicationContext(), GroupDetailActivity.class);
+                groupdetail.putExtra("groepnaam", mGroups.getItemAtPosition(i).toString());
+                startActivity(groupdetail);
+            }
+        });
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_group_button);
         fab.setOnClickListener(new View.OnClickListener() {
