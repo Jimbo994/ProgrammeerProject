@@ -1,4 +1,4 @@
-package mprog.nl.studentenschoonmaakapp;
+package mprog.nl.studentenschoonmaakapp.models;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;

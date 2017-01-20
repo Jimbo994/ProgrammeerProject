@@ -49,11 +49,11 @@ public class User {
         this.email = email;
     }
 
-    public String getLastName() {
+    public  String getLastname() {
         return lastname;
     }
 
-    public void setLastName(String lastName){
+    public void setLastname(String lastname){
         this.lastname = lastname;
     }
 

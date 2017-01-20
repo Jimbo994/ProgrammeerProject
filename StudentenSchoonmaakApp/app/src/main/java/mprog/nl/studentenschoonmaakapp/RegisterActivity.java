@@ -153,7 +153,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     public void writeNewUser(String uid, String Name, String last_name, String email) {
         User user = new User(Name, last_name, email);
 
-        mDatabase.child("users").child(uid).setValue(user);
+        int hash = email.hashCode();
+        String hash_email = String.valueOf(hash);
+
+        mDatabase.child("users").child(hash_email).setValue(user);
     }
     // [END basic_write]
 

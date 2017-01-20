@@ -38,9 +38,13 @@ public class FireBaseHelper {
             }
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+                mygroups.clear();
+                fetchData(dataSnapshot);
             }
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                mygroups.clear();
+                fetchData(dataSnapshot);
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {

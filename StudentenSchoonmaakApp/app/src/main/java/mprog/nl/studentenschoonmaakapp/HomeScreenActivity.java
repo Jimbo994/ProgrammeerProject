@@ -14,14 +14,10 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import mprog.nl.studentenschoonmaakapp.models.FireBaseHelper;
 
@@ -52,11 +48,14 @@ public class HomeScreenActivity extends AppCompatActivity
 
         mGroups = (ListView) findViewById(R.id.listview_mygroups);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(uid_current_user).child("groups");
+        String email_current_user = mAuth.getCurrentUser().getEmail();
+        String hash_current_user = String.valueOf((email_current_user.hashCode()));
+
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(hash_current_user).child("groups");
 
         mHelper = new FireBaseHelper(mDatabase);
 
-        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mHelper.retrieve());
+        mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mHelper.retrieve());
 
         mGroups.setAdapter(mAdapter);
 

@@ -29,8 +29,8 @@ public class Post {
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
-        result.put("title", groupid);
-        result.put("title", groupname);
+        result.put("groupid", groupid);
+        result.put("groupname", groupname);
 
         return result;
     }
