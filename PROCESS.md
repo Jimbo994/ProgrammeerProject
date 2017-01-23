@@ -55,5 +55,11 @@ Busy with weekend activities.
 
 #day14
 Busy with weekend activities.
+
 #day15
+Worked on reading and writing tasks into firebase as wel as seeing it in a listview.
+bumped into some bugs and solved some of those.
+Tommorow I will work on deleting tasks groups and users as well as some other bugs.
+
+
 
