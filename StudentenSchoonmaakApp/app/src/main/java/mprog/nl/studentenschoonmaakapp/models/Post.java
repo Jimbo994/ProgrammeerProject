@@ -35,11 +35,11 @@ public class Post {
         return result;
     }
 
-    public static String getGroupid() {
+    public String getGroupid() {
         return Post.groupid;
     }
 
-    public static String getGroupname(){
+    public String getGroupname(){
         return Post.groupname;
     }
     // [END post_to_map]

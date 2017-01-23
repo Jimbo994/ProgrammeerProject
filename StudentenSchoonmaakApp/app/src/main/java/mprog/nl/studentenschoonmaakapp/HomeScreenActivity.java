@@ -16,10 +16,16 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 import mprog.nl.studentenschoonmaakapp.models.FireBaseHelper;
+import mprog.nl.studentenschoonmaakapp.models.Post;
 
 public class HomeScreenActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -28,11 +34,13 @@ public class HomeScreenActivity extends AppCompatActivity
 
     private DatabaseReference mDatabase;
 
+    ArrayList mMyGroups;
+
     FireBaseHelper mHelper;
 
     ListView mGroups;
 
-    ArrayAdapter<String> mAdapter;
+    ArrayAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +52,11 @@ public class HomeScreenActivity extends AppCompatActivity
 
         mAuth = FirebaseAuth.getInstance();
 
-        final String uid_current_user = mAuth.getCurrentUser().getUid();
 
         mGroups = (ListView) findViewById(R.id.listview_mygroups);
 
-        String email_current_user = mAuth.getCurrentUser().getEmail();
-        String hash_current_user = String.valueOf((email_current_user.hashCode()));
+        final String email_current_user = mAuth.getCurrentUser().getEmail();
+        final String hash_current_user = String.valueOf((email_current_user.hashCode()));
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(hash_current_user).child("groups");
 

@@ -4,6 +4,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -15,6 +16,7 @@ public class FireBaseHelper {
 
     DatabaseReference db;
     ArrayList<String> mygroups;
+    Post post;
 
     public FireBaseHelper(DatabaseReference db) {
         this.db = db;
@@ -23,32 +25,19 @@ public class FireBaseHelper {
 
     /** Retrieves Arraylist, on Eventlisteners fetchdata is called which fills Arraylist
      Not all Eventlisteners used yet.*/
-    public ArrayList<String> retrieve()
-    {
-        db.addChildEventListener(new ChildEventListener() {
+    public ArrayList<String> retrieve() {
+        db.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                mygroups.clear();
+            public void onDataChange(DataSnapshot dataSnapshot) {
                 fetchData(dataSnapshot);
             }
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                mygroups.clear();
-                fetchData(dataSnapshot);
-            }
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                mygroups.clear();
-                fetchData(dataSnapshot);
-            }
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                mygroups.clear();
-                fetchData(dataSnapshot);
-            }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
+
             }
+
+
         });
         return mygroups;
     }
@@ -57,8 +46,10 @@ public class FireBaseHelper {
     /** fetches data from database and adds it to Arraylist*/
     private void fetchData(DataSnapshot dataSnapshot)
     {
-        for (DataSnapshot ds : dataSnapshot.getChildren()) {
-            mygroups.add(String.valueOf(ds.getValue()));
+       for (DataSnapshot ds : dataSnapshot.getChildren()) {
+           post = ds.getValue(Post.class);
+           String groupname = post.getGroupname();
+           mygroups.add(groupname);
         }
     }
 }
