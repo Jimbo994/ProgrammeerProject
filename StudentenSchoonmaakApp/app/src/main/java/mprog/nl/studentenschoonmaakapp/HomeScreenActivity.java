@@ -16,16 +16,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 import mprog.nl.studentenschoonmaakapp.models.FireBaseHelper;
-import mprog.nl.studentenschoonmaakapp.models.Post;
 
 public class HomeScreenActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -52,7 +48,6 @@ public class HomeScreenActivity extends AppCompatActivity
 
         mAuth = FirebaseAuth.getInstance();
 
-
         mGroups = (ListView) findViewById(R.id.listview_mygroups);
 
         final String email_current_user = mAuth.getCurrentUser().getEmail();
@@ -64,13 +59,18 @@ public class HomeScreenActivity extends AppCompatActivity
 
         mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mHelper.retrieve());
 
+        final ArrayList mGroupid = mHelper.retrieve_groupid();
+
         mGroups.setAdapter(mAdapter);
+
+        mAdapter.notifyDataSetChanged();
 
         mGroups.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent groupdetail = new Intent (getApplicationContext(), GroupDetailActivity.class);
                 groupdetail.putExtra("groepnaam", mGroups.getItemAtPosition(i).toString());
+                groupdetail.putExtra("groepid", mGroupid.get(i).toString());
                 startActivity(groupdetail);
             }
         });

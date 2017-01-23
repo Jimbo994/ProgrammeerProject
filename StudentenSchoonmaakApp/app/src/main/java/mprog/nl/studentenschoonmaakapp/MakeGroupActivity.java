@@ -335,6 +335,7 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
         //members toevoegen aan groep
         DatabaseReference groupref2 = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child(group);
             groupref2.child("members").push().setValue(hash_email);
+            groupref2.child("tasks");
 
         return new AsyncResult<>();
     }

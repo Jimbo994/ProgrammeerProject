@@ -44,4 +44,9 @@
     <string name="wijzig">Wijzig</string>
     <string name="lid_wijzigen">Lid wijzigen</string>
     <string name="deelnemers">Deelnemers</string>
+    <string name="kamer_toevoegen">Kamer toevoegen</string>
+    <string name="kamer">Kamer</string>
+    <string name="opslaan">Opslaan</string>
+    <string name="wie_zijn_taak_is_dit">Wie zijn taak is dit?</string>
+    <string name="taken">Taken</string>
 </resources>
