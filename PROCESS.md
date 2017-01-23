@@ -39,4 +39,21 @@ Custom dialogs made, made start to sending out invitation emails for groupmember
 
 #day 9
 Struggled entire day with asynchronous firebase actions in a for loop...  Made some progress but still not where i should be.
-Once this works other implementations should be easy.
+Once this works other implementations should be easy. So basically what i was trying to do was the following. I wanted to be able to invite members by email. I wanted to be able to registrate these members straight away, write them into my database and send them an email. But because of asynchronous issues this did not work.
+
+#day10
+Worked around some of the asynchronous issues. By using a Future I can now authenticate members in a loop and send them mail. unfortunately it is still not possible to write them in the database with their user id. Because I only have acces to their uid when they are signed in or when they are in the authentication function of my code. But because of the asynchronous issues it never gets to that part in the code. I am thinking of solutions and spoke with Renske and Hella about it.
+
+#day11
+Still trying to figure out a solution. I am now thinking of just send members you want to invite an email. Then in my database under groups I have a list with groupmembers and here I put their email. So when they register and sign in I can find to what groups they have access by looping through alll groups in my database. Although this is not so elegant it will work.
+
+#day12
+After presentations I had a eureka moment. Instead of writing users into my databse with their user id I am know going to hash their email (since an email is unique as well). When the user is then signed in I can acces their email and hash it again and then search the database with that information.
+
+#day13
+Busy with weekend activities.
+
+#day14
+Busy with weekend activities.
+#day15
+
