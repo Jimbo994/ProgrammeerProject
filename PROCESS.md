@@ -57,8 +57,9 @@ Busy with weekend activities.
 Busy with weekend activities.
 
 #day15
-Worked on reading and writing tasks into firebase as wel as seeing it in a listview.
-bumped into some bugs and solved some of those.
+Worked on reading and writing tasks into firebase as wel as seeing it in a listview. Made custom dialog to add tasks.
+bumped into some bugs and solved some of those. one of the bugs i faced was that sometimes i was writing stuff double.
+But only sometimes because usually it is overwritten on the rewrite. But in slow writing timestamps of id's changed so sometimes stuff was written double. I found mistakes in the code and solved this.
 Tommorow I will work on deleting tasks groups and users as well as some other bugs.
 
 
