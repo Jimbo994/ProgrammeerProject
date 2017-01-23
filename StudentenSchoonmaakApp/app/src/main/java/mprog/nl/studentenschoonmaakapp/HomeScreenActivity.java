@@ -68,7 +68,7 @@ public class HomeScreenActivity extends AppCompatActivity
         mGroups.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent groupdetail = new Intent (getApplicationContext(), GroupDetailActivity.class);
+                Intent groupdetail = new Intent (getApplicationContext(), GroupActivity.class);
                 groupdetail.putExtra("groepnaam", mGroups.getItemAtPosition(i).toString());
                 groupdetail.putExtra("groepid", mGroupid.get(i).toString());
                 startActivity(groupdetail);

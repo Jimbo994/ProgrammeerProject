@@ -19,7 +19,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import mprog.nl.studentenschoonmaakapp.models.FireBaseHelper;
 
-public class GroupDetailActivity extends AppCompatActivity {
 
     EditText mRoomField;
     String groupid;
@@ -37,7 +36,6 @@ public class GroupDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_group_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Taken");
@@ -54,7 +52,6 @@ public class GroupDetailActivity extends AppCompatActivity {
         groupid = getIntent().getStringExtra("groepid");
         groupname = getIntent().getStringExtra("groepnaam");
 
-        Toast.makeText(GroupDetailActivity.this,("groepid: " + groupid + " groepnaam: " + groupname), Toast.LENGTH_LONG).show();
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child(groupname);
 
@@ -87,7 +84,6 @@ public class GroupDetailActivity extends AppCompatActivity {
 
     private void AddTask() {
 
-        final Dialog dialog = new Dialog(GroupDetailActivity.this);
         dialog.setContentView(R.layout.custom_dialog_add_task);
 
         // Edittext in AlertDialog

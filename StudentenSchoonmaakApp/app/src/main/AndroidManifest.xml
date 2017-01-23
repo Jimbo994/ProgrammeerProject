@@ -21,7 +21,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".PasswordRecoveryActivity" />
         <activity
@@ -29,7 +28,7 @@
             android:label="@string/title_activity_home_screen"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".GroupDetailActivity"
+            android:name=".GroupActivity"
             android:label="@string/title_activity_group_detail"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
