@@ -15,8 +15,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import mprog.nl.studentenschoonmaakapp.models.FireBaseHelper;
 
@@ -83,7 +86,29 @@ public class GroupActivity extends AppCompatActivity {
         mRooms.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                return false;
+                final String room_name = mRooms.getItemAtPosition(i).toString();
+                Toast.makeText(getApplicationContext(), "kamer" + room_name, Toast.LENGTH_SHORT).show();
+
+                DatabaseReference ref_tasks = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child(groupname).child("tasks");
+                ref_tasks.child(room_name).removeValue();
+
+                mDatabase.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot ds : dataSnapshot.getChildren()){
+                            String current_room_name = ds.getValue(String.class);
+                            if (current_room_name.equals(room_name)){
+                                ds.getRef().removeValue();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+                return true;
             }
         });
 
