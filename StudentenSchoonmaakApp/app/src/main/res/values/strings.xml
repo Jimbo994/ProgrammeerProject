@@ -49,4 +49,7 @@
     <string name="opslaan">Opslaan</string>
     <string name="wie_zijn_taak_is_dit">Wie zijn taak is dit?</string>
     <string name="taken">Taken</string>
+    <string name="kamers">Kamers</string>
+    <string name="taak_toevoegen">Taak toevoegen</string>
+    <string name="taak">Taak</string>
 </resources>

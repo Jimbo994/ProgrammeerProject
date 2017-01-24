@@ -35,7 +35,16 @@
             android:name=".MakeGroupActivity"
             android:label="@string/title_activity_make_group"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".MyAccountActivity"></activity>
+        <activity android:name=".MyAccountActivity" />
+        <activity
+            android:name=".GroupDetailActivity"
+            android:label="@string/title_activity_group_detail"
+            android:parentActivityName=".GroupActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="mprog.nl.studentenschoonmaakapp.GroupActivity" />
+        </activity>
     </application>
 
 </manifest>

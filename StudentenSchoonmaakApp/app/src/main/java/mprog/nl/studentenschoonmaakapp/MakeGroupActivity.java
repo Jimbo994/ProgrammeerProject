@@ -330,7 +330,7 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
 
         //ingelogde user toevoegen aan groep
         DatabaseReference groupref2 = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child(group);
-        String key = groupref2.getKey();
+        String key = groupref2.push().getKey();
         groupref2.child("members").child(key).setValue(hash_email_current_user);
         
     }
@@ -376,12 +376,11 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
 
         //members toevoegen aan groep
         DatabaseReference groupref2 = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child(group);
-        String key2 = groupref2.getKey();
-            groupref2.child("members").child(key2).setValue(hash_email);
+        String key2 = groupref2.push().getKey();
+        groupref2.child("members").child(key2).setValue(hash_email);
 
         return new AsyncResult<>();
     }
-
 
 
     private Future<?> SendMail(User u) {

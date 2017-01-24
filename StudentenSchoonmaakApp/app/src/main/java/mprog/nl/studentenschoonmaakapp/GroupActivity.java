@@ -1,6 +1,7 @@
 package mprog.nl.studentenschoonmaakapp;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -28,11 +29,9 @@ public class GroupActivity extends AppCompatActivity {
     DatabaseReference mDatabase;
 
     FireBaseHelper mHelper;
-
     ArrayAdapter mAdapter;
 
-
-    ListView mTasks;
+    ListView mRooms;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +39,7 @@ public class GroupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_group);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Taken");
+        getSupportActionBar().setTitle("Kamers");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -56,27 +55,32 @@ public class GroupActivity extends AppCompatActivity {
 
         Toast.makeText(GroupActivity.this,("groepid: " + groupid + " groepnaam: " + groupname), Toast.LENGTH_LONG).show();
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child(groupname);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child(groupname).child("rooms");
 
-        mTasks =(ListView) findViewById(R.id.tasks_listview);
+        mRooms =(ListView) findViewById(R.id.tasks_listview);
 
         mHelper = new FireBaseHelper(mDatabase);
 
         if (mHelper.retrieve_tasks() != null)
         {
-            mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mHelper.retrieve_tasks());
-            mTasks.setAdapter(mAdapter);
-            mAdapter.notifyDataSetChanged();
+            mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mHelper.retrieve_rooms());
+            mRooms.setAdapter(mAdapter);
         }
 
-        mTasks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mRooms.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent groupdetail = new Intent (getApplicationContext(), GroupDetailActivity.class);
+                groupdetail.putExtra("kamer", mRooms.getItemAtPosition(i).toString());
+                groupdetail.putExtra("ref", mDatabase.toString());
+                groupdetail.putExtra("groepid", groupid);
+                groupdetail.putExtra("groepnaam", groupname);
 
+                startActivity(groupdetail);
             }
         });
 
-        mTasks.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        mRooms.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 return false;
@@ -88,7 +92,7 @@ public class GroupActivity extends AppCompatActivity {
     private void AddTask() {
 
         final Dialog dialog = new Dialog(GroupActivity.this);
-        dialog.setContentView(R.layout.custom_dialog_add_task);
+        dialog.setContentView(R.layout.custom_dialog_add_room);
 
         // Edittext in AlertDialog
         mRoomField = (EditText) dialog.findViewById(R.id.field_add_room);
@@ -109,7 +113,7 @@ public class GroupActivity extends AppCompatActivity {
                     DatabaseReference db_ref = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child(groupname);
                     String key = db_ref.push().getKey();
 
-                    db_ref.child("tasks").child(key).setValue(room);
+                    db_ref.child("rooms").child(key).setValue(room);
                     dialog.dismiss();
                 }
             }
