@@ -59,7 +59,7 @@ public class GroupActivity extends AppCompatActivity {
 
         Toast.makeText(GroupActivity.this,("groepid: " + groupid + " groepnaam: " + groupname), Toast.LENGTH_LONG).show();
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child(groupname).child("rooms");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child("rooms");
 
         mRooms =(ListView) findViewById(R.id.tasks_listview);
 
@@ -105,7 +105,7 @@ public class GroupActivity extends AppCompatActivity {
                 remove.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        DatabaseReference ref_tasks = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child(groupname).child("tasks");
+                        DatabaseReference ref_tasks = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child("tasks");
                         ref_tasks.child(room_name).removeValue();
 
                         mDatabase.addValueEventListener(new ValueEventListener() {
@@ -160,7 +160,7 @@ public class GroupActivity extends AppCompatActivity {
                     return;
                 } else {
                     String room = mRoomField.getText().toString();
-                    DatabaseReference db_ref = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child(groupname);
+                    DatabaseReference db_ref = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid);
                     String key = db_ref.push().getKey();
 
                     db_ref.child("rooms").child(key).setValue(room);

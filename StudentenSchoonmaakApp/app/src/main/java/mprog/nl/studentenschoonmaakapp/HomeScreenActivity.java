@@ -19,12 +19,21 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
+import mprog.nl.studentenschoonmaakapp.models.AsyncResult;
 import mprog.nl.studentenschoonmaakapp.models.FireBaseHelper;
+import mprog.nl.studentenschoonmaakapp.models.User;
 
 public class HomeScreenActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -33,7 +42,8 @@ public class HomeScreenActivity extends AppCompatActivity
 
     private DatabaseReference mDatabase;
 
-    ArrayList mMyGroups;
+
+    ArrayList<String> mGroupMembers;
 
     FireBaseHelper mHelper;
 
@@ -48,6 +58,8 @@ public class HomeScreenActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Mijn Groepen");
+
+        mGroupMembers = new ArrayList<>();
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -82,7 +94,9 @@ public class HomeScreenActivity extends AppCompatActivity
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 final String group_name = mGroups.getItemAtPosition(i).toString();
-                Toast.makeText(getApplicationContext(), "kamer" + group_name, Toast.LENGTH_SHORT).show();
+                final String group_id = mGroupid.get(i).toString();
+                Toast.makeText(getApplicationContext(), "kamer" + group_name + "id " + group_id, Toast.LENGTH_SHORT).show();
+
 
                 final Dialog dialog = new Dialog(HomeScreenActivity.this);
                 dialog.setContentView(R.layout.custom_dialog_remove_group);
@@ -94,6 +108,40 @@ public class HomeScreenActivity extends AppCompatActivity
                 remove.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                    DatabaseReference ref_groups = FirebaseDatabase.getInstance().getReference().child("groups");
+
+
+                    ref_groups.child(group_id).child("members").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                String current_member_id = ds.getValue(String.class);
+                                mGroupMembers.add(current_member_id);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                        List<Future<?>> members = new ArrayList<>();
+                        for (String s : mGroupMembers) {
+                            members.add(DeleteGroupfromUser(group_id, s));
+                        }
+                        for (Future<?> member : members) {
+                            try {
+                                member.get(); // await completion
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            } catch (ExecutionException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        //Deleting of group under groups
+                        ref_groups.child(group_id).removeValue();
                         dialog.dismiss();
                     }
                 });
@@ -129,6 +177,28 @@ public class HomeScreenActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private Future<?> DeleteGroupfromUser(final String id, String s) {
+
+        DatabaseReference ref_user = FirebaseDatabase.getInstance().getReference().child("users").child(s).child("groups");
+        ref_user.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    String current_groupid = ds.getValue(String.class);
+                    if (current_groupid.equals(id)){
+                        ds.getRef().removeValue();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        return new AsyncResult<>();
     }
 
     @Override

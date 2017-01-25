@@ -63,7 +63,7 @@ public class GroupDetailActivity extends AppCompatActivity {
         ref = getIntent().getStringExtra("ref");
         room = getIntent().getStringExtra("kamer");
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child(groupname).child("tasks").child(room);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child("tasks").child(room);
 
         mTasks = (ListView) findViewById(R.id.tasks_listview);
 
@@ -97,7 +97,7 @@ public class GroupDetailActivity extends AppCompatActivity {
                             return;
                         } else {
                             String new_task = mEditField.getText().toString();
-                            DatabaseReference ref_tasks = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child(groupname).child("tasks").child(room);
+                            DatabaseReference ref_tasks = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child("tasks").child(room);
                             RemoveTask(ref_tasks, task_name);
 
                             String key = ref_tasks.push().getKey();
@@ -113,7 +113,7 @@ public class GroupDetailActivity extends AppCompatActivity {
                     public void onClick(View view) {
 
                         DatabaseReference ref_tasks = FirebaseDatabase.getInstance().getReference().child("groups").
-                                child(groupid).child(groupname).child("tasks").child(room);
+                                child(groupid).child("tasks").child(room);
 
                         RemoveTask(ref_tasks, task_name);
 
@@ -166,8 +166,7 @@ public class GroupDetailActivity extends AppCompatActivity {
                             return;
                         } else {
                             String task = mTaskField.getText().toString();
-                            DatabaseReference db_ref = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child(groupname).child("tasks").child(room);
-
+                            DatabaseReference db_ref = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child("tasks").child(room);
 
                             String key = db_ref.push().getKey();
 

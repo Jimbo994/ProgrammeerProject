@@ -314,22 +314,22 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
 
         //groep toevoegen aan ingelogde user
         DatabaseReference userref2 = FirebaseDatabase.getInstance().getReference().child("users").child(hash_email_current_user).child("groups");
-        String key2 = userref2.push().getKey();
+        //String key2 = userref2.push().getKey();
 
         Post post2 = new Post(group, groupid);
         Map<String, Object> postvalues2 = post2.toMap();
 
         Map<String, Object> childUpdates2 = new HashMap<>();
 
-        childUpdates2.put(key2, postvalues2);
+        childUpdates2.put(groupid, postvalues2);
         userref2.updateChildren(childUpdates2);
 
         //Maak groep aan
         DatabaseReference groupref = FirebaseDatabase.getInstance().getReference().child("groups");
-        groupref.child(groupid).setValue(group);
+        groupref.child(groupid).child("groupname").setValue(group);
 
         //ingelogde user toevoegen aan groep
-        DatabaseReference groupref2 = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child(group);
+        DatabaseReference groupref2 = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid);
         String key = groupref2.push().getKey();
         groupref2.child("members").child(key).setValue(hash_email_current_user);
         
@@ -364,24 +364,23 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
 
         //groep toevoegen aan user u
         DatabaseReference userref = FirebaseDatabase.getInstance().getReference().child("users").child(hash_email).child("groups");
-        String key = userref.push().getKey();
+//        String key = userref.push().getKey();
 
         Post post = new Post(group, groupid);
         Map<String, Object> postvalues = post.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
 
-        childUpdates.put(key, postvalues);
+        childUpdates.put(groupid, postvalues);
         userref.updateChildren(childUpdates);
 
         //members toevoegen aan groep
-        DatabaseReference groupref2 = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child(group);
+        DatabaseReference groupref2 = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid);
         String key2 = groupref2.push().getKey();
         groupref2.child("members").child(key2).setValue(hash_email);
 
         return new AsyncResult<>();
     }
-
 
     private Future<?> SendMail(User u) {
         String email = u.getEmail();
