@@ -52,4 +52,9 @@
     <string name="kamers">Kamers</string>
     <string name="taak_toevoegen">Taak toevoegen</string>
     <string name="taak">Taak</string>
+    <string name="wijzigen_of_verwijderen">Wijzigen of verwijderen</string>
+    <string name="annuleer">Annuleer</string>
+    <string name="het_verwijderen_van_een_kamer_zal_ook_alle_taken_in_deze_kamer_verwijderen">Het verwijderen van een kamer zal ook alle taken in deze kamer verwijderen!</string>
+    <string name="weet_je_het_zeker">Weet je het zeker?</string>
+    <string name="het_verwijderen_van_een_groep_zal_de_groep_inclusief_alle_data_in_deze_groep_permanent_verwijderen">Het verwijderen van een groep zal de groep, inclusief alle data in deze groep permanent verwijderen!</string>
 </resources>

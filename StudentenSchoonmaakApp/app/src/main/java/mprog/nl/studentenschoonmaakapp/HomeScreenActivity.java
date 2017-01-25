@@ -1,5 +1,6 @@
 package mprog.nl.studentenschoonmaakapp;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,7 +14,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -73,6 +76,39 @@ public class HomeScreenActivity extends AppCompatActivity
                 groupdetail.putExtra("groepid", mGroupid.get(i).toString());
                 startActivity(groupdetail);
             }
+        });
+
+        mGroups.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                final String group_name = mGroups.getItemAtPosition(i).toString();
+                Toast.makeText(getApplicationContext(), "kamer" + group_name, Toast.LENGTH_SHORT).show();
+
+                final Dialog dialog = new Dialog(HomeScreenActivity.this);
+                dialog.setContentView(R.layout.custom_dialog_remove_group);
+
+                // Buttons in Alertdialog
+                Button remove = (Button) dialog.findViewById(R.id.remove_button);
+                Button cancel = (Button) dialog.findViewById(R.id.cancel_button);
+
+                remove.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+                return true;
+            }
+
         });
 
 

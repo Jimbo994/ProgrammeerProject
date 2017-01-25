@@ -26,6 +26,7 @@ import mprog.nl.studentenschoonmaakapp.models.FireBaseHelper;
 public class GroupActivity extends AppCompatActivity {
 
     EditText mRoomField;
+    EditText mRemoveRoomField;
     String groupid;
     String groupname;
 
@@ -89,29 +90,53 @@ public class GroupActivity extends AppCompatActivity {
                 final String room_name = mRooms.getItemAtPosition(i).toString();
                 Toast.makeText(getApplicationContext(), "kamer" + room_name, Toast.LENGTH_SHORT).show();
 
-                DatabaseReference ref_tasks = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child(groupname).child("tasks");
-                ref_tasks.child(room_name).removeValue();
+                final Dialog dialog = new Dialog(GroupActivity.this);
+                dialog.setContentView(R.layout.custom_dialog_remove_room);
 
-                mDatabase.addValueEventListener(new ValueEventListener() {
+                // Edittext in AlertDialog
+                mRemoveRoomField = (EditText) dialog.findViewById(R.id.field_add_task);
+
+                // Buttons in Alertdialog
+                Button remove = (Button) dialog.findViewById(R.id.remove_button);
+                Button cancel = (Button) dialog.findViewById(R.id.cancel_button);
+
+                dialog.show();
+
+                remove.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot ds : dataSnapshot.getChildren()){
-                            String current_room_name = ds.getValue(String.class);
-                            if (current_room_name.equals(room_name)){
-                                ds.getRef().removeValue();
+                    public void onClick(View view) {
+                        DatabaseReference ref_tasks = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child(groupname).child("tasks");
+                        ref_tasks.child(room_name).removeValue();
+
+                        mDatabase.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot ds : dataSnapshot.getChildren()){
+                                    String current_room_name = ds.getValue(String.class);
+                                    if (current_room_name.equals(room_name)){
+                                        ds.getRef().removeValue();
+                                    }
+                                }
                             }
-                        }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                        dialog.dismiss();
                     }
+                });
 
+                cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
+                    public void onClick(View view) {
+                        dialog.dismiss();
                     }
                 });
                 return true;
             }
         });
-
     }
 
     private void AddTask() {

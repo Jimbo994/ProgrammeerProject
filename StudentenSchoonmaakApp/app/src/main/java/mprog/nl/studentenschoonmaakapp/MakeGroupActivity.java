@@ -145,7 +145,7 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
                                            final int index, long arg3) {
 
                 final Dialog dialog = new Dialog(MakeGroupActivity.this);
-                dialog.setContentView(R.layout.custom_dialog_edit);
+                dialog.setContentView(R.layout.custom_dialog_edit_member);
 
                 // Edittext in AlertDialog
                 mNameField = (EditText) dialog.findViewById(R.id.field_edit_member_name);
