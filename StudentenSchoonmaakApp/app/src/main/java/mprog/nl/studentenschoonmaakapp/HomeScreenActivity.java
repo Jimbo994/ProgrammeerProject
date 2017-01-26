@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -113,8 +114,7 @@ public class HomeScreenActivity extends AppCompatActivity
                 remove.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                    DatabaseReference ref_groups = FirebaseDatabase.getInstance().getReference().child("groups");
-
+                    final DatabaseReference ref_groups = FirebaseDatabase.getInstance().getReference().child("groups");
 
                     ref_groups.child(group_id).child("members").addValueEventListener(new ValueEventListener() {
                         @Override
@@ -122,7 +122,13 @@ public class HomeScreenActivity extends AppCompatActivity
                             for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                 String current_member_id = ds.getValue(String.class);
                                 mGroupMembers.add(current_member_id);
+                                FirebaseDatabase.getInstance().getReference().child("users").child(current_member_id).child("groups").
+                                        child(group_id).removeValue();
                             }
+
+                            // Deleting of group under groups
+                        ref_groups.child(group_id).removeValue();
+
                         }
 
                         @Override
@@ -131,22 +137,8 @@ public class HomeScreenActivity extends AppCompatActivity
                         }
                     });
 
-                        List<Future<?>> members = new ArrayList<>();
-                        for (String s : mGroupMembers) {
-                            members.add(DeleteGroupfromUser(group_id, s));
-                        }
-                        for (Future<?> member : members) {
-                            try {
-                                member.get(); // await completion
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            } catch (ExecutionException e) {
-                                e.printStackTrace();
-                            }
-                        }
 
-                        //Deleting of group under groups
-                        ref_groups.child(group_id).removeValue();
+
                         dialog.dismiss();
                     }
                 });
@@ -182,29 +174,11 @@ public class HomeScreenActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View hView =  navigationView.getHeaderView(0);
+        TextView nav_user = (TextView)hView.findViewById(R.id.username_Textview);
+        nav_user.setText(email_current_user);
     }
 
-    private Future<?> DeleteGroupfromUser(final String id, String s) {
-
-        DatabaseReference ref_user = FirebaseDatabase.getInstance().getReference().child("users").child(s).child("groups");
-        ref_user.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    String current_groupid = ds.getValue(String.class);
-                    if (current_groupid.equals(id)){
-                        ds.getRef().removeValue();
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        return new AsyncResult<>();
-    }
 
     @Override
     public void onBackPressed() {

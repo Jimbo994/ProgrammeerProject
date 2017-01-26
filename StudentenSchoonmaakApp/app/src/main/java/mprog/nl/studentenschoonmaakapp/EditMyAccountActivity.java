@@ -57,6 +57,7 @@ public class EditMyAccountActivity extends AppCompatActivity {
                     String hash_email = String.valueOf(hash);
 
                     mDatabase.child(hash_email).child("userinfo").setValue(user);
+                    finish();
                 }
             }
         });

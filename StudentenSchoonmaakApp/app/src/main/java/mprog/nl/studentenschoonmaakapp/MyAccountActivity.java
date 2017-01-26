@@ -96,6 +96,9 @@ public class MyAccountActivity extends AppCompatActivity implements NavigationVi
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View hView =  navigationView.getHeaderView(0);
+        TextView nav_user = (TextView)hView.findViewById(R.id.username_Textview);
+        nav_user.setText(email);
     }
 
 
@@ -136,9 +139,9 @@ public class MyAccountActivity extends AppCompatActivity implements NavigationVi
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        startActivity(new Intent(this, HomeScreenActivity.class));
+
         if (id == R.id.nav_lists) {
-            // Handle the camera action
+            startActivity(new Intent(this, HomeScreenActivity.class));
         } else if (id == R.id.nav_account) {
 
         } else if (id == R.id.nav_logout) {
