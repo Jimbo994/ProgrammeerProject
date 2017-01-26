@@ -62,5 +62,20 @@ bumped into some bugs and solved some of those. one of the bugs i faced was that
 But only sometimes because usually it is overwritten on the rewrite. But in slow writing timestamps of id's changed so sometimes stuff was written double. I found mistakes in the code and solved this.
 Tommorow I will work on deleting tasks groups and users as well as some other bugs.
 
+#Day16
+Made it possible to delete and edit tasks.
+Delete rooms, and delete groups. But the deleting of groups still does not work properly. (again a asynchronous problem)
+Also made custom dialogs to pop up on deleting to warn the user.
+Made some adjustments to database structure to make editing and deleting easier.
+
+#Day17
+The MyAccountActivity now works and will show the user details, these can also be edited.
+Also implemented a password reset.
+Made a new ListView for design purposes but this still needs to be enhanced.
+Worked on bug for my adapters. Data from firebase sometimes doesnt load, only loads on refresh of activity.
+made some progress but still not completely working.
+still needs to be done: deleting of groups (perhaps deleting of user as well)
+
+
 
 
