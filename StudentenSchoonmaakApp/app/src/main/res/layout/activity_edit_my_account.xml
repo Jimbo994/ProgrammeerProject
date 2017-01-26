@@ -1,13 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_edit_my_account"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="mprog.nl.studentenschoonmaakapp.EditMyAccountActivity">
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <!--<EditText-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/my_account_email"-->
+        <!--android:layout_alignLeft="@+id/my_account_email"-->
+        <!--android:layout_alignStart="@+id/my_account_email"-->
+        <!--android:layout_marginTop="15dp"-->
+        <!--android:id="@+id/my_account_field_email"-->
+        <!--android:hint="@string/e_mailadres"-->
+        <!--android:inputType="textEmailAddress" />-->
+
+    <TextView
+        android:text="@string/profiel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="37dp"
+        android:layout_marginStart="37dp"
+        android:layout_marginTop="53dp"
+        android:id="@+id/profiel"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="20sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="@string/voornaam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_my_account_name"
+        android:textSize="15sp"
+        android:layout_marginTop="21dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:layout_below="@+id/profiel"
+        android:layout_alignLeft="@+id/profiel"
+        android:layout_alignStart="@+id/profiel" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_my_account_field_name"
+        android:hint="@string/voornaam"
+        android:inputType="textPersonName"
+        android:layout_below="@+id/edit_my_account_name"
+        android:layout_alignLeft="@+id/edit_my_account_name"
+        android:layout_alignStart="@+id/edit_my_account_name"
+        android:layout_marginTop="25dp" />
+
+    <TextView
+        android:text="@string/achternaam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:id="@+id/edit_my_account_lastname"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:layout_below="@+id/edit_my_account_field_name"
+        android:layout_alignLeft="@+id/edit_my_account_field_name"
+        android:layout_alignStart="@+id/edit_my_account_field_name"
+        android:layout_marginTop="29dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_my_account_field_lastname"
+        android:hint="@string/achternaam"
+        android:inputType="textPersonName"
+        android:layout_below="@+id/edit_my_account_lastname"
+        android:layout_alignLeft="@+id/edit_my_account_lastname"
+        android:layout_alignStart="@+id/edit_my_account_lastname"
+        android:layout_marginTop="24dp" />
+
+    <Button
+        android:text="@string/opslaan"
+        android:textColor="@android:color/holo_green_light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/save_edit_my_account"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_marginTop="45dp"
+        android:layout_below="@+id/edit_my_account_field_lastname"
+        android:layout_toRightOf="@+id/edit_my_account_field_name"
+        android:layout_toEndOf="@+id/edit_my_account_field_name" />
+
+
+    <!--<TextView-->
+        <!--android:text="@string/e_mailadres"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/my_account_email"-->
+        <!--android:textAppearance="@style/TextAppearance.AppCompat.Body1"-->
+        <!--android:textSize="15sp"-->
+        <!--android:layout_below="@+id/my_account_field_lastname"-->
+        <!--android:layout_alignLeft="@+id/my_account_field_lastname"-->
+        <!--android:layout_alignStart="@+id/my_account_field_lastname"-->
+        <!--android:layout_marginTop="13dp" />-->
+
 
 </RelativeLayout>

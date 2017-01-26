@@ -61,7 +61,7 @@ public class MyAccountActivity extends AppCompatActivity implements View.OnClick
         String hash_email = String.valueOf(hash);
 
 
-        mDatabase.child(hash_email).addValueEventListener(new ValueEventListener() {
+        mDatabase.child(hash_email).child("userinfo").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);

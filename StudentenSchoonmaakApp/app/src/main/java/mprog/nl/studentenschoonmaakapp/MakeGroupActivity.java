@@ -219,7 +219,7 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
             mNameField.setError("Vul bijnaam in.");
             result = false;
         } else {
-            mEmailField.setError(null);
+            mNameField.setError(null);
         }
         return result;
     }
@@ -289,7 +289,7 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
         int hash = email.hashCode();
         String hash_email = String.valueOf(hash);
 
-        userref.child(hash_email).setValue(user);
+        userref.child(hash_email).child("userinfo").setValue(user);
         return new AsyncResult<>();
     }
 

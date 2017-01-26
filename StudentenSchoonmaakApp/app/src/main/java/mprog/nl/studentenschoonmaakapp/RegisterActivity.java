@@ -156,7 +156,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         int hash = email.hashCode();
         String hash_email = String.valueOf(hash);
 
-        mDatabase.child("users").child(hash_email).setValue(user);
+        mDatabase.child("users").child(hash_email).child("userinfo").setValue(user);
     }
     // [END basic_write]
 
