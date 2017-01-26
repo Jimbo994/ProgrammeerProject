@@ -76,6 +76,13 @@ Worked on bug for my adapters. Data from firebase sometimes doesnt load, only lo
 made some progress but still not completely working.
 still needs to be done: deleting of groups (perhaps deleting of user as well)
 
+Managed to solve the deleting of group. Now it deletes everything that has to be deleted properly!
+
+So still left: Deleting of user, making it possible for a user to enter a group or leave a group after creation?
+And fixing ListView problem..
+
+#Day18
+
 
 
 
