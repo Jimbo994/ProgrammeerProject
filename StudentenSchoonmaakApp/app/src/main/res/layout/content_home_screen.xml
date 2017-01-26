@@ -27,7 +27,7 @@
     <ListView
         android:id="@+id/listview_mygroups"
         android:layout_width="match_parent"
-        android:paddingTop="50dp"
+        android:paddingTop="10dp"
         android:layout_height="350dp"
         />
 

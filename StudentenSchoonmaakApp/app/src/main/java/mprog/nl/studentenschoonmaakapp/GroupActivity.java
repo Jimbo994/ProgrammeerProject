@@ -21,6 +21,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
+import mprog.nl.studentenschoonmaakapp.models.CustomAdapter;
 import mprog.nl.studentenschoonmaakapp.models.FireBaseHelper;
 
 public class GroupActivity extends AppCompatActivity {
@@ -29,6 +32,8 @@ public class GroupActivity extends AppCompatActivity {
     EditText mRemoveRoomField;
     String groupid;
     String groupname;
+
+    ArrayList<String> RoomList;
 
     DatabaseReference mDatabase;
 
@@ -57,19 +62,18 @@ public class GroupActivity extends AppCompatActivity {
         groupid = getIntent().getStringExtra("groepid");
         groupname = getIntent().getStringExtra("groepnaam");
 
+        mRooms =(ListView) findViewById(R.id.tasks_listview);
+        RoomList = new ArrayList<>();
+        mAdapter = new CustomAdapter(this, RoomList);
+        mRooms.setAdapter(mAdapter);
+
         Toast.makeText(GroupActivity.this,("groepid: " + groupid + " groepnaam: " + groupname), Toast.LENGTH_LONG).show();
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child("rooms");
-
-        mRooms =(ListView) findViewById(R.id.tasks_listview);
-
         mHelper = new FireBaseHelper(mDatabase);
+        RoomList = mHelper.retrieve_rooms(RoomList);
 
-        if (mHelper.retrieve_tasks() != null)
-        {
-            mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mHelper.retrieve_rooms());
-            mRooms.setAdapter(mAdapter);
-        }
+        mAdapter.notifyDataSetChanged();
 
         mRooms.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -87,8 +91,8 @@ public class GroupActivity extends AppCompatActivity {
         mRooms.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                final String room_name = mRooms.getItemAtPosition(i).toString();
-                Toast.makeText(getApplicationContext(), "kamer" + room_name, Toast.LENGTH_SHORT).show();
+                final String[] room_name = {mRooms.getItemAtPosition(i).toString()};
+                Toast.makeText(getApplicationContext(), "kamer" + room_name[0], Toast.LENGTH_SHORT).show();
 
                 final Dialog dialog = new Dialog(GroupActivity.this);
                 dialog.setContentView(R.layout.custom_dialog_remove_room);
@@ -106,15 +110,17 @@ public class GroupActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         DatabaseReference ref_tasks = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child("tasks");
-                        ref_tasks.child(room_name).removeValue();
+                        ref_tasks.child(room_name[0]).removeValue();
 
                         mDatabase.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 for (DataSnapshot ds : dataSnapshot.getChildren()){
                                     String current_room_name = ds.getValue(String.class);
-                                    if (current_room_name.equals(room_name)){
+                                    if (current_room_name.equals(room_name[0])){
                                         ds.getRef().removeValue();
+                                        room_name[0] = "";
+
                                     }
                                 }
                             }
@@ -124,6 +130,7 @@ public class GroupActivity extends AppCompatActivity {
 
                             }
                         });
+
                         dialog.dismiss();
                     }
                 });
@@ -134,7 +141,9 @@ public class GroupActivity extends AppCompatActivity {
                         dialog.dismiss();
                     }
                 });
+                mAdapter.notifyDataSetChanged();
                 return true;
+
             }
         });
     }

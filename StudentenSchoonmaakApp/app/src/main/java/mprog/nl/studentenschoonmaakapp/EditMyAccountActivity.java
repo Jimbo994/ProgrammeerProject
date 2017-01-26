@@ -26,6 +26,8 @@ public class EditMyAccountActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_my_account);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Wijzig persoonlijke gegevens");
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
@@ -75,6 +77,11 @@ public class EditMyAccountActivity extends AppCompatActivity {
             mName.setError(null);
         }
         return result;
+    }
+
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 
 }

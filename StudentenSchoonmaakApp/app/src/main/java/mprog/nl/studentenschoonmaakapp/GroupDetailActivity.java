@@ -20,6 +20,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
+import mprog.nl.studentenschoonmaakapp.models.CustomAdapter;
 import mprog.nl.studentenschoonmaakapp.models.FireBaseHelper;
 
 public class GroupDetailActivity extends AppCompatActivity {
@@ -30,7 +33,7 @@ public class GroupDetailActivity extends AppCompatActivity {
     String room;
 
     ArrayAdapter mAdapter;
-
+    ArrayList<String> mTaskList;
     ListView mTasks;
 
     EditText mEditField;
@@ -66,11 +69,13 @@ public class GroupDetailActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child("tasks").child(room);
 
         mTasks = (ListView) findViewById(R.id.tasks_listview);
+        mTaskList = new ArrayList<>();
+        mAdapter = new CustomAdapter(this, mTaskList);
+        mTasks.setAdapter(mAdapter);
 
         mHelper = new FireBaseHelper(mDatabase);
-
-        mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mHelper.retrieve_tasks());
-        mTasks.setAdapter(mAdapter);
+        mHelper.retrieve_tasks(mTaskList);
+        mAdapter.notifyDataSetChanged();
 
         mTasks.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -116,7 +121,6 @@ public class GroupDetailActivity extends AppCompatActivity {
                                 child(groupid).child("tasks").child(room);
 
                         RemoveTask(ref_tasks, task_name);
-
                         dialog.dismiss();
                     }
 

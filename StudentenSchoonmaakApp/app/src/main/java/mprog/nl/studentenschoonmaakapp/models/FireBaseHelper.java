@@ -19,29 +19,22 @@ import mprog.nl.studentenschoonmaakapp.MyAccountActivity;
 public class FireBaseHelper {
 
     DatabaseReference db;
-    ArrayList<String> mygroups;
     Post post;
     ArrayList<String> mygroupids;
-    ArrayList<String> myTasks;
-    ArrayList<String> myRooms;
-
     public FireBaseHelper(DatabaseReference db) {
         this.db = db;
-        mygroups = new ArrayList<>();
         mygroupids = new ArrayList<>();
-        myRooms = new ArrayList<>();
-        myTasks = new ArrayList<>();
 
     }
 
     /** Retrieves Arraylist, on Eventlisteners fetchdata is called which fills Arraylist
      Not all Eventlisteners used yet.*/
-    public ArrayList<String> retrieve() {
+    public ArrayList<String> retrieve(final ArrayList<String> a) {
         db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mygroups.clear();
-                fetchData(dataSnapshot);
+                a.clear();
+                fetchData(a, dataSnapshot);
             }
 
             @Override
@@ -49,14 +42,14 @@ public class FireBaseHelper {
 
             }
         });
-        return mygroups;
+        return a;
     }
 
-    public ArrayList retrieve_groupid() {
+    public ArrayList retrieve_groupid(final ArrayList<String> a) {
         db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                fetchData(dataSnapshot);
+                fetchData(a, dataSnapshot);
             }
 
             @Override
@@ -69,25 +62,25 @@ public class FireBaseHelper {
 
 
     /** fetches data from database and adds it to Arraylist*/
-    private void fetchData(DataSnapshot dataSnapshot)
+    private void fetchData(ArrayList<String> a, DataSnapshot dataSnapshot)
     {
-        mygroups.clear();
+        a.clear();
        for (DataSnapshot ds : dataSnapshot.getChildren()) {
            post = ds.getValue(Post.class);
            String groupname = post.getGroupname();
            String groupid = post.getGroupid();
            mygroupids.add(groupid);
-           mygroups.add(groupname);
+           a.add(groupname);
         }
     }
 
 
-    public ArrayList<String> retrieve_rooms() {
+    public ArrayList<String> retrieve_rooms(final ArrayList<String> a) {
         db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                myRooms.clear();
-                fetchAllRooms(dataSnapshot);
+                a.clear();
+                fetchAllRooms(a, dataSnapshot);
             }
 
             @Override
@@ -95,21 +88,21 @@ public class FireBaseHelper {
 
             }
         });
-        return myRooms;
+        return a;
     }
 
-    private void fetchAllRooms(DataSnapshot dataSnapshot){
+    private void fetchAllRooms(ArrayList<String> a, DataSnapshot dataSnapshot){
         for(DataSnapshot ds : dataSnapshot.getChildren()){
-            myRooms.add(String.valueOf(ds.getValue()));
+            a.add(String.valueOf(ds.getValue()));
         }
     }
 
-    public ArrayList<String> retrieve_tasks() {
+    public ArrayList<String> retrieve_tasks(final ArrayList<String> a) {
         db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                myTasks.clear();
-                fetchAllTasks(dataSnapshot);
+                a.clear();
+                fetchAllTasks(a, dataSnapshot);
             }
 
             @Override
@@ -117,12 +110,12 @@ public class FireBaseHelper {
 
             }
         });
-        return myTasks;
+        return a;
     }
 
-    private void fetchAllTasks(DataSnapshot dataSnapshot){
+    private void fetchAllTasks(ArrayList<String> a, DataSnapshot dataSnapshot){
         for(DataSnapshot ds : dataSnapshot.getChildren()){
-            myTasks.add(String.valueOf(ds.getValue()));
+            a.add(String.valueOf(ds.getValue()));
         }
     }
 }

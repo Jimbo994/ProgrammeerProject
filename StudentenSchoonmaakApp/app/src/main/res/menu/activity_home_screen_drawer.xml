@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="single"
+        android:choiceMode="none">
         <item
             android:id="@+id/nav_lists"
             android:icon="@drawable/ic_list_black_24dp"
-            android:title="Mijn lijsten" />
+            android:title="Mijn lijsten"
+            />
         <item
             android:id="@+id/nav_account"
             android:icon="@drawable/ic_account_circle_black_24dp"

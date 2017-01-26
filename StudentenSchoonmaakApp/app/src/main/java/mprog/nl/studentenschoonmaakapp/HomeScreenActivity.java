@@ -32,6 +32,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import mprog.nl.studentenschoonmaakapp.models.AsyncResult;
+import mprog.nl.studentenschoonmaakapp.models.CustomAdapter;
 import mprog.nl.studentenschoonmaakapp.models.FireBaseHelper;
 import mprog.nl.studentenschoonmaakapp.models.User;
 
@@ -42,6 +43,7 @@ public class HomeScreenActivity extends AppCompatActivity
 
     private DatabaseReference mDatabase;
 
+    ArrayList<String> mGroupsList;
 
     ArrayList<String> mGroupMembers;
 
@@ -60,6 +62,8 @@ public class HomeScreenActivity extends AppCompatActivity
         getSupportActionBar().setTitle("Mijn Groepen");
 
         mGroupMembers = new ArrayList<>();
+        mGroupsList = new ArrayList<>();
+        mAdapter = new CustomAdapter(this, mGroupsList);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -72,12 +76,13 @@ public class HomeScreenActivity extends AppCompatActivity
 
         mHelper = new FireBaseHelper(mDatabase);
 
-        mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mHelper.retrieve());
 
-        final ArrayList mGroupid = mHelper.retrieve_groupid();
+
+        final ArrayList mGroupid = mHelper.retrieve_groupid(mGroupMembers);
 
         mGroups.setAdapter(mAdapter);
 
+        mGroupsList = mHelper.retrieve(mGroupsList);
         mAdapter.notifyDataSetChanged();
 
         mGroups.setOnItemClickListener(new AdapterView.OnItemClickListener() {
