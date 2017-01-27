@@ -3,6 +3,7 @@ package mprog.nl.studentenschoonmaakapp;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -24,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import mprog.nl.studentenschoonmaakapp.models.CustomAdapter;
+import mprog.nl.studentenschoonmaakapp.models.CustomTaskAdapter;
 import mprog.nl.studentenschoonmaakapp.models.FireBaseHelper;
 
 public class GroupActivity extends AppCompatActivity {
@@ -34,11 +37,16 @@ public class GroupActivity extends AppCompatActivity {
     String groupname;
 
     ArrayList<String> RoomList;
+    ArrayList<String> Members;
 
     DatabaseReference mDatabase;
+    DatabaseReference mDatabase_for_members;
 
 //    FireBaseHelper mHelper;
     ArrayAdapter mAdapter;
+    ArrayAdapter<String> mSpinnerAdapter;
+
+    Spinner spinner;
 
     ListView mRooms;
 
@@ -64,12 +72,17 @@ public class GroupActivity extends AppCompatActivity {
 
         mRooms =(ListView) findViewById(R.id.tasks_listview);
         RoomList = new ArrayList<>();
+        Members = new ArrayList<>();
         mAdapter = new CustomAdapter(this, RoomList);
+
+
+        mSpinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Members);
 
 
         Toast.makeText(GroupActivity.this,("groepid: " + groupid + " groepnaam: " + groupname), Toast.LENGTH_LONG).show();
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child("rooms");
+        mDatabase_for_members = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child("membernames");
 //        mHelper = new FireBaseHelper(mDatabase);
 //        RoomList = mHelper.retrieve_rooms(RoomList);
 
@@ -88,7 +101,6 @@ public class GroupActivity extends AppCompatActivity {
 
             }
         });
-
 
         mRooms.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -174,6 +186,26 @@ public class GroupActivity extends AppCompatActivity {
         // Buttons in Alertdialog
         Button save = (Button) dialog.findViewById(R.id.add_room_button);
         Button cancel = (Button) dialog.findViewById(R.id.cancel_add_room_button);
+
+        // Spinner
+        spinner = (Spinner) findViewById(R.id.spinner);
+
+        mDatabase_for_members.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    Members.add(String.valueOf(ds.getValue()));
+                }
+                spinner.setAdapter(mSpinnerAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
 
         dialog.show();
 

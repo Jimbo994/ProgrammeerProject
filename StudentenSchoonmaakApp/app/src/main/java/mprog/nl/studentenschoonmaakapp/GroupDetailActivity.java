@@ -23,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import mprog.nl.studentenschoonmaakapp.models.CustomAdapter;
+import mprog.nl.studentenschoonmaakapp.models.CustomTaskAdapter;
 import mprog.nl.studentenschoonmaakapp.models.FireBaseHelper;
 
 public class GroupDetailActivity extends AppCompatActivity {
@@ -70,7 +71,7 @@ public class GroupDetailActivity extends AppCompatActivity {
 
         mTasks = (ListView) findViewById(R.id.tasks_listview);
         mTaskList = new ArrayList<>();
-        mAdapter = new CustomAdapter(this, mTaskList);
+        mAdapter = new CustomTaskAdapter(this, mTaskList);
 
 
 //        mHelper = new FireBaseHelper(mDatabase);
