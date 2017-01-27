@@ -37,7 +37,7 @@ public class GroupActivity extends AppCompatActivity {
 
     DatabaseReference mDatabase;
 
-    FireBaseHelper mHelper;
+//    FireBaseHelper mHelper;
     ArrayAdapter mAdapter;
 
     ListView mRooms;
@@ -65,15 +65,30 @@ public class GroupActivity extends AppCompatActivity {
         mRooms =(ListView) findViewById(R.id.tasks_listview);
         RoomList = new ArrayList<>();
         mAdapter = new CustomAdapter(this, RoomList);
-        mRooms.setAdapter(mAdapter);
+
 
         Toast.makeText(GroupActivity.this,("groepid: " + groupid + " groepnaam: " + groupname), Toast.LENGTH_LONG).show();
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child("rooms");
-        mHelper = new FireBaseHelper(mDatabase);
-        RoomList = mHelper.retrieve_rooms(RoomList);
+//        mHelper = new FireBaseHelper(mDatabase);
+//        RoomList = mHelper.retrieve_rooms(RoomList);
 
-        mAdapter.notifyDataSetChanged();
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                RoomList.clear();
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    RoomList.add(String.valueOf(ds.getValue()));
+                }
+                mRooms.setAdapter(mAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
         mRooms.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

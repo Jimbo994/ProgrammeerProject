@@ -27,15 +27,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
-import mprog.nl.studentenschoonmaakapp.models.AsyncResult;
 import mprog.nl.studentenschoonmaakapp.models.CustomAdapter;
 import mprog.nl.studentenschoonmaakapp.models.FireBaseHelper;
-import mprog.nl.studentenschoonmaakapp.models.User;
+import mprog.nl.studentenschoonmaakapp.models.Post;
 
 public class HomeScreenActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -77,14 +72,27 @@ public class HomeScreenActivity extends AppCompatActivity
 
         mHelper = new FireBaseHelper(mDatabase);
 
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mGroupsList.clear();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Post post = ds.getValue(Post.class);
+                    String groupname = post.getGroupname();
+                    mGroupsList.add(groupname);
+                }
+                mGroups.setAdapter(mAdapter);
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-        final ArrayList mGroupid = mHelper.retrieve_groupid(mGroupMembers);
+            }
+        });
 
-        mGroups.setAdapter(mAdapter);
+      final ArrayList mGroupid = mHelper.retrieve_groupid(mGroupMembers);
 
-        mGroupsList = mHelper.retrieve(mGroupsList);
-        mAdapter.notifyDataSetChanged();
+        //mGroupsList = mHelper.retrieve(mGroupsList);
 
         mGroups.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -136,9 +144,6 @@ public class HomeScreenActivity extends AppCompatActivity
 
                         }
                     });
-
-
-
                         dialog.dismiss();
                     }
                 });
@@ -210,5 +215,4 @@ public class HomeScreenActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 }

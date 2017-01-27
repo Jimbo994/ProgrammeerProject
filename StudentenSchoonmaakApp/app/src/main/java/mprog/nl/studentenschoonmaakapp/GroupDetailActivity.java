@@ -39,7 +39,7 @@ public class GroupDetailActivity extends AppCompatActivity {
     EditText mEditField;
     EditText mTaskField;
 
-    FireBaseHelper mHelper;
+//    FireBaseHelper mHelper;
 
     DatabaseReference mDatabase;
 
@@ -71,11 +71,27 @@ public class GroupDetailActivity extends AppCompatActivity {
         mTasks = (ListView) findViewById(R.id.tasks_listview);
         mTaskList = new ArrayList<>();
         mAdapter = new CustomAdapter(this, mTaskList);
-        mTasks.setAdapter(mAdapter);
 
-        mHelper = new FireBaseHelper(mDatabase);
-        mHelper.retrieve_tasks(mTaskList);
-        mAdapter.notifyDataSetChanged();
+
+//        mHelper = new FireBaseHelper(mDatabase);
+//        mHelper.retrieve_tasks(mTaskList);
+
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mTaskList.clear();
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    mTaskList.add(String.valueOf(ds.getValue()));
+                }
+                mTasks.setAdapter(mAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
         mTasks.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
