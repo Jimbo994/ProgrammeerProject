@@ -2,6 +2,7 @@ package mprog.nl.studentenschoonmaakapp.models;
 
 import com.google.firebase.database.Exclude;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,13 +14,15 @@ public class Task {
 
     private String task;
     private boolean completed;
+    private String timestamp;
 
     public Task(){
 
     }
-    public Task (String task, boolean completed) {
+    public Task (String task, boolean completed, String timestamp) {
         this.task = task;
         this.completed = completed;
+        this.timestamp = timestamp;
     }
 
     public String getTask() {
@@ -36,5 +39,13 @@ public class Task {
 
     public void setCompleted(boolean completed){
         this.completed = completed;
+    }
+
+    public String getTimestamp(){
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp){
+        this.timestamp = timestamp;
     }
 }

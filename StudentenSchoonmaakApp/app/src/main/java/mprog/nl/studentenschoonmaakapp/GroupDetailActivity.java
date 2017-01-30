@@ -24,6 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -85,10 +86,13 @@ public class GroupDetailActivity extends AppCompatActivity {
             @Override
             protected void populateView(View v, final Task model, int position) {
                 TextView theTextView = (TextView) v.findViewById(R.id.movie_title);
+                TextView date = (TextView) v.findViewById(R.id.date);
                 CheckBox checkbox = (CheckBox) v.findViewById(R.id.checkBox);
+
 
                 theTextView.setText(model.getTask());
                 checkbox.setChecked(model.isCompleted());
+                date.setText(model.getTimestamp());
 
             }
         };
@@ -123,7 +127,8 @@ public class GroupDetailActivity extends AppCompatActivity {
 
         mTasks.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                final String task_name = mTasks.getItemAtPosition(i).toString();
+                Task task = (Task) mTasks.getItemAtPosition(i);
+                final String task_name = task.getTask();
                 Toast.makeText(getApplicationContext(), "taak" + task_name, Toast.LENGTH_SHORT).show();
 
                 final Dialog dialog = new Dialog(GroupDetailActivity.this);
@@ -147,11 +152,12 @@ public class GroupDetailActivity extends AppCompatActivity {
                         } else {
                             String new_task = mEditField.getText().toString();
                             DatabaseReference ref_tasks = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child("tasks").child(room);
-                            RemoveTask(ref_tasks, task_name);
+//                            RemoveTask(ref_tasks, task_name);
+                            Task edittask = new Task(new_task, false, "");
 
-                            String key = ref_tasks.push().getKey();
+                            ref_tasks.child(task_name).removeValue();
 
-                            ref_tasks.child(key).setValue(new_task);
+                            ref_tasks.child(new_task).setValue(edittask);
                             dialog.dismiss();
                         }
                     }
@@ -164,7 +170,9 @@ public class GroupDetailActivity extends AppCompatActivity {
                         DatabaseReference ref_tasks = FirebaseDatabase.getInstance().getReference().child("groups").
                                 child(groupid).child("tasks").child(room);
 
-                        RemoveTask(ref_tasks, task_name);
+                        ref_tasks.child(task_name).removeValue();
+
+//                        RemoveTask(ref_tasks, task_name);
                         dialog.dismiss();
                     }
 
@@ -174,25 +182,24 @@ public class GroupDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void RemoveTask(DatabaseReference ref, final String string) {
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    String current_task_name = ds.getValue(String.class);
-                    if (current_task_name.equals(string)) {
-                        ds.getRef().removeValue();
-                    }
-                }
-            }
+//    private void RemoveTask(DatabaseReference ref, final String string) {
+//        ref.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+//                    String current_task_name = ds.getValue(String.class);
+//                    if (current_task_name.equals(string)) {
+//                        ds.getRef().removeValue();
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-    }
 
     private void AddTask() {
                 final Dialog dialog = new Dialog(GroupDetailActivity.this);
@@ -263,12 +270,14 @@ public class GroupDetailActivity extends AppCompatActivity {
 
         boolean isChecked = ((CheckBox)view).isChecked();
         if (isChecked){
-            Task t = new Task(task_string, true);
+            Date timestamp = new Date();
+            String str_timestamp = timestamp.toString();
+            Task t = new Task(task_string, true, str_timestamp);
             ref.setValue(t);
             Toast.makeText(this, "checked", Toast.LENGTH_SHORT).show();
         }
         else{
-            Task t = new Task(task_string, false);
+            Task t = new Task(task_string, false, "");
             ref.setValue(t);
         }
     }

@@ -42,12 +42,12 @@
         android:id="@+id/title_field_add_responsible_member"
         android:textAppearance="@style/TextAppearance.AppCompat" />
 
-   <ListView
-       android:layout_width="wrap_content"
-       android:layout_height="80dp"
-       android:id="@+id/member_listview">
+   <Spinner
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:spinnerMode="dropdown"
+       android:id="@+id/member_spinner"/>
 
-   </ListView>
 
     <!--<EditText-->
         <!--android:layout_width="match_parent"-->

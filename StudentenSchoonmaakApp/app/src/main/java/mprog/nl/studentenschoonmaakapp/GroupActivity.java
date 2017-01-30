@@ -2,6 +2,7 @@ package mprog.nl.studentenschoonmaakapp;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
@@ -9,14 +10,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,6 +34,8 @@ import java.util.List;
 import mprog.nl.studentenschoonmaakapp.models.CustomAdapter;
 import mprog.nl.studentenschoonmaakapp.models.CustomTaskAdapter;
 import mprog.nl.studentenschoonmaakapp.models.FireBaseHelper;
+import mprog.nl.studentenschoonmaakapp.models.Room;
+import mprog.nl.studentenschoonmaakapp.models.Task;
 
 public class GroupActivity extends AppCompatActivity {
 
@@ -46,8 +53,9 @@ public class GroupActivity extends AppCompatActivity {
 //    FireBaseHelper mHelper;
     ArrayAdapter mAdapter;
     ArrayAdapter<String> mMemberAdapter;
+    FirebaseListAdapter<Room> mAdapter2;
 
-    ListView Resposible;
+    Spinner Resposible;
 
     ListView mRooms;
 
@@ -77,31 +85,45 @@ public class GroupActivity extends AppCompatActivity {
         mAdapter = new CustomAdapter(this, RoomList);
 
 
-        mMemberAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Members);
 
+        mMemberAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, Members);
 
         Toast.makeText(GroupActivity.this,("groepid: " + groupid + " groepnaam: " + groupname), Toast.LENGTH_LONG).show();
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child("rooms");
+
+        mAdapter2 = new FirebaseListAdapter<Room>(this, Room.class, R.layout.custom_listview, mDatabase) {
+            @Override
+            protected void populateView(View v, Room model, int position) {
+                TextView room = (TextView) v.findViewById(R.id.movie_title);
+                TextView responsible = (TextView) v.findViewById(R.id.responsible);
+
+                room.setText(model.getRoom());
+                responsible.setText(model.getResponsibility());
+            }
+        };
+
+        mRooms.setAdapter(mAdapter2);
+
         mDatabase_for_members = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child("membernames");
 //        mHelper = new FireBaseHelper(mDatabase);
 //        RoomList = mHelper.retrieve_rooms(RoomList);
 
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                RoomList.clear();
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    RoomList.add(String.valueOf(ds.getValue()));
-                }
-                mRooms.setAdapter(mAdapter);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+//        mDatabase.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                RoomList.clear();
+//                for(DataSnapshot ds : dataSnapshot.getChildren()){
+//                    RoomList.add(String.valueOf(ds.getValue()));
+//                }
+//                mRooms.setAdapter(mAdapter);
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
 
         mRooms.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -188,9 +210,8 @@ public class GroupActivity extends AppCompatActivity {
         Button save = (Button) dialog.findViewById(R.id.add_room_button);
         Button cancel = (Button) dialog.findViewById(R.id.cancel_add_room_button);
 
-        // ListView
-        Resposible = (ListView) dialog.findViewById(R.id.member_listview);
-
+        // Spinnner
+        Resposible = (Spinner) dialog.findViewById(R.id.member_spinner);
 
         dialog.show();
 
@@ -222,8 +243,11 @@ public class GroupActivity extends AppCompatActivity {
                     String room = mRoomField.getText().toString();
                     DatabaseReference db_ref = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid);
                     String key = db_ref.push().getKey();
+                    String responsible = Resposible.getSelectedItem().toString();
+                    Room r = new Room(room, responsible);
 
-                    db_ref.child("rooms").child(key).setValue(room);
+
+                    db_ref.child("rooms").child(room).setValue(r);
                     dialog.dismiss();
                 }
             }
