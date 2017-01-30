@@ -24,6 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import mprog.nl.studentenschoonmaakapp.models.CustomAdapter;
 import mprog.nl.studentenschoonmaakapp.models.CustomTaskAdapter;
@@ -44,9 +45,9 @@ public class GroupActivity extends AppCompatActivity {
 
 //    FireBaseHelper mHelper;
     ArrayAdapter mAdapter;
-    ArrayAdapter<String> mSpinnerAdapter;
+    ArrayAdapter<String> mMemberAdapter;
 
-    Spinner spinner;
+    ListView Resposible;
 
     ListView mRooms;
 
@@ -76,7 +77,7 @@ public class GroupActivity extends AppCompatActivity {
         mAdapter = new CustomAdapter(this, RoomList);
 
 
-        mSpinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Members);
+        mMemberAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Members);
 
 
         Toast.makeText(GroupActivity.this,("groepid: " + groupid + " groepnaam: " + groupname), Toast.LENGTH_LONG).show();
@@ -187,8 +188,11 @@ public class GroupActivity extends AppCompatActivity {
         Button save = (Button) dialog.findViewById(R.id.add_room_button);
         Button cancel = (Button) dialog.findViewById(R.id.cancel_add_room_button);
 
-        // Spinner
-        spinner = (Spinner) findViewById(R.id.spinner);
+        // ListView
+        Resposible = (ListView) dialog.findViewById(R.id.member_listview);
+
+
+        dialog.show();
 
         mDatabase_for_members.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -196,7 +200,8 @@ public class GroupActivity extends AppCompatActivity {
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
                     Members.add(String.valueOf(ds.getValue()));
                 }
-                spinner.setAdapter(mSpinnerAdapter);
+                Resposible.setAdapter(mMemberAdapter);
+
             }
 
             @Override
@@ -207,7 +212,6 @@ public class GroupActivity extends AppCompatActivity {
 
 
 
-        dialog.show();
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override

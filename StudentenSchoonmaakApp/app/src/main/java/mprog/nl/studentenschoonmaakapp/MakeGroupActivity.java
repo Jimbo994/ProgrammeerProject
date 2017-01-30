@@ -19,8 +19,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -78,6 +81,7 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
 
         // make sure it is empty
         mMemberList.clear();
+
 
         mAuth = FirebaseAuth.getInstance();
         email_current_user = mAuth.getCurrentUser().getEmail();
@@ -290,6 +294,7 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
         String hash_email = String.valueOf(hash);
 
         userref.child(hash_email).child("userinfo").setValue(user);
+
         return new AsyncResult<>();
     }
 
@@ -332,6 +337,26 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
         DatabaseReference groupref2 = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid);
         String key = groupref2.push().getKey();
         groupref2.child("members").child(key).setValue(hash_email_current_user);
+
+        //naam toevoegen aan members
+        final String[] current_name = new String[1];
+        final DatabaseReference members = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child("membernames");
+        DatabaseReference me = FirebaseDatabase.getInstance().getReference().child("users").child(hash_email_current_user).child("userinfo");
+        me.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    current_name[0] = String.valueOf(ds.getValue());
+                }
+                members.push().setValue(current_name[0]);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     private Future<?> MembertoGroup(User u) {

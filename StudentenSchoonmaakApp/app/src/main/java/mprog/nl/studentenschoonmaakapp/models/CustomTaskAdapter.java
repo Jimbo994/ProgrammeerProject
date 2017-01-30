@@ -59,6 +59,8 @@ public class CustomTaskAdapter extends ArrayAdapter<String> {
 
         CheckBox checkbox = (CheckBox) theView.findViewById(R.id.checkBox);
 
+        checkbox.isChecked();
+
         return theView;
 
     }

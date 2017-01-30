@@ -10,10 +10,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,10 +24,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import mprog.nl.studentenschoonmaakapp.models.CustomAdapter;
 import mprog.nl.studentenschoonmaakapp.models.CustomTaskAdapter;
 import mprog.nl.studentenschoonmaakapp.models.FireBaseHelper;
+import mprog.nl.studentenschoonmaakapp.models.Task;
 
 public class GroupDetailActivity extends AppCompatActivity {
 
@@ -41,7 +47,7 @@ public class GroupDetailActivity extends AppCompatActivity {
     EditText mTaskField;
 
 //    FireBaseHelper mHelper;
-
+    FirebaseListAdapter<Task> mAdapter2;
     DatabaseReference mDatabase;
 
 
@@ -73,25 +79,46 @@ public class GroupDetailActivity extends AppCompatActivity {
         mTaskList = new ArrayList<>();
         mAdapter = new CustomTaskAdapter(this, mTaskList);
 
+        String key = mDatabase.getKey();
+
+        mAdapter2 = new FirebaseListAdapter<Task>(this, Task.class, R.layout.custom_listview_tasks, mDatabase) {
+            @Override
+            protected void populateView(View v, final Task model, int position) {
+                TextView theTextView = (TextView) v.findViewById(R.id.movie_title);
+                CheckBox checkbox = (CheckBox) v.findViewById(R.id.checkBox);
+
+                theTextView.setText(model.getTask());
+                checkbox.setChecked(model.isCompleted());
+
+            }
+        };
+
+        mTasks.setAdapter(mAdapter2);
+
 
 //        mHelper = new FireBaseHelper(mDatabase);
 //        mHelper.retrieve_tasks(mTaskList);
 
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                mTaskList.clear();
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    mTaskList.add(String.valueOf(ds.getValue()));
-                }
-                mTasks.setAdapter(mAdapter);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+//        mDatabase.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                mTaskList.clear();
+//                for(DataSnapshot ds : dataSnapshot.getChildren()){
+//                    Task task = ds.getValue(Task.class);
+//                    String t = task.getTask();
+////                    String string = (String.valueOf(ds.getValue()));
+////                    String[] split = string.split("=");
+////                    split[0] = split[0].substring(1);
+//                   mTaskList.add(t);
+//                }
+//                mTasks.setAdapter(mAdapter);
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
 
 
         mTasks.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -187,11 +214,16 @@ public class GroupDetailActivity extends AppCompatActivity {
                             return;
                         } else {
                             String task = mTaskField.getText().toString();
+                            Task new_task = new Task();
+                            new_task.setTask(task);
+                            new_task.setCompleted(false);
+
                             DatabaseReference db_ref = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child("tasks").child(room);
 
                             String key = db_ref.push().getKey();
 
-                            db_ref.child(key).setValue(task);
+                            db_ref.child(task).setValue(new_task);
+
                             dialog.dismiss();
                         }
                     }
@@ -220,5 +252,25 @@ public class GroupDetailActivity extends AppCompatActivity {
                 finish();
                 return true;
             }
+
+    public void onClick(View view) {
+        View parent = (View) view.getParent();
+        TextView task = (TextView) parent.findViewById(R.id.movie_title);
+        String task_string = String.valueOf(task.getText().toString());
+        Toast.makeText(this, task_string, Toast.LENGTH_SHORT).show();
+        DatabaseReference ref = mDatabase.child(task_string);
+
+
+        boolean isChecked = ((CheckBox)view).isChecked();
+        if (isChecked){
+            Task t = new Task(task_string, true);
+            ref.setValue(t);
+            Toast.makeText(this, "checked", Toast.LENGTH_SHORT).show();
         }
+        else{
+            Task t = new Task(task_string, false);
+            ref.setValue(t);
+        }
+    }
+}
 
