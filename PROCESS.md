@@ -82,6 +82,19 @@ So still left: Deleting of user, making it possible for a user to enter a group 
 And fixing ListView problem..
 
 #Day18
+Did all that was left yesterdaty
+
+#day19 
+presentation. Added checkboxes and spinner. But no functions to it yet
+
+#day 20&21 enjoyed the weekend
+
+#day 22
+Added functionality to checkboxes. Had to make objects for it and some minor databse changes.
+Added Spinner and functionality also had to make some objects and minor databse changes.
+Looks like the functionality is here now. So now refactoring and bug fixing.
+Also changed two normal arrayadapters for firebaselistadapters. Saved a lot of code!
+If only i found out about this way earlier.
 
 
 
