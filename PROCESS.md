@@ -96,6 +96,9 @@ Looks like the functionality is here now. So now refactoring and bug fixing.
 Also changed two normal arrayadapters for firebaselistadapters. Saved a lot of code!
 If only i found out about this way earlier.
 
+#day 23
+Started refactoring. Swapped last old listview adapter for firebaselistadapter. This meant I could delete two customadapters.
+Which was a bit painful because I put some time in that. Refactored a lot of code. Could skip a lot. Also deleted FirebaseHelper because it seems better to leave it in the activities instead of putting it in a seperate java. Fixed a bug where if i would switch to myaccount activity after making a new group I would be signed in with the last added person to the group. which was odd.
 
 
 
