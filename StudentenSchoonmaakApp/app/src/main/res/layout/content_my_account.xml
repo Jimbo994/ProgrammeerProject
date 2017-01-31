@@ -42,17 +42,6 @@
         android:id="@+id/my_account_lastname"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
-
-    <!--<Button-->
-        <!--android:text="Verwijder Account"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/button_delete_account"-->
-        <!--android:layout_alignBaseline="@+id/button_reset_password"-->
-        <!--android:layout_alignBottom="@+id/button_reset_password"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_alignParentEnd="true" />-->
-
     <TextView
         android:text="Email adres:"
         android:layout_width="wrap_content"
@@ -97,15 +86,5 @@
         android:layout_below="@+id/my_account_name"
         android:layout_alignLeft="@+id/my_account_name"
         android:layout_alignStart="@+id/my_account_name" />
-
-    <Button
-        android:text="Reset wachtwoord"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/button_reset_password"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_below="@+id/my_account_field_email"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="42dp" />
 
 </RelativeLayout>

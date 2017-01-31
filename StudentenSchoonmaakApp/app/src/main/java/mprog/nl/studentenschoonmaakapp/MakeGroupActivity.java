@@ -34,7 +34,7 @@ import java.util.concurrent.Future;
 
 import mprog.nl.studentenschoonmaakapp.models.AsyncResult;
 import mprog.nl.studentenschoonmaakapp.models.MyAdapter;
-import mprog.nl.studentenschoonmaakapp.models.Post;
+import mprog.nl.studentenschoonmaakapp.models.Group;
 import mprog.nl.studentenschoonmaakapp.models.User;
 
 public class MakeGroupActivity extends AppCompatActivity implements View.OnClickListener {
@@ -321,8 +321,8 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
         DatabaseReference userref2 = FirebaseDatabase.getInstance().getReference().child("users").child(hash_email_current_user).child("groups");
         //String key2 = userref2.push().getKey();
 
-        Post post2 = new Post(group, groupid);
-        Map<String, Object> postvalues2 = post2.toMap();
+        Group group2 = new Group(group, groupid);
+        Map<String, Object> postvalues2 = group2.toMap();
 
         Map<String, Object> childUpdates2 = new HashMap<>();
 
@@ -390,8 +390,8 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
         DatabaseReference userref = FirebaseDatabase.getInstance().getReference().child("users").child(hash_email).child("groups");
 //        String key = userref.push().getKey();
 
-        Post post = new Post(group, groupid);
-        Map<String, Object> postvalues = post.toMap();
+        Group group1 = new Group(group, groupid);
+        Map<String, Object> postvalues = group1.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
 

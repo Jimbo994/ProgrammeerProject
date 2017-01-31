@@ -1,3 +1,9 @@
+/**
+ * Created by Jim Boelrijk
+ * Student of UvA
+ * Student number: 1045216
+ *
+ */
 package mprog.nl.studentenschoonmaakapp.models;
 
 import android.content.Context;

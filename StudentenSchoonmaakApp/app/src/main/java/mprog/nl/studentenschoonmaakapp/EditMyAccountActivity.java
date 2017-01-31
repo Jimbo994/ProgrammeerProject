@@ -1,3 +1,9 @@
+/**
+ * Created by Jim Boelrijk
+ * Student of UvA
+ * Student number: 1045216
+ */
+
 package mprog.nl.studentenschoonmaakapp;
 
 import android.support.v7.app.AppCompatActivity;
@@ -13,22 +19,25 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import mprog.nl.studentenschoonmaakapp.models.User;
 
+/**
+ * Edits Userinfo of user.
+ */
+
 public class EditMyAccountActivity extends AppCompatActivity {
 
-    FirebaseAuth mAuth;
-    DatabaseReference mDatabase;
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
 
-    EditText mName;
-    EditText mLastName;
-
+    private EditText mName;
+    private EditText mLastName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_my_account);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Wijzig persoonlijke gegevens");
 
+        // Initialize Firebase DatabaseReference and Auth.
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
 
@@ -39,30 +48,28 @@ public class EditMyAccountActivity extends AppCompatActivity {
         //Button
         Button save = (Button) findViewById(R.id.save_edit_my_account);
 
+        // Gets data from EditText fields and sets this data as new userinfo in Database.
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!validateForm()) {
                     return;
-                } else {
-                    String name = mName.getText().toString();
-                    String lastname = mLastName.getText().toString();
-                    String email = mAuth.getCurrentUser().getEmail();
+                }
                     User user = new User();
-                    user.setName(name);
-                    user.setLastname(lastname);
-                    user.setEmail(email);
+                    user.setName(mName.getText().toString());
+                    user.setLastname(mLastName.getText().toString());
+                    user.setEmail(mAuth.getCurrentUser().getEmail());
 
-                    int hash = email.hashCode();
+                    int hash = mAuth.getCurrentUser().getEmail().hashCode();
                     String hash_email = String.valueOf(hash);
 
                     mDatabase.child(hash_email).child("userinfo").setValue(user);
                     finish();
                 }
-            }
         });
     }
 
+    // Checks if TextFields are properly filled in.
     private boolean validateForm() {
         boolean result = true;
         if (TextUtils.isEmpty(mLastName.getText().toString())) {
@@ -80,9 +87,9 @@ public class EditMyAccountActivity extends AppCompatActivity {
         return result;
     }
 
+    // Finishes activity on navigate back button click.
     public boolean onSupportNavigateUp(){
         finish();
         return true;
     }
-
 }

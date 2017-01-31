@@ -1,10 +1,17 @@
-package mprog.nl.studentenschoonmaakapp;
+/**
+ * Created by Jim Boelrijk
+ * Student of UvA
+ * Student number: 1045216
+ *
+ * This code was inspired by google tutorial code for FireBase (see URL below)
+ *  https://github.com/firebase/quickstart-android
+ */
+package mprog.nl.studentenschoonmaakapp.LogIn;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -17,71 +24,76 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import mprog.nl.studentenschoonmaakapp.BaseActivity;
+import mprog.nl.studentenschoonmaakapp.R;
 import mprog.nl.studentenschoonmaakapp.models.User;
+
+/**
+ * Does Sign in on FireBase database, extends BaseActivity for showing of ProgressDialog.
+ */
 
 public class RegisterActivity extends BaseActivity implements View.OnClickListener {
 
-    private static final String TAG = "RegisterActivity";
+    private DatabaseReference mDatabase;
+    private FirebaseAuth mAuth;
 
     private EditText mEmailField;
     private EditText mNameField;
     private EditText mLastNameField;
     private EditText mPasswordField;
-    // private EditText mConfirmPassword;
 
     public String name;
     public String lastname;
-
-    // [START declare_auth&database]
-    private DatabaseReference mDatabase;
-    private FirebaseAuth mAuth;
-    // [END declare_auth&database]
+    public String email;
+    public String password;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        getSupportActionBar().setTitle("Registreren");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // Initialize DatabaseReference and Auth.
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
 
-        //Views
+        // Views
         mEmailField = (EditText) findViewById(R.id.field_register_email);
         mNameField = (EditText) findViewById(R.id.field_register_name);
         mLastNameField = (EditText) findViewById(R.id.field_register_lastname);
         mPasswordField = (EditText) findViewById(R.id.field_register_password);
-        // mConfirmPassword = (EditText) findViewById(R.id.field_register_passwordconfirm);
 
-        //Buttons
+        // Buttons
         findViewById(R.id.register_button).setOnClickListener(this);
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.register_button:
+                signUp();
+        }
+    }
+
+    // Registers new user, writes into database and sends Account Activation email.
     private void signUp() {
-        Log.d(TAG, "signUp");
         if (!validateForm()) {
             return;
         }
-
         showProgressDialog();
 
-        String email = mEmailField.getText().toString();
+        email = mEmailField.getText().toString();
         name = mNameField.getText().toString();
         lastname = mLastNameField.getText().toString();
-        String password = mPasswordField.getText().toString();
+        password = mPasswordField.getText().toString();
 
-        //dit nog niet doen, onnodig lastig
-        //String passwordconfirm = mConfirmPassword.getText().toString();
-
+        // Register users and call onAuthSuccess if successful.
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "createUser:onComplete:" + task.isSuccessful());
                         hideProgressDialog();
-
                         if (task.isSuccessful()) {
                             onAuthSuccess(task.getResult().getUser());
                             Toast.makeText(RegisterActivity.this, "Registreren",
@@ -94,17 +106,14 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 });
     }
 
+    // Calls writeNewUser then sends Account Activation email. Logs in user.
     private void onAuthSuccess(FirebaseUser user) {
-
-        // Write new user
-        writeNewUser(user.getUid(), name, lastname, user.getEmail());
-
+        writeNewUser(name, lastname, user.getEmail());
         user.sendEmailVerification()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Log.d(TAG, "Email sent.");
                             Toast.makeText(RegisterActivity.this, "Account activatie e-mail verstuurd.",
                                     Toast.LENGTH_SHORT).show();
                         }
@@ -116,6 +125,19 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         finish();
     }
 
+    // Writes user into database
+    public void writeNewUser(String Name, String last_name, String email) {
+        User user = new User(Name, last_name, email);
+
+        // Make hash from email and set as user id.
+        int hash = email.hashCode();
+        String hash_email = String.valueOf(hash);
+
+        mDatabase.child("users").child(hash_email).child("userinfo").setValue(user);
+    }
+
+
+    // Checks if Textfields are properly filled in.
     private boolean validateForm() {
         boolean result = true;
         if (TextUtils.isEmpty(mEmailField.getText().toString())) {
@@ -123,51 +145,26 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             result = false;
         } else {
             mEmailField.setError(null);
-        }
-
-        if (TextUtils.isEmpty(mNameField.getText().toString())) {
+        }if (TextUtils.isEmpty(mNameField.getText().toString())) {
             mNameField.setError("Vul naam in.");
             result = false;
         } else {
             mNameField.setError(null);
-        }
-
-        if (TextUtils.isEmpty(mLastNameField.getText().toString())) {
+        } if (TextUtils.isEmpty(mLastNameField.getText().toString())) {
             mLastNameField.setError("Vul achternaam in.");
             result = false;
         } else {
             mLastNameField.setError(null);
-        }
-
-        if (TextUtils.isEmpty(mPasswordField.getText().toString())) {
+        } if (TextUtils.isEmpty(mPasswordField.getText().toString())) {
             mPasswordField.setError("Vul wachtwoord in.");
             result = false;
         } else {
             mPasswordField.setError(null);
         }
-
         return result;
     }
 
-    // [START basic_write]
-    public void writeNewUser(String uid, String Name, String last_name, String email) {
-        User user = new User(Name, last_name, email);
-
-        int hash = email.hashCode();
-        String hash_email = String.valueOf(hash);
-
-        mDatabase.child("users").child(hash_email).child("userinfo").setValue(user);
-    }
-    // [END basic_write]
-
-    @Override
-    public void onClick(View view) {
-        int i = view.getId();
-        if (i == R.id.register_button) {
-            signUp();
-        }
-    }
-
+    // Finishes activity on navigate back button click.
     @Override
     public boolean onSupportNavigateUp(){
         finish();

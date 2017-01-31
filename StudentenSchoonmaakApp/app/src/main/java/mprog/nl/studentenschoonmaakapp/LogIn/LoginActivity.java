@@ -7,13 +7,12 @@
  *  https://github.com/firebase/quickstart-android
  */
 
-package mprog.nl.studentenschoonmaakapp;
+package mprog.nl.studentenschoonmaakapp.LogIn;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -21,32 +20,27 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+
+import mprog.nl.studentenschoonmaakapp.BaseActivity;
+import mprog.nl.studentenschoonmaakapp.MyGroupsActivity;
+import mprog.nl.studentenschoonmaakapp.R;
 
 /**
- * Does sign in and registration on FireBase database, extends BaseActivity for showing of ProgressDialog.
- * Uses User model for writing user into Firebase database.
+ * Does Sign in on FireBase database, extends BaseActivity for showing of ProgressDialog.
  */
 
-public class LoginActivity extends BaseActivity implements
-        View.OnClickListener {
-
-    private static final String TAG = "LogIn";
+public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
     private EditText mEmailField;
     private EditText mPasswordField;
-
-    // [START declare_auth]
     private FirebaseAuth mAuth;
-    // [END declare_auth]
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        getSupportActionBar().setTitle("Inloggen");
 
         // Views
         mEmailField = (EditText) findViewById(R.id.field_login_email);
@@ -57,9 +51,8 @@ public class LoginActivity extends BaseActivity implements
         findViewById(R.id.password_forgotten).setOnClickListener(this);
         findViewById(R.id.register).setOnClickListener(this);
 
-        // [START initialize_auth]
+        // initialize mAuth
         mAuth = FirebaseAuth.getInstance();
-        // [END initialize_auth]
     }
 
     @Override
@@ -67,17 +60,17 @@ public class LoginActivity extends BaseActivity implements
         super.onStart();
         // Check auth on Activity start
         if (mAuth.getCurrentUser() != null) {
-            onAuthSuccess(mAuth.getCurrentUser());
+            onAuthSuccess();
         }
     }
 
+    // Signs in user if validateForm and credentials are correct.
     private void signIn() {
-        Log.d(TAG, "signIn");
         if (!validateForm()) {
             return;
         }
-
         showProgressDialog();
+
         String email = mEmailField.getText().toString();
         String password = mPasswordField.getText().toString();
 
@@ -85,11 +78,9 @@ public class LoginActivity extends BaseActivity implements
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "signIn:onComplete:" + task.isSuccessful());
                         hideProgressDialog();
-
                         if (task.isSuccessful()) {
-                            onAuthSuccess(task.getResult().getUser());
+                            onAuthSuccess();
                             Toast.makeText(LoginActivity.this, "Inloggen...",
                                     Toast.LENGTH_SHORT).show();
                         } else {
@@ -100,12 +91,13 @@ public class LoginActivity extends BaseActivity implements
                 });
     }
 
-    private void onAuthSuccess(FirebaseUser user) {
-        // Go to MainActivity
-        startActivity(new Intent(LoginActivity.this, HomeScreenActivity.class));
+    // If successfully logged in, go to MyGroupsActivity
+    private void onAuthSuccess() {
+        startActivity(new Intent(LoginActivity.this, MyGroupsActivity.class));
         finish();
     }
 
+    // Checks if Textfield are properly filled in.
     private boolean validateForm() {
         boolean result = true;
         if (TextUtils.isEmpty(mEmailField.getText().toString())) {
@@ -114,26 +106,27 @@ public class LoginActivity extends BaseActivity implements
         } else {
             mEmailField.setError(null);
         }
-
         if (TextUtils.isEmpty(mPasswordField.getText().toString())) {
             mPasswordField.setError("Vul wachtwoord in.");
             result = false;
         } else {
             mPasswordField.setError(null);
         }
-
         return result;
     }
 
     @Override
     public void onClick(View view) {
-        int i = view.getId();
-        if (i == R.id.login_button) {
-            signIn();
-        } else if (i == R.id.password_forgotten) {
-            startActivity(new Intent(LoginActivity.this, PasswordRecoveryActivity.class));
-        } else if (i == R.id.register) {
-            startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+        switch (view.getId()){
+            case R.id.login_button:
+                signIn();
+                break;
+            case R.id.password_forgotten:
+                startActivity(new Intent(LoginActivity.this, PasswordRecoveryActivity.class));
+                break;
+            case R.id.register:
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+                break;
         }
     }
 }

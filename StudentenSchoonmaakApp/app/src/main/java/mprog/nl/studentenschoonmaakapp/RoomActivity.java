@@ -1,23 +1,25 @@
+/**
+ * Created by Jim Boelrijk
+ * Student of UvA
+ * Student number: 1045216
+ *
+ */
 package mprog.nl.studentenschoonmaakapp;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.database.DataSetObserver;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,15 +31,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import mprog.nl.studentenschoonmaakapp.models.CustomAdapter;
-import mprog.nl.studentenschoonmaakapp.models.CustomTaskAdapter;
-import mprog.nl.studentenschoonmaakapp.models.FireBaseHelper;
 import mprog.nl.studentenschoonmaakapp.models.Room;
-import mprog.nl.studentenschoonmaakapp.models.Task;
 
-public class GroupActivity extends AppCompatActivity {
+
+public class RoomActivity extends AppCompatActivity {
 
     EditText mRoomField;
     EditText mRemoveRoomField;
@@ -50,7 +48,6 @@ public class GroupActivity extends AppCompatActivity {
     DatabaseReference mDatabase;
     DatabaseReference mDatabase_for_members;
 
-//    FireBaseHelper mHelper;
     ArrayAdapter mAdapter;
     ArrayAdapter<String> mMemberAdapter;
     FirebaseListAdapter<Room> mAdapter2;
@@ -82,13 +79,10 @@ public class GroupActivity extends AppCompatActivity {
         mRooms =(ListView) findViewById(R.id.tasks_listview);
         RoomList = new ArrayList<>();
         Members = new ArrayList<>();
-        mAdapter = new CustomAdapter(this, RoomList);
-
-
 
         mMemberAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, Members);
 
-        Toast.makeText(GroupActivity.this,("groepid: " + groupid + " groepnaam: " + groupname), Toast.LENGTH_LONG).show();
+        Toast.makeText(RoomActivity.this,("groepid: " + groupid + " groepnaam: " + groupname), Toast.LENGTH_LONG).show();
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child("rooms");
 
@@ -106,30 +100,13 @@ public class GroupActivity extends AppCompatActivity {
         mRooms.setAdapter(mAdapter2);
 
         mDatabase_for_members = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child("membernames");
-//        mHelper = new FireBaseHelper(mDatabase);
-//        RoomList = mHelper.retrieve_rooms(RoomList);
-
-//        mDatabase.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                RoomList.clear();
-//                for(DataSnapshot ds : dataSnapshot.getChildren()){
-//                    RoomList.add(String.valueOf(ds.getValue()));
-//                }
-//                mRooms.setAdapter(mAdapter);
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
 
         mRooms.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent groupdetail = new Intent (getApplicationContext(), GroupDetailActivity.class);
-                groupdetail.putExtra("kamer", mRooms.getItemAtPosition(i).toString());
+                Intent groupdetail = new Intent (getApplicationContext(), TaskActivity.class);
+                Room room = (Room) mRooms.getItemAtPosition(i);
+                groupdetail.putExtra("kamer", room.getRoom());
                 groupdetail.putExtra("ref", mDatabase.toString());
                 groupdetail.putExtra("groepid", groupid);
                 groupdetail.putExtra("groepnaam", groupname);
@@ -144,7 +121,7 @@ public class GroupActivity extends AppCompatActivity {
                 final String[] room_name = {mRooms.getItemAtPosition(i).toString()};
                 Toast.makeText(getApplicationContext(), "kamer" + room_name[0], Toast.LENGTH_SHORT).show();
 
-                final Dialog dialog = new Dialog(GroupActivity.this);
+                final Dialog dialog = new Dialog(RoomActivity.this);
                 dialog.setContentView(R.layout.custom_dialog_remove_room);
 
                 // Edittext in AlertDialog
@@ -200,7 +177,7 @@ public class GroupActivity extends AppCompatActivity {
 
     private void AddTask() {
 
-        final Dialog dialog = new Dialog(GroupActivity.this);
+        final Dialog dialog = new Dialog(RoomActivity.this);
         dialog.setContentView(R.layout.custom_dialog_add_room);
 
         // Edittext in AlertDialog

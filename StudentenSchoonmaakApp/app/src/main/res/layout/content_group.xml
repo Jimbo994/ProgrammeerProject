@@ -7,7 +7,7 @@
     android:layout_height="400dp"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="mprog.nl.studentenschoonmaakapp.GroupDetailActivity"
+    tools:context="mprog.nl.studentenschoonmaakapp.TaskActivity"
     tools:showIn="@layout/activity_group">
 
     <TextView

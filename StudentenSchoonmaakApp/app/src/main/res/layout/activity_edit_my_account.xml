@@ -3,18 +3,6 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <!--<EditText-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_below="@+id/my_account_email"-->
-        <!--android:layout_alignLeft="@+id/my_account_email"-->
-        <!--android:layout_alignStart="@+id/my_account_email"-->
-        <!--android:layout_marginTop="15dp"-->
-        <!--android:id="@+id/my_account_field_email"-->
-        <!--android:hint="@string/e_mailadres"-->
-        <!--android:inputType="textEmailAddress" />-->
-
     <TextView
         android:text="@string/profiel"
         android:layout_width="wrap_content"
@@ -85,18 +73,4 @@
         android:layout_below="@+id/edit_my_account_field_lastname"
         android:layout_toRightOf="@+id/edit_my_account_field_name"
         android:layout_toEndOf="@+id/edit_my_account_field_name" />
-
-    <!--<TextView-->
-        <!--android:text="@string/e_mailadres"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/my_account_email"-->
-        <!--android:textAppearance="@style/TextAppearance.AppCompat.Body1"-->
-        <!--android:textSize="15sp"-->
-        <!--android:layout_below="@+id/my_account_field_lastname"-->
-        <!--android:layout_alignLeft="@+id/my_account_field_lastname"-->
-        <!--android:layout_alignStart="@+id/my_account_field_lastname"-->
-        <!--android:layout_marginTop="13dp" />-->
-
-
 </RelativeLayout>

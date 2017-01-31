@@ -1,3 +1,9 @@
+/**
+ * Created by Jim Boelrijk
+ * Student of UvA
+ * Student number: 1045216
+ *
+ */
 package mprog.nl.studentenschoonmaakapp.models;
 
 import com.google.firebase.database.Exclude;
@@ -10,19 +16,18 @@ import java.util.Map;
  * Created by Jim on 19-1-2017.
  */
 
-// [START post_class]
 @IgnoreExtraProperties
-public class Post {
+public class Group {
     private static String groupid;
     private static String groupname;
 
-    public Post() {
+    public Group() {
         // Default constructor required for calls to DataSnapshot.getValue(Post.class)
     }
 
-    public Post(String groupname, String groupid) {
-        Post.groupname = groupname;
-        Post.groupid = groupid;
+    public Group(String groupname, String groupid) {
+        Group.groupname = groupname;
+        Group.groupid = groupid;
     }
 
     // [START post_to_map]
@@ -36,11 +41,11 @@ public class Post {
     }
 
     public String getGroupid() {
-        return Post.groupid;
+        return Group.groupid;
     }
 
     public String getGroupname(){
-        return Post.groupname;
+        return Group.groupname;
     }
     // [END post_to_map]
 

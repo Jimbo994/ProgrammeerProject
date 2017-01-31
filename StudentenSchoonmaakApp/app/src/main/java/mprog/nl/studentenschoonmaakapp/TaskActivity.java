@@ -1,3 +1,10 @@
+/**
+ * Created by Jim Boelrijk
+ * Student of UvA
+ * Student number: 1045216
+ *
+ */
+
 package mprog.nl.studentenschoonmaakapp;
 
 import android.app.Dialog;
@@ -8,7 +15,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -17,37 +23,27 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
-import mprog.nl.studentenschoonmaakapp.models.CustomAdapter;
-import mprog.nl.studentenschoonmaakapp.models.CustomTaskAdapter;
-import mprog.nl.studentenschoonmaakapp.models.FireBaseHelper;
 import mprog.nl.studentenschoonmaakapp.models.Task;
 
-public class GroupDetailActivity extends AppCompatActivity {
+public class TaskActivity extends AppCompatActivity {
 
     String groupid;
     String groupname;
     String ref;
     String room;
 
-    ArrayAdapter mAdapter;
-    ArrayList<String> mTaskList;
+    private ArrayList<String> mTaskList;
     ListView mTasks;
 
     EditText mEditField;
     EditText mTaskField;
 
-//    FireBaseHelper mHelper;
     FirebaseListAdapter<Task> mAdapter2;
     DatabaseReference mDatabase;
 
@@ -78,9 +74,7 @@ public class GroupDetailActivity extends AppCompatActivity {
 
         mTasks = (ListView) findViewById(R.id.tasks_listview);
         mTaskList = new ArrayList<>();
-        mAdapter = new CustomTaskAdapter(this, mTaskList);
 
-        String key = mDatabase.getKey();
 
         mAdapter2 = new FirebaseListAdapter<Task>(this, Task.class, R.layout.custom_listview_tasks, mDatabase) {
             @Override
@@ -99,39 +93,13 @@ public class GroupDetailActivity extends AppCompatActivity {
 
         mTasks.setAdapter(mAdapter2);
 
-
-//        mHelper = new FireBaseHelper(mDatabase);
-//        mHelper.retrieve_tasks(mTaskList);
-
-//        mDatabase.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                mTaskList.clear();
-//                for(DataSnapshot ds : dataSnapshot.getChildren()){
-//                    Task task = ds.getValue(Task.class);
-//                    String t = task.getTask();
-////                    String string = (String.valueOf(ds.getValue()));
-////                    String[] split = string.split("=");
-////                    split[0] = split[0].substring(1);
-//                   mTaskList.add(t);
-//                }
-//                mTasks.setAdapter(mAdapter);
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-
-
         mTasks.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Task task = (Task) mTasks.getItemAtPosition(i);
                 final String task_name = task.getTask();
                 Toast.makeText(getApplicationContext(), "taak" + task_name, Toast.LENGTH_SHORT).show();
 
-                final Dialog dialog = new Dialog(GroupDetailActivity.this);
+                final Dialog dialog = new Dialog(TaskActivity.this);
 
                 dialog.setContentView(R.layout.custom_dialog_edit_tasks);
 
@@ -152,7 +120,6 @@ public class GroupDetailActivity extends AppCompatActivity {
                         } else {
                             String new_task = mEditField.getText().toString();
                             DatabaseReference ref_tasks = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child("tasks").child(room);
-//                            RemoveTask(ref_tasks, task_name);
                             Task edittask = new Task(new_task, false, "");
 
                             ref_tasks.child(task_name).removeValue();
@@ -169,10 +136,7 @@ public class GroupDetailActivity extends AppCompatActivity {
 
                         DatabaseReference ref_tasks = FirebaseDatabase.getInstance().getReference().child("groups").
                                 child(groupid).child("tasks").child(room);
-
                         ref_tasks.child(task_name).removeValue();
-
-//                        RemoveTask(ref_tasks, task_name);
                         dialog.dismiss();
                     }
 
@@ -182,27 +146,9 @@ public class GroupDetailActivity extends AppCompatActivity {
         });
     }
 
-//    private void RemoveTask(DatabaseReference ref, final String string) {
-//        ref.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-//                    String current_task_name = ds.getValue(String.class);
-//                    if (current_task_name.equals(string)) {
-//                        ds.getRef().removeValue();
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-
 
     private void AddTask() {
-                final Dialog dialog = new Dialog(GroupDetailActivity.this);
+                final Dialog dialog = new Dialog(TaskActivity.this);
                 dialog.setContentView(R.layout.custom_dialog_add_task);
 
                 // Edittext in AlertDialog
@@ -220,16 +166,13 @@ public class GroupDetailActivity extends AppCompatActivity {
                         if (!validateForm(mTaskField)) {
                             return;
                         } else {
-                            String task = mTaskField.getText().toString();
                             Task new_task = new Task();
-                            new_task.setTask(task);
+                            new_task.setTask(mTaskField.getText().toString());
                             new_task.setCompleted(false);
 
                             DatabaseReference db_ref = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child("tasks").child(room);
 
-                            String key = db_ref.push().getKey();
-
-                            db_ref.child(task).setValue(new_task);
+                            db_ref.child(mTaskField.getText().toString()).setValue(new_task);
 
                             dialog.dismiss();
                         }
@@ -270,8 +213,7 @@ public class GroupDetailActivity extends AppCompatActivity {
 
         boolean isChecked = ((CheckBox)view).isChecked();
         if (isChecked){
-            Date timestamp = new Date();
-            String str_timestamp = timestamp.toString();
+            String str_timestamp = new Date().toString();
             Task t = new Task(task_string, true, str_timestamp);
             ref.setValue(t);
             Toast.makeText(this, "checked", Toast.LENGTH_SHORT).show();

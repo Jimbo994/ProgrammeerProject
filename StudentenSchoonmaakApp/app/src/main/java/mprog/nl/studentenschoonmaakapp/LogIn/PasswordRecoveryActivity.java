@@ -1,9 +1,15 @@
-package mprog.nl.studentenschoonmaakapp;
+/**
+ * Created by Jim Boelrijk
+ * Student of UvA
+ * Student number: 1045216
+ *
+ * This code was inspired by google tutorial code for FireBase (see URL below)
+ *  https://github.com/firebase/quickstart-android
+ */
+package mprog.nl.studentenschoonmaakapp.LogIn;
 
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -12,22 +18,23 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
+import mprog.nl.studentenschoonmaakapp.BaseActivity;
+import mprog.nl.studentenschoonmaakapp.R;
+
+/**
+ * Send password reset email to email that has been put in.
+ */
+
 public class PasswordRecoveryActivity extends BaseActivity implements
         View.OnClickListener  {
 
-    private static final String TAG = "Recover";
-
-    private EditText mEmailField;
-
-    // [START declare_auth]
     private FirebaseAuth mAuth;
-    // [END declare_auth]
+    private EditText mEmailField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_password_recovery);
-        getSupportActionBar().setTitle("Herstel mijn wachtwoord");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Views
@@ -36,12 +43,11 @@ public class PasswordRecoveryActivity extends BaseActivity implements
         //Buttons
         findViewById(R.id.recovery_button).setOnClickListener(this);
 
-        // [START initialize_auth]
+        // Initialize Auth
         mAuth = FirebaseAuth.getInstance();
-        // [END initialize_auth]
     }
 
-
+    // Sends password reset email.
     @Override
     public void onClick(View view) {
 
@@ -54,7 +60,6 @@ public class PasswordRecoveryActivity extends BaseActivity implements
                         if (task.isSuccessful()) {
                             Toast.makeText(PasswordRecoveryActivity.this, "E-mail verzonden.",
                                     Toast.LENGTH_SHORT).show();
-                            Log.d(TAG, "Email sent.");
                         } else {
                             Toast.makeText(PasswordRecoveryActivity.this, "Er is iets misgegaan.",
                                     Toast.LENGTH_SHORT).show();
@@ -63,6 +68,7 @@ public class PasswordRecoveryActivity extends BaseActivity implements
                 });
     }
 
+    // Finishes activity on navigate back button click.
     @Override
     public boolean onSupportNavigateUp(){
         finish();
