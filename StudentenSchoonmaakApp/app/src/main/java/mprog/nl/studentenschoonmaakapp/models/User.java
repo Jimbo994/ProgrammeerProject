@@ -2,9 +2,6 @@
  * Created by Jim Boelrijk
  * Student of UvA
  * Student number: 1045216
- *
- * This code was inspired by google tutorial code for FireBase (see URL below)
- *  https://github.com/firebase/quickstart-android
  */
 
 package mprog.nl.studentenschoonmaakapp.models;
@@ -12,24 +9,23 @@ package mprog.nl.studentenschoonmaakapp.models;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 /**
- * Model for signing up users to database.
+ * This class contains a User Object. This object contains the information of a user,
+ * consisting of a email, name and lastname. It is used to write user information to FireBase.
  */
 
-// [START blog_user_class]
 @IgnoreExtraProperties
 public class User {
 
-    public String email;
-    public String name;
-    public String lastname;
+    private String email;
+    private String name;
+    private String lastName;
 
     public User() {
-        // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public User(String name, String lastname, String email) {
+    public User(String name, String lastName, String email) {
         this.name = name;
-        this.lastname = lastname;
+        this.lastName = lastName;
         this.email = email;
     }
 
@@ -49,15 +45,11 @@ public class User {
         this.email = email;
     }
 
-    public  String getLastname() {
-        return lastname;
+    public  String getLastName() {
+        return lastName;
     }
 
-    public void setLastname(String lastname){
-        this.lastname = lastname;
+    public void setLastName(String lastname){
+        this.lastName = lastname;
     }
-
-
-
 }
-// [END blog_user_class]

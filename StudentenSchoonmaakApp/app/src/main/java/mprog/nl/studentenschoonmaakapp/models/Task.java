@@ -1,13 +1,16 @@
+/**
+ * Created by Jim Boelrijk
+ * Student of UvA
+ * Student number: 1045216
+ */
+
 package mprog.nl.studentenschoonmaakapp.models;
 
-import com.google.firebase.database.Exclude;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
 /**
- * Created by Jim on 30-1-2017.
+ * This class contains a Task Object. This object contains the information of a Task,
+ * consisting of the name of the task, a boolean to check if the task is completed. and a timestamp
+ * to check when it was done.
+ * It is used to write a Task to FireBase.
  */
 
 public class Task {
@@ -17,8 +20,8 @@ public class Task {
     private String timestamp;
 
     public Task(){
-
     }
+
     public Task (String task, boolean completed, String timestamp) {
         this.task = task;
         this.completed = completed;

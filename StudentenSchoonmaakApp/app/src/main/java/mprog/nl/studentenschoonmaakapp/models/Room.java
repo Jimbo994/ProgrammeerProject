@@ -1,13 +1,21 @@
-package mprog.nl.studentenschoonmaakapp.models;
-
 /**
  * Created by Jim on 30-1-2017.
  */
 
+
+package mprog.nl.studentenschoonmaakapp.models;
+
+/**
+ * This class contains a Room Object. This object contains the information of a Room,
+ * consisting of the name of the room and the name of the user responsible for cleaning this
+ * room.
+ * It is used to write a Room to FireBase.
+ */
+
 public class Room {
 
-    String room;
-    String responsibility;
+    private String room;
+    private String responsibility;
 
     public Room(){
 

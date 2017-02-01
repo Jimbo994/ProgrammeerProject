@@ -3,7 +3,7 @@
  * Student of UvA
  * Student number: 1045216
  */
-package mprog.nl.studentenschoonmaakapp;
+package mprog.nl.studentenschoonmaakapp.myaccount;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -25,7 +25,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import mprog.nl.studentenschoonmaakapp.LogIn.LoginActivity;
+import mprog.nl.studentenschoonmaakapp.login.LoginActivity;
+import mprog.nl.studentenschoonmaakapp.MyGroupsActivity;
+import mprog.nl.studentenschoonmaakapp.R;
 import mprog.nl.studentenschoonmaakapp.models.User;
 
 /**
@@ -53,15 +55,15 @@ public class MyAccountActivity extends AppCompatActivity implements NavigationVi
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // Initialize FireBase DatabaseReference
+        // Initialize FireBase DatabaseReference.
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
 
-        // TextViews
+        // TextViews.
         mEmail = (TextView) findViewById(R.id.my_account_field_email);
         mFirstName = (TextView) findViewById(R.id.my_account_field_name);
         mLastName = (TextView) findViewById(R.id.my_account_field_lastname);
 
-        // Buttons
+        // Buttons.
         findViewById(R.id.my_account_edit_button).setOnClickListener(this);
 
         // Retrieve email and hash of currently signed in user.
@@ -73,7 +75,7 @@ public class MyAccountActivity extends AppCompatActivity implements NavigationVi
     }
 
     private void inflateNavigationDrawer() {
-        // Inflate Navigation drawer
+        // Inflate Navigation drawer.
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -98,7 +100,7 @@ public class MyAccountActivity extends AppCompatActivity implements NavigationVi
                 User user = dataSnapshot.getValue(User.class);
                 mEmail.setText(user.getEmail());
                 mFirstName.setText(user.getName());
-                mLastName.setText(user.getLastname());
+                mLastName.setText(user.getLastName());
             }
 
             @Override

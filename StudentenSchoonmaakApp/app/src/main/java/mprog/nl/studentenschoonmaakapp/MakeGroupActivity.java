@@ -116,13 +116,11 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
                     @Override
                     public void onClick(View view) {
 
-                        if (!validateForm()) {
-                            return;
-                        } else {
+                        if (validateForm()) {
                             String email = mEmailField.getText().toString();
                             String name = mNameField.getText().toString();
                             user = new User();
-                            user.setLastname(null);
+                            user.setLastName(null);
                             user.setName(name);
                             user.setEmail(email);
                             mMemberList.add(user);
@@ -166,13 +164,13 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
                     public void onClick(View view) {
 
                         if (!validateForm()) {
-                            return;
+
                         } else {
                             mMemberList.remove(index);
                             String email = mEmailField.getText().toString();
                             String name = mNameField.getText().toString();
                             user = new User();
-                            user.setLastname(null);
+                            user.setLastName(null);
                             user.setName(name);
                             user.setEmail(email);
                             mMemberList.add(user);
@@ -251,9 +249,7 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
             for (Future<?> member : members) {
                 try {
                     member.get(); // await completion
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
+                } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
                 }
             }

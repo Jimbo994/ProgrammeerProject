@@ -2,7 +2,6 @@
  * Created by Jim Boelrijk
  * Student of UvA
  * Student number: 1045216
- *
  */
 
 package mprog.nl.studentenschoonmaakapp;
@@ -20,33 +19,33 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
+import mprog.nl.studentenschoonmaakapp.models.Task;
+
 import java.util.Date;
 
-import mprog.nl.studentenschoonmaakapp.models.Task;
+/**
+ * Shows ListView with all tasks of a room. These tasks can be
+ * edited and deleted on longItemClick. The tasks can also be checked to mark for completion.
+ * Via a floating action button a task can be added.
+ */
 
 public class TaskActivity extends AppCompatActivity {
 
-    String groupid;
-    String groupname;
+    private DatabaseReference mDatabase;
+
+    private ListView mTasks;
+    private EditText mEditField;
+    private EditText mTaskField;
+
+    String groupId;
+    String groupName;
     String ref;
     String room;
-
-    private ArrayList<String> mTaskList;
-    ListView mTasks;
-
-    EditText mEditField;
-    EditText mTaskField;
-
-    FirebaseListAdapter<Task> mAdapter2;
-    DatabaseReference mDatabase;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +54,7 @@ public class TaskActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Initialize and set FloatingActionButton.
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,164 +64,180 @@ public class TaskActivity extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //getting data from intent
-        groupid = getIntent().getStringExtra("groepid");
-        groupname = getIntent().getStringExtra("groepnaam");
+        // Getting data from intent.
+        groupId = getIntent().getStringExtra("groepid");
+        groupName = getIntent().getStringExtra("groepnaam");
         ref = getIntent().getStringExtra("ref");
         room = getIntent().getStringExtra("kamer");
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child("tasks").child(room);
+        // Initialize DatabaseReference.
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("groups").child(groupId).child("tasks").child(room);
+
+        setListView();
+        setListViewClickListener();
+    }
+
+    // Initializes and fills ListView.
+    private void setListView() {
 
         mTasks = (ListView) findViewById(R.id.tasks_listview);
-        mTaskList = new ArrayList<>();
 
-
-        mAdapter2 = new FirebaseListAdapter<Task>(this, Task.class, R.layout.custom_listview_tasks, mDatabase) {
+        // initialize FirebaseListAdapters that retrieves and shows Task object form mDatabase.
+        FirebaseListAdapter<Task> mAdapter = new FirebaseListAdapter<Task>(this, Task.class, R.layout.custom_listview_tasks, mDatabase) {
             @Override
             protected void populateView(View v, final Task model, int position) {
-                TextView theTextView = (TextView) v.findViewById(R.id.movie_title);
+                TextView Task = (TextView) v.findViewById(R.id.movie_title);
                 TextView date = (TextView) v.findViewById(R.id.date);
                 CheckBox checkbox = (CheckBox) v.findViewById(R.id.checkBox);
 
-
-                theTextView.setText(model.getTask());
+                Task.setText(model.getTask());
                 checkbox.setChecked(model.isCompleted());
                 date.setText(model.getTimestamp());
-
             }
         };
 
-        mTasks.setAdapter(mAdapter2);
+        mTasks.setAdapter(mAdapter);
+    }
+
+    // Sets onItemLongClickListener on ListView.
+    private void setListViewClickListener() {
 
         mTasks.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Task task = (Task) mTasks.getItemAtPosition(i);
                 final String task_name = task.getTask();
-                Toast.makeText(getApplicationContext(), "taak" + task_name, Toast.LENGTH_SHORT).show();
 
                 final Dialog dialog = new Dialog(TaskActivity.this);
-
                 dialog.setContentView(R.layout.custom_dialog_edit_tasks);
 
-                dialog.show();
-
-                // Edittext in AlertDialog
+                // Edittext in dialog.
                 mEditField = (EditText) dialog.findViewById(R.id.field_edit);
 
-                // Buttons in Alertdialog
+                // Buttons in dialog.
                 Button edit = (Button) dialog.findViewById(R.id.edit_button);
                 Button remove = (Button) dialog.findViewById(R.id.remove_button);
 
-                edit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (!validateForm(mEditField)) {
-                            return;
-                        } else {
-                            String new_task = mEditField.getText().toString();
-                            DatabaseReference ref_tasks = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child("tasks").child(room);
-                            Task edittask = new Task(new_task, false, "");
-
-                            ref_tasks.child(task_name).removeValue();
-
-                            ref_tasks.child(new_task).setValue(edittask);
-                            dialog.dismiss();
-                        }
-                    }
-                });
+                // DataBaseReference.
+                final DatabaseReference ref_tasks = FirebaseDatabase.getInstance().getReference().child("groups")
+                        .child(groupId).child("tasks").child(room);
+                dialog.show();
 
                 remove.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
-                        DatabaseReference ref_tasks = FirebaseDatabase.getInstance().getReference().child("groups").
-                                child(groupid).child("tasks").child(room);
-                        ref_tasks.child(task_name).removeValue();
+                        removeTask(task_name);
                         dialog.dismiss();
                     }
+                });
 
+                edit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (validateForm(mEditField)) {
+                            // Remove old Task.
+                            removeTask(task_name);
+                            // Create new Task and write to DataBase.
+                            Task edittask = new Task(mEditField.getText().toString(), false, "");
+                            ref_tasks.child(mEditField.getText().toString()).setValue(edittask);
+                            dialog.dismiss();
+                        }
+                    }
                 });
                 return true;
             }
         });
     }
 
+    // Removes task from DataBase.
+    private void removeTask(String task_name) {
+        DatabaseReference ref_tasks = FirebaseDatabase.getInstance().getReference().child("groups").
+                child(groupId).child("tasks").child(room);
+        ref_tasks.child(task_name).removeValue();
+    }
 
+    // Inflates dialog where a task can be created and added.
     private void AddTask() {
-                final Dialog dialog = new Dialog(TaskActivity.this);
-                dialog.setContentView(R.layout.custom_dialog_add_task);
+        // Initialize dialog and set View.
+        final Dialog dialog = new Dialog(TaskActivity.this);
+        dialog.setContentView(R.layout.custom_dialog_add_task);
 
-                // Edittext in AlertDialog
-                mTaskField = (EditText) dialog.findViewById(R.id.field_add_task);
+        // Edittext in AlertDialog.
+        mTaskField = (EditText) dialog.findViewById(R.id.field_add_task);
 
-                // Buttons in Alertdialog
-                Button save = (Button) dialog.findViewById(R.id.add_task_button);
-                Button cancel = (Button) dialog.findViewById(R.id.cancel_add_task_button);
+        // Buttons in AlertDialog.
+        Button save = (Button) dialog.findViewById(R.id.add_task_button);
+        Button cancel = (Button) dialog.findViewById(R.id.cancel_add_task_button);
 
-                dialog.show();
+        // Inflate dialog.
+        dialog.show();
 
-                save.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (!validateForm(mTaskField)) {
-                            return;
-                        } else {
-                            Task new_task = new Task();
-                            new_task.setTask(mTaskField.getText().toString());
-                            new_task.setCompleted(false);
-
-                            DatabaseReference db_ref = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child("tasks").child(room);
-
-                            db_ref.child(mTaskField.getText().toString()).setValue(new_task);
-
-                            dialog.dismiss();
-                        }
-                    }
-                });
-
-                cancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
-                    }
-                });
-            }
-
-            private boolean validateForm(EditText edittext) {
-                boolean result = true;
-                if (TextUtils.isEmpty(edittext.getText().toString())) {
-                    edittext.setError("Vul een kamer in.");
-                    result = false;
-                } else {
-                    edittext.setError(null);
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (validateForm(mTaskField)) {
+                    saveTask();
+                    dialog.dismiss();
                 }
-                return result;
             }
-
-            public boolean onSupportNavigateUp() {
-                finish();
-                return true;
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
             }
+        });
+    }
 
+    // Writes task to database.
+    private void saveTask() {
+        Task new_task = new Task();
+        new_task.setTask(mTaskField.getText().toString());
+        new_task.setCompleted(false);
+
+        DatabaseReference db_ref = FirebaseDatabase.getInstance().getReference().child("groups").
+                child(groupId).child("tasks").child(room);
+        db_ref.child(mTaskField.getText().toString()).setValue(new_task);
+    }
+
+    // Checks if TextFields are properly filled in.
+    private boolean validateForm(EditText edittext) {
+        boolean result = true;
+        if (TextUtils.isEmpty(edittext.getText().toString())) {
+            edittext.setError(getString(R.string.vultaakin));
+            result = false;
+        } else {
+            edittext.setError(null);
+        }
+        return result;
+    }
+
+    // OnClick listener for checkboxes in ListView. Checkboxes can be checked/unchecked
+    // to mark completion of Task. A date is added at the time of completion.
     public void onClick(View view) {
+        // Get parent View and Data.
         View parent = (View) view.getParent();
         TextView task = (TextView) parent.findViewById(R.id.movie_title);
-        String task_string = String.valueOf(task.getText().toString());
-        Toast.makeText(this, task_string, Toast.LENGTH_SHORT).show();
-        DatabaseReference ref = mDatabase.child(task_string);
 
+        DatabaseReference ref = mDatabase.child(task.getText().toString());
 
+        // If checked mark completion as true by writing Task to Database,
+        // Else mark completion as false, and set no Date.
         boolean isChecked = ((CheckBox)view).isChecked();
         if (isChecked){
             String str_timestamp = new Date().toString();
-            Task t = new Task(task_string, true, str_timestamp);
+            Task t = new Task(task.getText().toString(), true, str_timestamp);
             ref.setValue(t);
-            Toast.makeText(this, "checked", Toast.LENGTH_SHORT).show();
         }
         else{
-            Task t = new Task(task_string, false, "");
+            Task t = new Task(task.getText().toString(), false, "");
             ref.setValue(t);
         }
+    }
+
+    // Finishes activity on navigate back button click.
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 }
 

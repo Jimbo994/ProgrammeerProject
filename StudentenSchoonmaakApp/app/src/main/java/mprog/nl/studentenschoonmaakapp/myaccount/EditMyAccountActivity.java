@@ -4,7 +4,7 @@
  * Student number: 1045216
  */
 
-package mprog.nl.studentenschoonmaakapp;
+package mprog.nl.studentenschoonmaakapp.myaccount;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import mprog.nl.studentenschoonmaakapp.R;
 import mprog.nl.studentenschoonmaakapp.models.User;
 
 /**
@@ -41,11 +42,11 @@ public class EditMyAccountActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
 
-        //EditTexts
+        //EditTexts.
         mName = (EditText) findViewById(R.id.edit_my_account_field_name);
         mLastName = (EditText) findViewById(R.id.edit_my_account_field_lastname);
 
-        //Button
+        //Button.
         Button save = (Button) findViewById(R.id.save_edit_my_account);
 
         // Gets data from EditText fields and sets this data as new userinfo in Database.
@@ -57,7 +58,7 @@ public class EditMyAccountActivity extends AppCompatActivity {
                 }
                     User user = new User();
                     user.setName(mName.getText().toString());
-                    user.setLastname(mLastName.getText().toString());
+                    user.setLastName(mLastName.getText().toString());
                     user.setEmail(mAuth.getCurrentUser().getEmail());
 
                     int hash = mAuth.getCurrentUser().getEmail().hashCode();
@@ -73,13 +74,13 @@ public class EditMyAccountActivity extends AppCompatActivity {
     private boolean validateForm() {
         boolean result = true;
         if (TextUtils.isEmpty(mLastName.getText().toString())) {
-            mLastName.setError("Vul een achternaam in.");
+            mLastName.setError(getString(R.string.vulachternaamin));
             result = false;
         } else {
             mLastName.setError(null);
         }
         if (TextUtils.isEmpty(mName.getText().toString())) {
-            mName.setError("Vul bijnaam in.");
+            mName.setError(getString(R.string.vulnaamin));
             result = false;
         } else {
             mName.setError(null);

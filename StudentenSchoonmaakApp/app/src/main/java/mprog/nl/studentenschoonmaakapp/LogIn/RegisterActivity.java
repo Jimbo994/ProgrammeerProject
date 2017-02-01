@@ -6,7 +6,7 @@
  * This code was inspired by google tutorial code for FireBase (see URL below)
  *  https://github.com/firebase/quickstart-android
  */
-package mprog.nl.studentenschoonmaakapp.LogIn;
+package mprog.nl.studentenschoonmaakapp.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,7 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import mprog.nl.studentenschoonmaakapp.BaseActivity;
+import mprog.nl.studentenschoonmaakapp.models.BaseActivity;
 import mprog.nl.studentenschoonmaakapp.R;
 import mprog.nl.studentenschoonmaakapp.models.User;
 
@@ -58,13 +58,13 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
 
-        // Views
+        // Views.
         mEmailField = (EditText) findViewById(R.id.field_register_email);
         mNameField = (EditText) findViewById(R.id.field_register_name);
         mLastNameField = (EditText) findViewById(R.id.field_register_lastname);
         mPasswordField = (EditText) findViewById(R.id.field_register_password);
 
-        // Buttons
+        // Buttons.
         findViewById(R.id.register_button).setOnClickListener(this);
     }
 
@@ -96,10 +96,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                         hideProgressDialog();
                         if (task.isSuccessful()) {
                             onAuthSuccess(task.getResult().getUser());
-                            Toast.makeText(RegisterActivity.this, "Registreren",
+                            Toast.makeText(RegisterActivity.this, R.string.registreren,
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(RegisterActivity.this, "Registreren mislukt.",
+                            Toast.makeText(RegisterActivity.this, R.string.registerenmislukt,
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -114,18 +114,18 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(RegisterActivity.this, "Account activatie e-mail verstuurd.",
+                            Toast.makeText(RegisterActivity.this, R.string.emailverstuurd,
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
 
-        // Go to MainActivity
+        // Go to MainActivity.
         startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
         finish();
     }
 
-    // Writes user into database
+    // Writes user into database.
     public void writeNewUser(String Name, String last_name, String email) {
         User user = new User(Name, last_name, email);
 
@@ -141,22 +141,22 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private boolean validateForm() {
         boolean result = true;
         if (TextUtils.isEmpty(mEmailField.getText().toString())) {
-            mEmailField.setError("Vul e-mail in.");
+            mEmailField.setError(getString(R.string.vulemailin));
             result = false;
         } else {
             mEmailField.setError(null);
         }if (TextUtils.isEmpty(mNameField.getText().toString())) {
-            mNameField.setError("Vul naam in.");
+            mNameField.setError(getString(R.string.vulnaamin));
             result = false;
         } else {
             mNameField.setError(null);
         } if (TextUtils.isEmpty(mLastNameField.getText().toString())) {
-            mLastNameField.setError("Vul achternaam in.");
+            mLastNameField.setError(getString(R.string.vulachternaamin));
             result = false;
         } else {
             mLastNameField.setError(null);
         } if (TextUtils.isEmpty(mPasswordField.getText().toString())) {
-            mPasswordField.setError("Vul wachtwoord in.");
+            mPasswordField.setError(getString(R.string.vulwachtwoord));
             result = false;
         } else {
             mPasswordField.setError(null);

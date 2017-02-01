@@ -2,8 +2,8 @@
  * Created by Jim Boelrijk
  * Student of UvA
  * Student number: 1045216
- *
  */
+
 package mprog.nl.studentenschoonmaakapp;
 
 import android.app.Dialog;
@@ -21,7 +21,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
@@ -34,27 +33,24 @@ import java.util.ArrayList;
 
 import mprog.nl.studentenschoonmaakapp.models.Room;
 
+/**
+ * Shows ListView with all rooms of a group in FireBase Database. These rooms can be
+ * deleted on longItemClick and contents of the room can be seen onItemClick.
+ * Via a floating action button a room can be added.
+ */
 
 public class RoomActivity extends AppCompatActivity {
 
-    EditText mRoomField;
-    EditText mRemoveRoomField;
-    String groupid;
-    String groupname;
-
-    ArrayList<String> RoomList;
-    ArrayList<String> Members;
-
-    DatabaseReference mDatabase;
-    DatabaseReference mDatabase_for_members;
-
-    ArrayAdapter mAdapter;
-    ArrayAdapter<String> mMemberAdapter;
-    FirebaseListAdapter<Room> mAdapter2;
-
-    Spinner Resposible;
-
+    private ArrayAdapter<String> mMemberAdapter;
+    private ArrayList<String> mMembers;
+    private DatabaseReference mDatabase;
+    private DatabaseReference mDatabase_for_members;
+    private EditText mRoomField;
+    private FirebaseListAdapter<Room> mAdapter;
+    String groupId;
+    String groupName;
     ListView mRooms;
+    private Spinner mSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,31 +58,33 @@ public class RoomActivity extends AppCompatActivity {
         setContentView(R.layout.activity_group);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Kamers");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // Initialize and set FloatingActionbutton, AddTask() onClick.
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddTask();
+                addRoom();
             }
         });
 
-        groupid = getIntent().getStringExtra("groepid");
-        groupname = getIntent().getStringExtra("groepnaam");
+        // Receiving data from Intent.
+        groupId = getIntent().getStringExtra("groepid");
+        groupName = getIntent().getStringExtra("groepnaam");
 
+        // Initialize Views.
         mRooms =(ListView) findViewById(R.id.tasks_listview);
-        RoomList = new ArrayList<>();
-        Members = new ArrayList<>();
+        mMembers = new ArrayList<>();
+        mMemberAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, mMembers);
 
-        mMemberAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, Members);
+        // Initialize DatabaseReference.
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("groups").child(groupId).child("rooms");
+        mDatabase_for_members = FirebaseDatabase.getInstance().getReference().child("groups").
+                child(groupId).child("membernames");
 
-        Toast.makeText(RoomActivity.this,("groepid: " + groupid + " groepnaam: " + groupname), Toast.LENGTH_LONG).show();
-
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child("rooms");
-
-        mAdapter2 = new FirebaseListAdapter<Room>(this, Room.class, R.layout.custom_listview, mDatabase) {
+        // FireBaseListAdapter that loads rooms of group.
+        mAdapter = new FirebaseListAdapter<Room>(this, Room.class, R.layout.custom_listview, mDatabase) {
             @Override
             protected void populateView(View v, Room model, int position) {
                 TextView room = (TextView) v.findViewById(R.id.movie_title);
@@ -97,10 +95,11 @@ public class RoomActivity extends AppCompatActivity {
             }
         };
 
-        mRooms.setAdapter(mAdapter2);
+        // setAdapter on Listview.
+        mRooms.setAdapter(mAdapter);
 
-        mDatabase_for_members = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child("membernames");
-
+        // OnItemClickListener starts TaskActivity and sends through room, DatabaseReference,
+        // groupId and groupName.
         mRooms.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -108,60 +107,37 @@ public class RoomActivity extends AppCompatActivity {
                 Room room = (Room) mRooms.getItemAtPosition(i);
                 groupdetail.putExtra("kamer", room.getRoom());
                 groupdetail.putExtra("ref", mDatabase.toString());
-                groupdetail.putExtra("groepid", groupid);
-                groupdetail.putExtra("groepnaam", groupname);
-
+                groupdetail.putExtra("groepid", groupId);
+                groupdetail.putExtra("groepnaam", groupName);
                 startActivity(groupdetail);
             }
         });
 
+        // OnItemLongClickListener inflates dialog where user can delete rooms.
         mRooms.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                final String[] room_name = {mRooms.getItemAtPosition(i).toString()};
-                Toast.makeText(getApplicationContext(), "kamer" + room_name[0], Toast.LENGTH_SHORT).show();
 
+                final String room_name = mRooms.getItemAtPosition(i).toString();
+
+                // Initialize dialog and set View.
                 final Dialog dialog = new Dialog(RoomActivity.this);
                 dialog.setContentView(R.layout.custom_dialog_remove_room);
 
-                // Edittext in AlertDialog
-                mRemoveRoomField = (EditText) dialog.findViewById(R.id.field_add_task);
-
-                // Buttons in Alertdialog
+                // Buttons in dialog.
                 Button remove = (Button) dialog.findViewById(R.id.remove_button);
                 Button cancel = (Button) dialog.findViewById(R.id.cancel_button);
 
+                // Inflate dialog.
                 dialog.show();
 
                 remove.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        DatabaseReference ref_tasks = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid).child("tasks");
-                        ref_tasks.child(room_name[0]).removeValue();
-
-                        mDatabase.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                for (DataSnapshot ds : dataSnapshot.getChildren()){
-                                    String current_room_name = ds.getValue(String.class);
-                                    if (current_room_name.equals(room_name[0])){
-                                        ds.getRef().removeValue();
-                                        room_name[0] = "";
-
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-
+                        removeRoom(room_name);
                         dialog.dismiss();
                     }
                 });
-
                 cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -175,58 +151,66 @@ public class RoomActivity extends AppCompatActivity {
         });
     }
 
-    private void AddTask() {
+    //  Removes a room from database.
+    private void removeRoom(final String room_name){
+        // Remove room under tasks.
+        DatabaseReference ref_tasks = FirebaseDatabase.getInstance().getReference().child("groups").child(groupId).child("tasks");
+        ref_tasks.child(room_name).removeValue();
 
+        // Remove room under rooms.
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()){
+                    String current_room_name = ds.getValue(String.class);
+                    if (current_room_name.equals(room_name)){
+                        ds.getRef().removeValue();
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
+    }
+
+    // writes a room to database.
+    private void addRoom() {
+        // Initialize dialog and set View.
         final Dialog dialog = new Dialog(RoomActivity.this);
         dialog.setContentView(R.layout.custom_dialog_add_room);
 
-        // Edittext in AlertDialog
+        // Edittext in dialog.
         mRoomField = (EditText) dialog.findViewById(R.id.field_add_room);
 
-        // Buttons in Alertdialog
+        // Buttons in dialog.
         Button save = (Button) dialog.findViewById(R.id.add_room_button);
         Button cancel = (Button) dialog.findViewById(R.id.cancel_add_room_button);
 
-        // Spinnner
-        Resposible = (Spinner) dialog.findViewById(R.id.member_spinner);
+        // Spinnner.
+        mSpinner = (Spinner) dialog.findViewById(R.id.member_spinner);
 
-        dialog.show();
-
+        // Retrieve group members from database to fill Spinner with, then setAdapter.
         mDatabase_for_members.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    Members.add(String.valueOf(ds.getValue()));
+                    mMembers.add(String.valueOf(ds.getValue()));
                 }
-                Resposible.setAdapter(mMemberAdapter);
-
+                mSpinner.setAdapter(mMemberAdapter);
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
+            public void onCancelled(DatabaseError databaseError) {}
         });
 
-
-
+        // Inflate dialog.
+        dialog.show();
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!validateForm()) {
-                    return;
-                } else {
-                    String room = mRoomField.getText().toString();
-                    DatabaseReference db_ref = FirebaseDatabase.getInstance().getReference().child("groups").child(groupid);
-                    String key = db_ref.push().getKey();
-                    String responsible = Resposible.getSelectedItem().toString();
-                    Room r = new Room(room, responsible);
-
-
-                    db_ref.child("rooms").child(room).setValue(r);
-                    dialog.dismiss();
-                }
+                saveRoom();
+                dialog.dismiss();
             }
         });
 
@@ -238,19 +222,34 @@ public class RoomActivity extends AppCompatActivity {
         });
     }
 
+    // Writes a new room to database.
+    public void saveRoom(){
+        if (validateForm()) {
+            // Retrieve data from EditText and Spinner.
+            String room = mRoomField.getText().toString();
+            String responsible = mSpinner.getSelectedItem().toString();
 
+            DatabaseReference db_ref = FirebaseDatabase.getInstance().getReference().child("groups").child(groupId);
+
+            // Create new Room object and write to database.
+            Room new_room = new Room(room, responsible);
+            db_ref.child("rooms").child(room).setValue(new_room);
+        }
+    }
+
+    // Checks if TextFields are properly filled in.
     private boolean validateForm() {
         boolean result = true;
         if (TextUtils.isEmpty(mRoomField.getText().toString())) {
-            mRoomField.setError("Vul een kamer in.");
+            mRoomField.setError(getString(R.string.vulkamerin));
             result = false;
-        }
-        else{
+        } else {
             mRoomField.setError(null);
         }
         return result;
     }
 
+    // Finishes activity on navigate back button click.
     public boolean onSupportNavigateUp(){
         finish();
         return true;

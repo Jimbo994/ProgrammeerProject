@@ -32,7 +32,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import mprog.nl.studentenschoonmaakapp.LogIn.LoginActivity;
+import mprog.nl.studentenschoonmaakapp.login.LoginActivity;
+import mprog.nl.studentenschoonmaakapp.myaccount.MyAccountActivity;
 import mprog.nl.studentenschoonmaakapp.models.Group;
 
 /**
@@ -43,21 +44,26 @@ import mprog.nl.studentenschoonmaakapp.models.Group;
  * There is also a sign out button in the Navigation drawer. The email of the currently signed in
  * user can be seen too.
  */
+
 public class MyGroupsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private DatabaseReference mDatabase;
     private ListView mGroups;
+
     String hash_current_user;
     String email_current_user;
+
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Initialize Auth
+        // Initialize Auth.
         FirebaseAuth auth = FirebaseAuth.getInstance();
         //  retrieve current users email and hash it for Database reference of user.
         if (auth.getCurrentUser() != null){
@@ -70,12 +76,12 @@ public class MyGroupsActivity extends AppCompatActivity
         }
 
         // Initialize FireBase Database.
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("users").child(hash_current_user).child("groups");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(hash_current_user).child("groups");
 
-        //Views
+        //Views.
         mGroups = (ListView) findViewById(R.id.listview_mygroups);
 
-        // Floating Action button
+        // Floating Action button.
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_group_button);
         //onClick a group can be added in MakeGroupActivity.
         fab.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +91,13 @@ public class MyGroupsActivity extends AppCompatActivity
             }
         });
 
+        inflateNavigationDrawer();
+        setListView();
+        setListViewClickListeners();
+    }
+
+
+    private void inflateNavigationDrawer() {
         //  Inflate navigation drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -100,10 +113,12 @@ public class MyGroupsActivity extends AppCompatActivity
         View hView =  navigationView.getHeaderView(0);
         TextView nav_user = (TextView)hView.findViewById(R.id.username_Textview);
         nav_user.setText(email_current_user);
+    }
 
-        // FirebaseListAdapter
+    private void setListView() {
+        // FirebaseListAdapter that loads groups of a user.
         FirebaseListAdapter<Group> mAdapter2 = new FirebaseListAdapter<Group>
-                (this, Group.class, R.layout.custom_listview_groups, database) {
+                (this, Group.class, R.layout.custom_listview_groups, mDatabase) {
             @Override
             protected void populateView(View v, Group model, int position) {
                 TextView group = (TextView) v.findViewById(R.id.group_name);
@@ -111,14 +126,16 @@ public class MyGroupsActivity extends AppCompatActivity
             }
         };
 
-        // Set adapter on ListView
+        // Set adapter on ListView.
         mGroups.setAdapter(mAdapter2);
+    }
 
-        // OnItemClickListener Starts intent RoomActivity and sends through clicked groupId and name
+    private void setListViewClickListeners() {
+        // OnItemClickListener Starts intent RoomActivity and sends through clicked groupId and name.
         mGroups.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent groupdetail = new Intent (getApplicationContext(), RoomActivity.class);
+                Intent groupdetail = new Intent(getApplicationContext(), RoomActivity.class);
                 Group group = (Group) mGroups.getItemAtPosition(i);
                 groupdetail.putExtra("groepnaam", group.getGroupname());
                 groupdetail.putExtra("groepid", group.getGroupid());
@@ -136,7 +153,7 @@ public class MyGroupsActivity extends AppCompatActivity
                 final Dialog dialog = new Dialog(MyGroupsActivity.this);
                 dialog.setContentView(R.layout.custom_dialog_remove_group);
 
-                // Buttons in Dialog
+                // Buttons in Dialog.
                 Button remove = (Button) dialog.findViewById(R.id.remove_button);
                 Button cancel = (Button) dialog.findViewById(R.id.cancel_button);
 
@@ -162,7 +179,7 @@ public class MyGroupsActivity extends AppCompatActivity
 
     private void deleteGroup(final String group_id) {
         final DatabaseReference ref_groups = FirebaseDatabase.getInstance().getReference().child("groups");
-        // Deleting group under users
+        // Deleting group under users.
         ref_groups.child(group_id).child("members").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -171,7 +188,7 @@ public class MyGroupsActivity extends AppCompatActivity
                     FirebaseDatabase.getInstance().getReference().child("users").child(current_member_id).child("groups").
                             child(group_id).removeValue();
                 }
-                // Deleting of group under groups
+                // Deleting of group under groups.
                 ref_groups.child(group_id).removeValue();
             }
             @Override
@@ -190,7 +207,7 @@ public class MyGroupsActivity extends AppCompatActivity
         }
     }
 
-    // Handles Navtigation view item clicks.
+    // Handles Navigation view item clicks.
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {

@@ -2,7 +2,6 @@
  * Created by Jim Boelrijk
  * Student of UvA
  * Student number: 1045216
- *
  */
 package mprog.nl.studentenschoonmaakapp.models;
 
@@ -16,9 +15,9 @@ import android.widget.TwoLineListItem;
 
 import java.util.ArrayList;
 
-
 /**
- * Created by Jim on 17-1-2017.
+ * Adapter for MakeGroupActivity.
+ *
  */
 
 public class MyAdapter extends BaseAdapter {
@@ -45,7 +44,6 @@ public class MyAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return 0;
     }
-
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

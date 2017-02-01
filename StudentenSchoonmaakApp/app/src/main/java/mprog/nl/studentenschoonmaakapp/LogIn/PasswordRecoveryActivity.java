@@ -6,7 +6,7 @@
  * This code was inspired by google tutorial code for FireBase (see URL below)
  *  https://github.com/firebase/quickstart-android
  */
-package mprog.nl.studentenschoonmaakapp.LogIn;
+package mprog.nl.studentenschoonmaakapp.login;
 
 import android.support.annotation.NonNull;
 import android.os.Bundle;
@@ -18,7 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
-import mprog.nl.studentenschoonmaakapp.BaseActivity;
+import mprog.nl.studentenschoonmaakapp.models.BaseActivity;
 import mprog.nl.studentenschoonmaakapp.R;
 
 /**
@@ -37,13 +37,13 @@ public class PasswordRecoveryActivity extends BaseActivity implements
         setContentView(R.layout.activity_password_recovery);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // Views
+        // Views.
         mEmailField = (EditText) findViewById(R.id.field_recovery_email);
 
-        //Buttons
+        //Buttons.
         findViewById(R.id.recovery_button).setOnClickListener(this);
 
-        // Initialize Auth
+        // Initialize Auth.
         mAuth = FirebaseAuth.getInstance();
     }
 
@@ -58,10 +58,10 @@ public class PasswordRecoveryActivity extends BaseActivity implements
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(PasswordRecoveryActivity.this, "E-mail verzonden.",
+                            Toast.makeText(PasswordRecoveryActivity.this, R.string.emailverzonden,
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(PasswordRecoveryActivity.this, "Er is iets misgegaan.",
+                            Toast.makeText(PasswordRecoveryActivity.this, R.string.ietsmisgegaan,
                                     Toast.LENGTH_SHORT).show();
                         }
                     }

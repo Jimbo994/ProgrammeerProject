@@ -1,12 +1,18 @@
-package mprog.nl.studentenschoonmaakapp;
+/**
+ * Created by Jim Boelrijk
+ * Student of UvA
+ * Student number: 1045216
+ */
+
+package mprog.nl.studentenschoonmaakapp.models;
 
 import android.app.ProgressDialog;
 import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 
-/**
- * Created by Jim on 12-1-2017.
- */
+import mprog.nl.studentenschoonmaakapp.R;
+
+// This class contains functions to inflate Progressdialog, and dismisses when done.
 
 public class BaseActivity extends AppCompatActivity {
 

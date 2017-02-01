@@ -2,8 +2,8 @@
  * Created by Jim Boelrijk
  * Student of UvA
  * Student number: 1045216
- *
  */
+
 package mprog.nl.studentenschoonmaakapp.models;
 
 import com.google.firebase.database.Exclude;
@@ -13,41 +13,39 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Jim on 19-1-2017.
+ * This class contains a Group Object. This object contains the information of a Group,
+ * consisting of the name of the group and its Id.
+ * It is used to write a Group to FireBase.
  */
 
 @IgnoreExtraProperties
 public class Group {
-    private static String groupid;
-    private static String groupname;
+    private static String groupId;
+    private static String groupName;
 
     public Group() {
-        // Default constructor required for calls to DataSnapshot.getValue(Post.class)
     }
 
-    public Group(String groupname, String groupid) {
-        Group.groupname = groupname;
-        Group.groupid = groupid;
+    public Group(String groupName, String groupId) {
+        Group.groupName = groupName;
+        Group.groupId = groupId;
     }
 
-    // [START post_to_map]
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
-        result.put("groupid", groupid);
-        result.put("groupname", groupname);
+        result.put("groupid", groupId);
+        result.put("groupname", groupName);
 
         return result;
     }
 
     public String getGroupid() {
-        return Group.groupid;
+        return Group.groupId;
     }
 
     public String getGroupname(){
-        return Group.groupname;
+        return Group.groupName;
     }
-    // [END post_to_map]
-
 }
-// [END post_class]
+

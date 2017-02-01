@@ -7,7 +7,7 @@
  *  https://github.com/firebase/quickstart-android
  */
 
-package mprog.nl.studentenschoonmaakapp.LogIn;
+package mprog.nl.studentenschoonmaakapp.login;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -22,7 +22,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-import mprog.nl.studentenschoonmaakapp.BaseActivity;
+import mprog.nl.studentenschoonmaakapp.models.BaseActivity;
 import mprog.nl.studentenschoonmaakapp.MyGroupsActivity;
 import mprog.nl.studentenschoonmaakapp.R;
 
@@ -36,29 +36,28 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private EditText mPasswordField;
     private FirebaseAuth mAuth;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Views
+        // Views.
         mEmailField = (EditText) findViewById(R.id.field_login_email);
         mPasswordField = (EditText) findViewById(R.id.field_login_password);
 
-        // Buttons
+        // Buttons.
         findViewById(R.id.login_button).setOnClickListener(this);
         findViewById(R.id.password_forgotten).setOnClickListener(this);
         findViewById(R.id.register).setOnClickListener(this);
 
-        // initialize mAuth
+        // initialize mAuth.
         mAuth = FirebaseAuth.getInstance();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        // Check auth on Activity start
+        // Check auth on Activity start.
         if (mAuth.getCurrentUser() != null) {
             onAuthSuccess();
         }
@@ -81,33 +80,33 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         hideProgressDialog();
                         if (task.isSuccessful()) {
                             onAuthSuccess();
-                            Toast.makeText(LoginActivity.this, "Inloggen...",
+                            Toast.makeText(LoginActivity.this, R.string.wachtopinlog,
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(LoginActivity.this, "Inloggen mislukt.",
+                            Toast.makeText(LoginActivity.this, R.string.inloggenmislukt,
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
 
-    // If successfully logged in, go to MyGroupsActivity
+    // If successfully logged in, go to MyGroupsActivity.
     private void onAuthSuccess() {
         startActivity(new Intent(LoginActivity.this, MyGroupsActivity.class));
         finish();
     }
 
-    // Checks if Textfield are properly filled in.
+    // Checks if TextFields are properly filled in.
     private boolean validateForm() {
         boolean result = true;
         if (TextUtils.isEmpty(mEmailField.getText().toString())) {
-            mEmailField.setError("Vul e-mail in.");
+            mEmailField.setError(getString(R.string.vulmailin));
             result = false;
         } else {
             mEmailField.setError(null);
         }
         if (TextUtils.isEmpty(mPasswordField.getText().toString())) {
-            mPasswordField.setError("Vul wachtwoord in.");
+            mPasswordField.setError(getString(R.string.vulwachtwoordin));
             result = false;
         } else {
             mPasswordField.setError(null);

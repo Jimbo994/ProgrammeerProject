@@ -58,4 +58,20 @@
     <string name="weet_je_het_zeker">Weet je het zeker?</string>
     <string name="het_verwijderen_van_een_groep_zal_de_groep_inclusief_alle_data_in_deze_groep_permanent_verwijderen">Het verwijderen van een groep zal de groep, inclusief alle data in deze groep permanent verwijderen!</string>
     <string name="profiel">Profiel</string>
+    <string name="vulkamer">Vul een kamer in.</string>
+    <string name="vulmailin">Vul e-mail in.</string>
+    <string name="vulwachtwoordin">Vul wachtwoord in.</string>
+    <string name="registreren">Registreren</string>
+    <string name="registerenmislukt">Registreren mislukt.</string>
+    <string name="emailverstuurd">Account activatie e-mail verstuurd.</string>
+    <string name="vulemailin">Vul e-mail in.</string>
+    <string name="vulnaamin">Vul naam in.</string>
+    <string name="vulachternaamin">Vul achternaam in.</string>
+    <string name="vulwachtwoord">Vul wachtwoord in.</string>
+    <string name="emailverzonden">E-mail verzonden.</string>
+    <string name="ietsmisgegaan">Er is iets misgegaan.</string>
+    <string name="vulkamerin">Vul een kamer in.</string>
+    <string name="vultaakin">Vul een Taak in</string>
+    <string name="wachtopinlog">Inloggen...</string>
+    <string name="inloggenmislukt">Inloggen mislukt.</string>
 </resources>
