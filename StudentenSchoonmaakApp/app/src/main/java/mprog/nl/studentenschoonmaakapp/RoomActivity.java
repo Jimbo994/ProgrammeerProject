@@ -185,18 +185,8 @@ public class RoomActivity extends AppCompatActivity {
         // Spinner.
         mSpinner = (Spinner) dialog.findViewById(R.id.member_spinner);
 
-        // Retrieve group members from database to fill Spinner with, then setAdapter.
-        mDatabase_for_members.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    mMembers.add(String.valueOf(ds.getValue()));
-                }
-                mSpinner.setAdapter(mMemberAdapter);
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        });
+        fillSpinner();
+
         // Inflate dialog.
         dialog.show();
         save.setOnClickListener(new View.OnClickListener() {
@@ -211,6 +201,22 @@ public class RoomActivity extends AppCompatActivity {
             public void onClick(View view) {
                 dialog.dismiss();
             }
+        });
+    }
+
+    // Fills Spinner with data from Firebase.
+    private void fillSpinner() {
+        // Retrieve group members from database to fill Spinner with, then setAdapter.
+        mDatabase_for_members.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    mMembers.add(String.valueOf(ds.getValue()));
+                }
+                mSpinner.setAdapter(mMemberAdapter);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
         });
     }
 

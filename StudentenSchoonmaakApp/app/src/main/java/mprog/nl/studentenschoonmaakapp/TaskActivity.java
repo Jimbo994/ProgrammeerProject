@@ -74,7 +74,8 @@ public class TaskActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(room);
 
         // Initialize DatabaseReference.
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("groups").child(groupId).child("tasks").child(room);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("groups").child(groupId)
+                .child("tasks").child(room);
 
         setListView();
         setListViewClickListener();
@@ -85,7 +86,8 @@ public class TaskActivity extends AppCompatActivity {
 
         mTasks = (ListView) findViewById(R.id.tasks_listview);
         // initialize FirebaseListAdapters that retrieves and shows Task object form mDatabase.
-        FirebaseListAdapter<Task> mAdapter = new FirebaseListAdapter<Task>(this, Task.class, R.layout.custom_listview_tasks, mDatabase) {
+        FirebaseListAdapter<Task> mAdapter = new FirebaseListAdapter<Task>
+                (this, Task.class, R.layout.custom_listview_tasks, mDatabase) {
             @Override
             protected void populateView(View v, final Task model, int position) {
                 TextView Task = (TextView) v.findViewById(R.id.task_name);
@@ -106,6 +108,7 @@ public class TaskActivity extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Task task = (Task) mTasks.getItemAtPosition(i);
                 final String task_name = task.getTask();
+
                 final Dialog dialog = new Dialog(TaskActivity.this);
                 dialog.setContentView(R.layout.custom_dialog_edit_tasks);
                 // EditText in dialog.
@@ -114,9 +117,6 @@ public class TaskActivity extends AppCompatActivity {
                 Button edit = (Button) dialog.findViewById(R.id.edit_button);
                 Button remove = (Button) dialog.findViewById(R.id.remove_button);
 
-                // DataBaseReference.
-                final DatabaseReference ref_tasks = FirebaseDatabase.getInstance().getReference().child("groups")
-                        .child(groupId).child("tasks").child(room);
                 dialog.show();
 
                 remove.setOnClickListener(new View.OnClickListener() {
@@ -134,7 +134,7 @@ public class TaskActivity extends AppCompatActivity {
                             removeTask(task_name);
                             // Create new Task and write to DataBase.
                             Task edittask = new Task(mEditField.getText().toString(), false, "");
-                            ref_tasks.child(mEditField.getText().toString()).setValue(edittask);
+                            mDatabase.child(mEditField.getText().toString()).setValue(edittask);
                             dialog.dismiss();
                         }
                     }
@@ -145,9 +145,7 @@ public class TaskActivity extends AppCompatActivity {
 
     // Removes task from DataBase.
     private void removeTask(String task_name) {
-        DatabaseReference ref_tasks = FirebaseDatabase.getInstance().getReference().child("groups").
-                child(groupId).child("tasks").child(room);
-        ref_tasks.child(task_name).removeValue();
+        mDatabase.child(task_name).removeValue();
     }
 
     // Inflates dialog where a task can be created and added.
@@ -189,9 +187,7 @@ public class TaskActivity extends AppCompatActivity {
         new_task.setTask(mTaskField.getText().toString());
         new_task.setCompleted(false);
 
-        DatabaseReference db_ref = FirebaseDatabase.getInstance().getReference().child("groups").
-                child(groupId).child("tasks").child(room);
-        db_ref.child(mTaskField.getText().toString()).setValue(new_task);
+        mDatabase.child(mTaskField.getText().toString()).setValue(new_task);
     }
 
     // Checks if TextFields are properly filled in.
