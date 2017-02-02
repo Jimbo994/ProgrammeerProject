@@ -35,28 +35,6 @@
         android:hint="@string/taak"
         android:paddingBottom="20dp"/>
 
-    <!--<TextView-->
-    <!--android:text="@string/wie_zijn_taak_is_dit"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:id="@+id/title_field_add_responsible_member"-->
-    <!--android:textAppearance="@style/TextAppearance.AppCompat" />-->
-
-    <!--<Spinner-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="50dp"-->
-    <!--android:id="@+id/spinner"-->
-    <!--android:layout_weight="0.41" />-->
-
-    <!--<EditText-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:paddingBottom="20dp"-->
-    <!--android:inputType="textPersonName"-->
-    <!--android:ems="10"-->
-    <!--android:id="@+id/field_add_responsible_member"-->
-    <!--android:hint="@string/bijnaam" />-->
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -74,7 +52,7 @@
             />
 
         <Button
-            android:text="Annuleer"
+            android:text="@string/annuleer"
             android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:id="@+id/cancel_add_task_button"

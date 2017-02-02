@@ -16,7 +16,8 @@ import android.widget.TwoLineListItem;
 import java.util.ArrayList;
 
 /**
- * Adapter for MakeGroupActivity.
+ * Adapter for MakeGroupActivity. Receives an ArrayList containing User objects and sets
+ * email and name of User object in ListView.
  */
 
 public class MyAdapter extends BaseAdapter {
@@ -61,8 +62,8 @@ public class MyAdapter extends BaseAdapter {
         TextView text1 = twoLineListItem.getText1();
         TextView text2 = twoLineListItem.getText2();
 
-        text1.setText("Naam: " + members.get(position).getName());
-        text2.setText("E-mailadres: " + members.get(position).getEmail());
+        text1.setText(String.format("Naam: %s", members.get(position).getName()));
+        text2.setText(String.format("E-mailadres: %s", members.get(position).getEmail()));
 
         return twoLineListItem;
     }

@@ -7,9 +7,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-
         <TextView
-            android:text="Naam: "
+            android:text="@string/naamvb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/naam" />
@@ -19,7 +18,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/name_custom_listview" />
-
     </LinearLayout>
 
     <LinearLayout
@@ -28,7 +26,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:text="E-mailadres: "
+            android:text="@string/e_mailadresmmm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/email" />

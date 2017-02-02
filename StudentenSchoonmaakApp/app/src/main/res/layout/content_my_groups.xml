@@ -11,17 +11,16 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="mprog.nl.studentenschoonmaakapp.MyGroupsActivity"
-    tools:showIn="@layout/app_bar_home_screen"
+    tools:showIn="@layout/app_bar_my_groups"
     android:orientation="vertical">
-
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:text="Mijn groepen"
+        android:text="@string/mijn_groepen"
         android:ems="10"
         android:id="@+id/editText"
-        android:textSize="30dp"
+        android:textSize="30sp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
     <ListView

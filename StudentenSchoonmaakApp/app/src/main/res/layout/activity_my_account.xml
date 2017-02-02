@@ -19,8 +19,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_home_screen"
-        app:menu="@menu/activity_home_screen_drawer" />
+        app:headerLayout="@layout/nav_header_my_groups"
+        app:menu="@menu/activity_my_groups_drawer" />
 
 </android.support.v4.widget.DrawerLayout>
 

@@ -59,17 +59,15 @@
         android:paddingBottom="10dp">
 
         <Button
-            android:text="Voeg toe"
+            android:text="@string/voeg_toe"
             android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:id="@+id/invite_member_button"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
             android:textColor="@android:color/holo_green_light"
             />
-
-
         <Button
-            android:text="Annuleer"
+            android:text="@string/annuleer"
             android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:id="@+id/invite_cancel_button"

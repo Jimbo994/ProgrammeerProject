@@ -9,7 +9,7 @@
     tools:showIn="@layout/app_bar_my_account">
 
     <TextView
-        android:text="Profiel"
+        android:text="@string/profiel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="37dp"
@@ -20,7 +20,7 @@
         android:textSize="20sp" />
 
     <TextView
-        android:text="Voornaam:"
+        android:text="@string/voornaamm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/my_account_name"
@@ -31,7 +31,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat" />
 
     <TextView
-        android:text="Achternaam:"
+        android:text="@string/achternaamm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/my_account_field_name"
@@ -43,7 +43,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
-        android:text="Email adres:"
+        android:text="@string/email_adresm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/my_account_email"
@@ -77,7 +77,7 @@
         android:layout_alignStart="@+id/my_account_lastname" />
 
     <TextView
-        android:text="voornaam"
+        android:text="@string/voornaam"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/my_account_field_name"

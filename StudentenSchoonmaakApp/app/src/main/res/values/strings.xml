@@ -80,4 +80,14 @@
     <string name="ubentalingelogd">U bent al ingelogd met deze email</string>
     <string name="vulgroepsnaamin">Vul groepsnaam in.</string>
     <string name="voegledentoe">U moet eerst leden toevoegen.</string>
+    <string name="mijn_groep">Mijn Groep</string>
+    <string name="voornaamm">Voornaam:</string>
+    <string name="achternaamm">Achternaam:</string>
+    <string name="email_adresm">Email adres:</string>
+    <string name="mijn_groepen">Mijn groepen</string>
+    <string name="voeg_toe">Voeg toe</string>
+    <string name="e_mailadresmmm">E-mailadres:</string>
+    <string name="naamvb">Naam:</string>
+    <string name="kamerph">Kamer: %s</string>
+    <string name="verantwoordelijkph">Verantwoordelijk: %s</string>
 </resources>

@@ -50,7 +50,7 @@ public class TaskActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_group_detail);
+        setContentView(R.layout.activity_tasks);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -86,7 +86,7 @@ public class TaskActivity extends AppCompatActivity {
         FirebaseListAdapter<Task> mAdapter = new FirebaseListAdapter<Task>(this, Task.class, R.layout.custom_listview_tasks, mDatabase) {
             @Override
             protected void populateView(View v, final Task model, int position) {
-                TextView Task = (TextView) v.findViewById(R.id.movie_title);
+                TextView Task = (TextView) v.findViewById(R.id.task_name);
                 TextView date = (TextView) v.findViewById(R.id.date);
                 CheckBox checkbox = (CheckBox) v.findViewById(R.id.checkBox);
 
@@ -216,7 +216,7 @@ public class TaskActivity extends AppCompatActivity {
     public void onClick(View view) {
         // Get parent View and Data.
         View parent = (View) view.getParent();
-        TextView task = (TextView) parent.findViewById(R.id.movie_title);
+        TextView task = (TextView) parent.findViewById(R.id.task_name);
 
         DatabaseReference ref = mDatabase.child(task.getText().toString());
 

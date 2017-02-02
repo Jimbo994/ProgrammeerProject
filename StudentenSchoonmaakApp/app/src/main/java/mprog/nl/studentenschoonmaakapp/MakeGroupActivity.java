@@ -51,6 +51,7 @@ import java.util.concurrent.Future;
  * Also the group is written on FireBase. When a newly invited user sets up their password by
  * clicking on a link in their invitation email they can log in and have direct access to the group.
  */
+
 public class MakeGroupActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ArrayList<User> mMemberList;
@@ -102,7 +103,7 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
             mMemberListView.setAdapter(mArrayAdapter);
         }
 
-        // Initialize onClick Listener on FloatingActionButton
+        // Initialize onClick Listener on FloatingActionButton.
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.invite_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,15 +120,15 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
         final Dialog dialog = new Dialog(MakeGroupActivity.this);
         dialog.setContentView(R.layout.custom_dialog_invite);
 
-        // Edittext in dialog
+        // EditText in dialog.
         mNameField = (EditText) dialog.findViewById(R.id.field_invite_member_name);
         mEmailField = (EditText) dialog.findViewById(R.id.field_invite_member_email);
 
-        // Buttons in dialog
+        // Buttons in dialog.
         Button invite = (Button) dialog.findViewById(R.id.invite_member_button);
         Button cancel = (Button) dialog.findViewById(R.id.invite_cancel_button);
 
-        // Inflate dialog
+        // Inflate dialog.
         dialog.show();
 
         invite.setOnClickListener(new View.OnClickListener() {
@@ -163,11 +164,11 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
                 final Dialog dialog = new Dialog(MakeGroupActivity.this);
                 dialog.setContentView(R.layout.custom_dialog_edit_member);
 
-                // Edittext in AlertDialog.
+                // Edittext in dialog.
                 mNameField = (EditText) dialog.findViewById(R.id.field_edit_member_name);
                 mEmailField = (EditText) dialog.findViewById(R.id.field_edit_member_email);
 
-                // Buttons in Alertdialog.
+                // Buttons in dialog.
                 Button edit = (Button) dialog.findViewById(R.id.edit_member_button);
                 Button remove = (Button) dialog.findViewById(R.id.remove_member_button);
 
@@ -206,7 +207,7 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
         });
     }
 
-    // onClick listeners on ActivityButtons
+    // onClick listeners on ActivityButtons.
     @Override
     public void onClick(View view) {
         int i = view.getId();
@@ -217,12 +218,13 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    // Creates a new group and calls all functions that are needed to do this.
-    //
-    private boolean createNewGroup() {
+    // Creates a new group and calls all functions that are needed to do this in the right order by
+    // using a Future List. By using a Future it is made sure that activity only finishes until
+    // for loop is finished.
+        private boolean createNewGroup() {
         if (validateform2()){
-            // Usage:
-            CurrentUsertoGroup();
+            CurrentUserToGroup();
+            // Make List Future
             List<Future<?>> members = new ArrayList<>();
             for (User u : mMemberList) {
                 members.add(MemberAuthentication(u));
@@ -232,7 +234,8 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
             }
             for (Future<?> member : members) {
                 try {
-                    member.get(); // await completion
+                    // await completion, only completes once all members are retrieved.
+                    member.get();
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
                 }
@@ -243,47 +246,52 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
         return true;
     }
 
-    private void CurrentUsertoGroup() {
-        //Get email of currently signed in user
+    // Creates a new group under current user and under groups.
+    private void CurrentUserToGroup() {
+        //Get email and hash of currently signed in user.
         String email_current_user = mAuth.getCurrentUser().getEmail();
-        Toast.makeText(this, "Current email:" + email_current_user, Toast.LENGTH_SHORT).show();
-
-        //Get hash of currently signed in user
         String hash_email_current_user = String.valueOf(email_current_user.hashCode());
 
-        Toast.makeText(this, "Writing current user with hash:" + hash_email_current_user, Toast.LENGTH_SHORT).show();
-
-        // get timestamp for unique group id
+        // get timestamp for unique group id.
         Long tsLong = System.currentTimeMillis()/1000;
         final String timestamp = tsLong.toString();
 
-        final String group = mGroupnameField.getText().toString();
-
-        // maak unieke groep id
+        // create unique groupId.
         mGroupId = hash_email_current_user + timestamp;
 
-        //groep toevoegen aan ingelogde user
-        DatabaseReference userref2 = FirebaseDatabase.getInstance().getReference().child("users").child(hash_email_current_user).child("groups");
-        //String key2 = userref2.push().getKey();
+        // Retrieve groupname.
+        final String group = mGroupnameField.getText().toString();
 
+        createGroupUnderUsers(hash_email_current_user, group);
+        createGroupunderGroups(hash_email_current_user, group);
+    }
+
+
+    private void createGroupUnderUsers(String hash_email_current_user, String group) {
+        // DatabaseReference.
+        DatabaseReference userref = FirebaseDatabase.getInstance().getReference().child("users").child(hash_email_current_user).child("groups");
+
+        // Create new Group object.
         Group group2 = new Group(group, mGroupId);
+
+        //Map Object and write to Database under users.
         Map<String, Object> postvalues2 = group2.toMap();
-
         Map<String, Object> childUpdates2 = new HashMap<>();
-
         childUpdates2.put(mGroupId, postvalues2);
-        userref2.updateChildren(childUpdates2);
+        userref.updateChildren(childUpdates2);
+    }
 
-        //Maak groep aan
+    private void createGroupunderGroups(String hash_email_current_user, String group) {
+        // Create group under groups.
         DatabaseReference groupref = FirebaseDatabase.getInstance().getReference().child("groups");
         groupref.child(mGroupId).child("groupname").setValue(group);
 
-        //ingelogde user toevoegen aan groep
+        // add current user to members in groups.
         DatabaseReference groupref2 = FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupId);
         String key = groupref2.push().getKey();
         groupref2.child("members").child(key).setValue(hash_email_current_user);
 
-        //naam toevoegen aan members
+        // add current username to membernames in groups.
         final String[] current_name = new String[1];
         final DatabaseReference members = FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupId).child("membernames");
         DatabaseReference me = FirebaseDatabase.getInstance().getReference().child("users").child(hash_email_current_user).child("userinfo");
@@ -295,21 +303,31 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
                 }
                 members.push().setValue(current_name[0]);
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
     }
 
+    // Writes a user in FireBase DataBase with hash of email as userId.
+    private Future<?> MemberRegistration(User u) {
+
+        DatabaseReference userref = FirebaseDatabase.getInstance().getReference().child("users");
+        String email = u.getEmail();
+        String name = u.getName();
+        User user = new User(name, "", email);
+
+        int hash = email.hashCode();
+        String hash_email = String.valueOf(hash);
+
+        userref.child(hash_email).child("userinfo").setValue(user);
+        return new AsyncResult<>();
+    }
+
+    // Registrates a user in FireBase Auth.
     Future<?> MemberAuthentication(User u) {
         String email = u.getEmail();
 
-        List<Future<?>> mUsersFuture = new ArrayList<>();
-
-        Toast.makeText(MakeGroupActivity.this, "Email =" + email,
-                Toast.LENGTH_SHORT).show();
         mAuth.createUserWithEmailAndPassword(email, "blablabla")
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -320,73 +338,28 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
         return new AsyncResult<>();
     }
 
-    private Future<?> MemberRegistration(User u) {
-
-        DatabaseReference userref = FirebaseDatabase.getInstance().getReference().child("users");
-
-        String email = u.getEmail();
-        String name = u.getName();
-        User user = new User(name, "", email);
-
-        int hash = email.hashCode();
-        String hash_email = String.valueOf(hash);
-
-        userref.child(hash_email).child("userinfo").setValue(user);
-
-        return new AsyncResult<>();
-    }
-
-
-
     private Future<?> MembertoGroup(User u) {
 
-        //Get email of currently signed in user
-        String email_current_user = mAuth.getCurrentUser().getEmail();
-
-        //Get hash of currently signed in user
-        String hash_email_current_user = String.valueOf(email_current_user.hashCode());
-
-        // Get email of user
+        // Get email of user.
         String email = u.getEmail();
 
-        // get hash of email
+        // get hash of email.
         String hash_email = String.valueOf(email.hashCode());
-
-        // get timestamp for unique group id
-        Long tsLong = System.currentTimeMillis()/1000;
-        final String timestamp = tsLong.toString();
-
 
         final String group = mGroupnameField.getText().toString();
 
-        // maak unieke groep id
-//        groupid = hash_email_current_user + timestamp;
+        createGroupUnderUsers(hash_email, group);
 
-        Toast.makeText(this, "Writing user u, but current user hash ="+ hash_email_current_user, Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, "Writing user u hash:" + hash_email, Toast.LENGTH_SHORT).show();
-
-        //groep toevoegen aan user u
-        DatabaseReference userref = FirebaseDatabase.getInstance().getReference().child("users").child(hash_email).child("groups");
-//        String key = userref.push().getKey();
-
-        Group group1 = new Group(group, mGroupId);
-        Map<String, Object> postvalues = group1.toMap();
-
-        Map<String, Object> childUpdates = new HashMap<>();
-
-        childUpdates.put(mGroupId, postvalues);
-        userref.updateChildren(childUpdates);
-
-        //members toevoegen aan groep
+        // Add members to group.
         DatabaseReference groupref2 = FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupId);
-        String key2 = groupref2.push().getKey();
-        groupref2.child("members").child(key2).setValue(hash_email);
-        groupref2.child("membernames").child(key2).setValue(u.getName());
+        String key = groupref2.push().getKey();
+        groupref2.child("members").child(key).setValue(hash_email);
+        groupref2.child("membernames").child(key).setValue(u.getName());
 
         return new AsyncResult<>();
     }
 
-    // Sends Password Reset Email to invited users. In Firebase a custom template is created
+    // Sends Password Reset Email to invited users. In FireBase a custom template is created
     // with a invitation text.
     private Future<?> SendMail(User u) {
         String email = u.getEmail();
@@ -405,7 +378,6 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
                 });
         return new AsyncResult<>();
     }
-
 
     // Checks if TextFields are properly filled in.
     private boolean validateForm() {
@@ -430,6 +402,7 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
         return result;
     }
 
+    // Checks if TextFields are properly filled in.
     private boolean validateform2() {
         boolean result = true;
         if (TextUtils.isEmpty(mGroupnameField.getText().toString())) {

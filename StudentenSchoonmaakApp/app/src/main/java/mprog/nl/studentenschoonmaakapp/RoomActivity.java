@@ -55,7 +55,7 @@ public class RoomActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_group);
+        setContentView(R.layout.activity_room);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -74,7 +74,7 @@ public class RoomActivity extends AppCompatActivity {
         groupName = getIntent().getStringExtra("groepnaam");
 
         // Initialize Views.
-        mRooms =(ListView) findViewById(R.id.tasks_listview);
+        mRooms =(ListView) findViewById(R.id.rooms_listview);
         mMembers = new ArrayList<>();
         mMemberAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, mMembers);
 
@@ -84,14 +84,14 @@ public class RoomActivity extends AppCompatActivity {
                 child(groupId).child("membernames");
 
         // FireBaseListAdapter that loads rooms of group.
-        mAdapter = new FirebaseListAdapter<Room>(this, Room.class, R.layout.custom_listview, mDatabase) {
+        mAdapter = new FirebaseListAdapter<Room>(this, Room.class, R.layout.custom_listview_room, mDatabase) {
             @Override
             protected void populateView(View v, Room model, int position) {
                 TextView room = (TextView) v.findViewById(R.id.movie_title);
                 TextView responsible = (TextView) v.findViewById(R.id.responsible);
 
                 room.setText(model.getRoom());
-                responsible.setText(model.getResponsibility());
+                responsible.setText(String.format(getString(R.string.verantwoordelijkph), model.getResponsibility()));
             }
         };
 

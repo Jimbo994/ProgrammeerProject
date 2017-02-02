@@ -27,33 +27,32 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:text="Annuleer"
+                android:text="@string/annuleer"
                 android:layout_width="107dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
+                android:layout_gravity="start"
                 android:id="@+id/cancel_button"
                 style="@style/Widget.AppCompat.Button.Borderless" />
 
             <TextView
-                android:text="Mijn Groep"
+                android:text="@string/mijn_groep"
                 android:layout_width="160dp"
                 android:layout_height="match_parent"
                 android:paddingTop="6dp"
                 android:textAlignment="center"
                 android:id="@+id/textView"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                android:textSize="24dp"/>
+                android:textSize="24sp"/>
 
             <Button
-                android:text="Opslaan"
+                android:text="@string/opslaan"
                 android:layout_width="112dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
+                android:layout_gravity="end"
                 android:id="@+id/save_button"
                 style="@style/Widget.AppCompat.Button.Borderless" />
 
         </LinearLayout>
-
 
     </android.support.design.widget.AppBarLayout>
 
