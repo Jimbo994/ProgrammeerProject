@@ -23,7 +23,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -62,7 +61,7 @@ public class MyGroupsActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home_screen);
+        setContentView(R.layout.activity_my_groups);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -72,16 +71,15 @@ public class MyGroupsActivity extends AppCompatActivity
         if (auth.getCurrentUser() != null){
             email_current_user = auth.getCurrentUser().getEmail();
             hash_current_user = String.valueOf((email_current_user.hashCode()));
-            Toast.makeText(this, hash_current_user, Toast.LENGTH_SHORT).show();
         } else{
-            FirebaseAuth.getInstance().signOut();
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
+         FirebaseAuth.getInstance().signOut();
+           startActivity(new Intent(this, LoginActivity.class));
+           finish();
         }
 
         // Initialize FireBase Database.
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(hash_current_user).child("groups");
-
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").
+                child(hash_current_user).child("groups");
         //Views.
         mGroups = (ListView) findViewById(R.id.listview_mygroups);
 
@@ -97,10 +95,10 @@ public class MyGroupsActivity extends AppCompatActivity
 
         inflateNavigationDrawer();
         setListView();
-        mAdapter.notifyDataSetChanged();
+        setListViewClickListeners();
     }
 
-    private void inflateNavigationDrawer() {
+       private void inflateNavigationDrawer() {
         //  Inflate navigation drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -125,22 +123,23 @@ public class MyGroupsActivity extends AppCompatActivity
             @Override
             protected void populateView(View v, Group model, int position) {
                 TextView group = (TextView) v.findViewById(R.id.group_name);
-                String group_name = model.getGroupname();
+                String group_name = model.getGroupName();
                 group.setText(group_name);
             }
         };
-
         // Set adapter on ListView.
         mGroups.setAdapter(mAdapter);
+    }
 
+    private void setListViewClickListeners() {
         // OnItemClickListener Starts intent RoomActivity and sends through clicked groupId and name.
         mGroups.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent groupdetail = new Intent(getApplicationContext(), RoomActivity.class);
                 Group group = (Group) mGroups.getItemAtPosition(i);
-                groupdetail.putExtra("groepnaam", group.getGroupname());
-                groupdetail.putExtra("groepid", group.getGroupid());
+                groupdetail.putExtra("groepnaam", group.getGroupName());
+                groupdetail.putExtra("groepid", group.getGroupId());
                 startActivity(groupdetail);
             }
         });
@@ -150,7 +149,7 @@ public class MyGroupsActivity extends AppCompatActivity
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Group group = (Group) mGroups.getItemAtPosition(i);
-                final String group_id = group.getGroupid();
+                final String group_id = group.getGroupId();
 
                 final Dialog dialog = new Dialog(MyGroupsActivity.this);
                 dialog.setContentView(R.layout.custom_dialog_remove_group);

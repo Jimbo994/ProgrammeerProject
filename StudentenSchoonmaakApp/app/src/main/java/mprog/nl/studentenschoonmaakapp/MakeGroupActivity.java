@@ -30,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import mprog.nl.studentenschoonmaakapp.models.AsyncResult;
+import mprog.nl.studentenschoonmaakapp.models.BaseActivity;
 import mprog.nl.studentenschoonmaakapp.models.MyAdapter;
 import mprog.nl.studentenschoonmaakapp.models.Group;
 import mprog.nl.studentenschoonmaakapp.models.User;
@@ -50,7 +51,7 @@ import java.util.concurrent.Future;
  * clicking on a link in their invitation email they can log in and have direct access to the group.
  */
 
-public class MakeGroupActivity extends AppCompatActivity implements View.OnClickListener {
+public class MakeGroupActivity extends BaseActivity implements View.OnClickListener {
 
     private ArrayList<User> mMemberList;
 
@@ -133,13 +134,7 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onClick(View view) {
                 if (validateForm()) {
-                    String email = mEmailField.getText().toString();
-                    String name = mNameField.getText().toString();
-                    mUser = new User();
-                    mUser.setLastName(null);
-                    mUser.setName(name);
-                    mUser.setEmail(email);
-                    mMemberList.add(mUser);
+                    setUser();
                     mArrayAdapter.notifyDataSetChanged();
                     dialog.dismiss();
                 }
@@ -151,6 +146,17 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
                 dialog.dismiss();
             }
         });
+    }
+
+    // Retrieves data from EditText and puts it into User object and adds it to arraylist.
+    private void setUser() {
+        String email = mEmailField.getText().toString();
+        String name = mNameField.getText().toString();
+        mUser = new User();
+        mUser.setLastName(null);
+        mUser.setName(name);
+        mUser.setEmail(email);
+        mMemberList.add(mUser);
     }
 
     private void setListViewClickListener() {
@@ -179,13 +185,7 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
                     public void onClick(View view) {
                         if (validateForm()) {
                             mMemberList.remove(index);
-                            String email = mEmailField.getText().toString();
-                            String name = mNameField.getText().toString();
-                            mUser = new User();
-                            mUser.setLastName(null);
-                            mUser.setName(name);
-                            mUser.setEmail(email);
-                            mMemberList.add(mUser);
+                            setUser();
                             mArrayAdapter.notifyDataSetChanged();
                             dialog.dismiss();
                         }
@@ -221,6 +221,9 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
     // for loop is finished.
         private boolean createNewGroup() {
         if (validateform2()){
+
+            showProgressDialog();
+
             CurrentUserToGroup();
             // Make List Future
             List<Future<?>> members = new ArrayList<>();
@@ -239,8 +242,10 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
                 }
             }
         }
+        hideProgressDialog();
         finish();
         mMemberList.clear();
+
         return true;
     }
 
@@ -257,7 +262,7 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
         // create unique groupId.
         mGroupId = hash_email_current_user + timestamp;
 
-        // Retrieve groupname.
+        // Retrieve groupName.
         final String group = mGroupnameField.getText().toString();
 
         createGroupUnderUsers(hash_email_current_user, group);
@@ -335,7 +340,6 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
 
         // Get email of user.
         String email = u.getEmail();
-
         // get hash of email.
         String hash_email = String.valueOf(email.hashCode());
 
