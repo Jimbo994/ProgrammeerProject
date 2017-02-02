@@ -12,7 +12,7 @@ in the house to users of the group. In each room a list of tasks can be created 
 Other users can see who has done what and when.
 
 <img src="/docs/LogInScreenshot.png" height="512">
-<img src="/docs/MakeGroupScreenshot" height="512">
+<img src="/docs/MakeGroupScreenshot.png" height="512">
 <img src="/docs/MyGroupsScreenshot.png" height="512">
 <img src="/docs/RoomScreenshot.png" height="512">
-<img src="/docs/TaskScreenshot.png" height="512">
+<img src="/docs/TaskScreenShot.png" height="512">
