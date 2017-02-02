@@ -74,24 +74,35 @@ Given the time the choice was not to do this.
 
 **DataBase Structure**
 
+I ran into some unexpected difficulties in choosing a right database structure. At first I refused to use objects since I did not really
+feel comfortable with using objects yet and a lot of pushkeys. I felt it was necessary to use pushkeys because otherwise data in the Database would get overwritten alot. But by using pushkeys it was needed to loop a lot through the database to find the right data which seemed unneeded if keys could be send through next activities using intents. That is why I decided to use the following database structure. By using groupids and names of rooms and tasks as keys, navigation through database is efficient in the sense that it is known beforehand where data is stored instead of having the need to loop through the database. The downside is that the using of room and task names as keys can be prone to crashing the app if special symbols are used. Another downside is that by creating duplicate rooms or tasks these are overwritten in the database. But the analogy I followed is that studenthomes do not very often contain two bathrooms for example. A better database is thinkable however.
+
+I also found out that in Firebase it is often better to keep your data unnested and as shallow as possible. This is because on a onDataChange call the Json file requested can be unnecessarily big then which would make database requests slow and which can cause asynchronous problems. The downside is that some data might be stored double in the database. According to FireBase documentation this is advised however.
+
+
 <img src="/docs/DataBaseStructure.png" width="350">
-
-
-
 
 **FireBase Asynchronousity**
 
 *MakeGroupActivity*
+This Activity was the biggest challenge of the project. I had the ambitious idea that on creating a group. I would automatically authenticate a user , register him/her to database, add him/her to the group and send them a invitation email. I thought it would be user friendly if a user had only to choose a password and log in and would find he/she would automatically have acces to the group.
+
+However Firebase is asynchronous and the problem I faced directly was the following; I added all future members to an ArrayList. On creating group I was trying to loop through this arraylist member for member to authenticate, register, add to group and send them a mail one by one. However because the FireBase calls where happening on another thread, the for loop would finish before I had done all firebase actions. So I had to figure out a solution for this problem.
+
+I found out on StackOverFlow about Future objects. With Future objects you can force a function to wait untill all the synchronous calls are done (for more info see code). This worked to some extent. The problem I had now was that I could authenticate all users in FireBase Auth and send them a email. But I could not write them to the database with their Firebase userid. When authentication is given to a user, there is small window of time where the uid can be reached, but it seemed to short to write the user to the database. I tried to build another Future around it. So that I would have a Future in a future but this did not work. One solution was to sign in every user and then write them into the database, because a userid can be accesed on user that is signed in. but this seemed a difficult and unwanted situation. Therefore I chose to use a hash of a user his mail, since a email is kind of unique and use this a user id in the Database. Like this if a user is signed in, his/her email can be retrieved and hashed to gain acces to the database.
+
+A weakness is that a hashfucntion can return a similar hash for another email adress, but this flaw is accepter for now.
 
 *ListView Issues*
 
+Because FireBase is asynchronous it can sometimes be a pain in the bottom to make onDataChange requests directly visible in a ListView.
+I found out FireBaseListAdapters can be used in Android which solve this automatically. I had to use object for this however and so I did. I feel I master objects now:).
 
 **Time**
 
 Initially the plan was to set a weakly deadline on tasks and have a scoreboard where groupmembers would gain point (or lose them) on not making their cleaning deadline. Although this could be implemented I had to spend to much time on fixing asynchronous problems. 
 It is possible to set reminders and make them run in the background to send users push notifications when the deadline is closing in.
 
-*Defence*
 To make up for this lack of functionality I did make it possible to mark tasks as complete and set a date of completion below it.
 In this way a group can still see if tasks have been done or not and they then punish or reward for it as they choose. A downside is that at the moment every user can check and uncheck a task in every room. Ideally you would want only the user responsible for his or her task to be able to check it. To avoid possible jokes of teammates.
 
