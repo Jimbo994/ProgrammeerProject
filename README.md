@@ -4,6 +4,8 @@ UvA Programmeerproject: Android App<br>
 February 2017<br>
 Jim Boelrijk<br>
 
+Copyright © 2017 Jimbo994
+
 It is a well known fact that every student living in a student house has a problem with cleaning.
 It is hard to keep track of who is doing what in the house. Because of this students tend to neglect
 their cleaning responsibilities. With the new app Clean Student this is no more! 
