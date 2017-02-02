@@ -12,7 +12,35 @@ can be assigned to members of the group. In these respective rooms a list of tas
 
 ### Detailed overview
 
+**Log In**
+
+*LogInActivity*
+
+*RegisterActivity*
+
+*PasswordRecoveryActivity*
+
+**My Account**
+
+*MyAccountActivity*
+
+*EditMyAccountActivity*
+
+**Main functionality**
+
+*MakeGroupActivity*
+
+*MyGroupsActivity*
+
+*RoomActivity*
+
+*TaskActivity*
+
 ## Challenges during development
+
+**FireBase Asynchronousity**
+
+**Time**
 
 ## Defend decisions
 
