@@ -30,7 +30,16 @@ In this activity, a user can fill in a email. If this email is a previously regi
 
 *MakeGroupActivity*
 
-This Activity contains the 
+In this Activity a user can create a new group. He/She can give a name to a group and by clicking a floating action button a user can add members in a dialog. The user needs to fill in a email and nickname of a future member. This is then saved to a ArrayList which can be seen in a ListView. OnLongItem Clicking a member in the ListView the user can still edit/remove a future member in case a typo was made.
+On Clicking save the group is created. This process contains several steps.
+Firstly a unique groupid is created by hashing the email of the currently signed in user and adding a timestamp to it.
+Then the groupid and name is saved under the current user in FireBase. The group is also written in FireBase under groups.
+
+Secondly all invited members that were stored in a ArrayList need to get acces to Firebase as well as to the group. To achieve this,
+all users are given authentication to FireBase, then these users are written to the DataBase (Again with hash of email as user id).
+And then they are added to the group as members. And under their userid the group is also stored. Then every user receives an email with an invitation to the Clean Student. The email says that all they need to do is download the app and set up a password clicking a password reset mail. When the users have set a password they can log in and they will automatically see they are member of the group.
+
+Below I will talk about how I achieved this and I will make this text clearer by showing my Database structure.
 
 *MyGroupsActivity*
 
@@ -41,11 +50,11 @@ By LongItemClicking a group in the ListView a user can delete a group. Every mem
 
 *RoomActivity*
 
-In this Activity a user can see a ListView with the rooms that have been added to a group. A room contains the name of the room as well as the groupmember responsible for it. On clicking the floating action button a room can be added in a dialog. In the dialog a name has to be filled in and a groupmember has to be selected from a spinner. On LongItemClick a room can be deleted. Again this can be done by all members in the group. on ItemClick the content of the room that has been clicked can be seen in TaskActivity. On clicking the return arrow a user can return to <i>MyGroupsActivity</i>.
+In this Activity a user can see a ListView with the rooms that have been added to a group. A room contains the name of the room as well as the groupmember responsible for it. On clicking the floating action button a room can be added in a dialog. In the dialog a name has to be filled in and a groupmember has to be selected from a spinner. On clicking add, the room is written to FireBase. On LongItemClick a room can be deleted. Again this can be done by all members in the group. on ItemClick the content of the room that has been clicked can be seen in TaskActivity. On clicking the return arrow a user can return to <i>MyGroupsActivity</i>.
 
 *TaskActivity*
 
-In This Activity a user can see a ListView with the tasks that have to be done in room. On Clicking the floating action button a new task can be added. OnLongItemClick on a task in the ListView, the task can be edited or deleted. On clicking the Checkbox next to task a user can mark a task as completed. On Clicking a checkbox a date appears below the task to mark when the task was done.
+In This Activity a user can see a ListView with the tasks that have to be done in room. On Clicking the floating action button a new task can be added to FireBase. OnLongItemClick on a task in the ListView, the task can be edited or deleted. On clicking the Checkbox next to task a user can mark a task as completed. On Clicking a checkbox a date appears below the task to mark when the task was done.
 At the moment all users can click all checkboxes. On clicking the return arrow a user can return to <i>RoomActivity</i>.
 
 **My Account**
@@ -63,13 +72,28 @@ Given the time the choice was not to do this.
 
 ## Challenges during development
 
+**DataBase Structure**
+
+<img src="/docs/DataBaseStructure.png" width="350">
+
+
+
+
 **FireBase Asynchronousity**
 
-**DataBase Structure**
+*MakeGroupActivity*
+
+*ListView Issues*
+
 
 **Time**
 
-## Defend decisions
+Initially the plan was to set a weakly deadline on tasks and have a scoreboard where groupmembers would gain point (or lose them) on not making their cleaning deadline. Although this could be implemented I had to spend to much time on fixing asynchronous problems. 
+It is possible to set reminders and make them run in the background to send users push notifications when the deadline is closing in.
+
+*Defence*
+To make up for this lack of functionality I did make it possible to mark tasks as complete and set a date of completion below it.
+In this way a group can still see if tasks have been done or not and they then punish or reward for it as they choose. A downside is that at the moment every user can check and uncheck a task in every room. Ideally you would want only the user responsible for his or her task to be able to check it. To avoid possible jokes of teammates.
 
 
 
