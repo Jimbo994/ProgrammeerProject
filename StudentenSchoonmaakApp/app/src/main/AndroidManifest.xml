@@ -7,11 +7,11 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/clean_logo"
-        android:label="@string/appnaam"
+        android:label="@string/cleanstudent"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".login.LoginActivity"
-            android:label="Inloggen">
+            android:label="@string/cleanstudent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
