@@ -210,6 +210,7 @@ public class RoomActivity extends AppCompatActivity {
         mDatabase_for_members.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                mMembers.clear();
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
                     mMembers.add(String.valueOf(ds.getValue()));
                 }
@@ -241,11 +242,16 @@ public class RoomActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(mRoomField.getText().toString())) {
             mRoomField.setError(getString(R.string.vulkamerin));
             result = false;
+        } if (mRoomField.getText().toString().contains(".")){
+            mRoomField.setError(getString(R.string.kamermaggeen));
+            result = false;
         } else {
             mRoomField.setError(null);
         }
         return result;
     }
+
+
 
     // Finishes activity on navigate back button click.
     public boolean onSupportNavigateUp(){

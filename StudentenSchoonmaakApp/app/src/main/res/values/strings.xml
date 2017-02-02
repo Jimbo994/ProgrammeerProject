@@ -91,4 +91,6 @@
     <string name="kamerph">Kamer: %s</string>
     <string name="verantwoordelijkph">Verantwoordelijk: %s</string>
     <string name="appnaam">Studenten Schoonmaak app</string>
+    <string name="kamermaggeen">Kamer mag geen . bevatten</string>
+    <string name="taakmaggeen">Taak mag geen . bevatten</string>
 </resources>

@@ -196,6 +196,9 @@ public class TaskActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(edittext.getText().toString())) {
             edittext.setError(getString(R.string.vultaakin));
             result = false;
+        } if (mTaskField.getText().toString().contains(".")){
+                mTaskField.setError(getString(R.string.taakmaggeen));
+                result = false;
         } else {
             edittext.setError(null);
         }
