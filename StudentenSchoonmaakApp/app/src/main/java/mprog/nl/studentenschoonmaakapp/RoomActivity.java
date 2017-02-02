@@ -177,15 +177,12 @@ public class RoomActivity extends AppCompatActivity {
         // Initialize dialog and set View.
         final Dialog dialog = new Dialog(RoomActivity.this);
         dialog.setContentView(R.layout.custom_dialog_add_room);
-
-        // Edittext in dialog.
+        // EditText in dialog.
         mRoomField = (EditText) dialog.findViewById(R.id.field_add_room);
-
         // Buttons in dialog.
         Button save = (Button) dialog.findViewById(R.id.add_room_button);
         Button cancel = (Button) dialog.findViewById(R.id.cancel_add_room_button);
-
-        // Spinnner.
+        // Spinner.
         mSpinner = (Spinner) dialog.findViewById(R.id.member_spinner);
 
         // Retrieve group members from database to fill Spinner with, then setAdapter.
@@ -200,10 +197,8 @@ public class RoomActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });
-
         // Inflate dialog.
         dialog.show();
-
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -211,7 +206,6 @@ public class RoomActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

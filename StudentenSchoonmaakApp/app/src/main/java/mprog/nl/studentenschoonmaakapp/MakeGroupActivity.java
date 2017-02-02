@@ -110,7 +110,6 @@ public class MakeGroupActivity extends BaseActivity implements View.OnClickListe
                 addMember();
             }
         });
-
         setListViewClickListener();
     }
 
@@ -164,21 +163,16 @@ public class MakeGroupActivity extends BaseActivity implements View.OnClickListe
         mMemberListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             public boolean onItemLongClick(AdapterView<?> arg0, View v,
                                            final int index, long arg3) {
-
                 final Dialog dialog = new Dialog(MakeGroupActivity.this);
                 dialog.setContentView(R.layout.custom_dialog_edit_member);
-
                 // EditText in dialog.
                 mNameField = (EditText) dialog.findViewById(R.id.field_edit_member_name);
                 mEmailField = (EditText) dialog.findViewById(R.id.field_edit_member_email);
-
                 // Buttons in dialog.
                 Button edit = (Button) dialog.findViewById(R.id.edit_member_button);
                 Button remove = (Button) dialog.findViewById(R.id.remove_member_button);
-
                 //inflate dialog.
                 dialog.show();
-
                 // Edit clicked member in ArrayList.
                 edit.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -199,8 +193,7 @@ public class MakeGroupActivity extends BaseActivity implements View.OnClickListe
                         mArrayAdapter.notifyDataSetChanged();
                         dialog.dismiss();
                     }
-                });
-                return true;
+                }); return true;
             }
         });
     }

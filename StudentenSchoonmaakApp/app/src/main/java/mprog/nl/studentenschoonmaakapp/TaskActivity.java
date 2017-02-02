@@ -108,10 +108,8 @@ public class TaskActivity extends AppCompatActivity {
                 final String task_name = task.getTask();
                 final Dialog dialog = new Dialog(TaskActivity.this);
                 dialog.setContentView(R.layout.custom_dialog_edit_tasks);
-
                 // EditText in dialog.
                 mEditField = (EditText) dialog.findViewById(R.id.field_edit);
-
                 // Buttons in dialog.
                 Button edit = (Button) dialog.findViewById(R.id.edit_button);
                 Button remove = (Button) dialog.findViewById(R.id.remove_button);
@@ -140,8 +138,7 @@ public class TaskActivity extends AppCompatActivity {
                             dialog.dismiss();
                         }
                     }
-                });
-                return true;
+                }); return true;
             }
         });
     }
