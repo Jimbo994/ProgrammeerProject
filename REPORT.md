@@ -46,7 +46,7 @@ Below I will talk about how I achieved this and I will make this text clearer by
 In this navigationdrawer activity a user can see a ListView which shows all groups this user is part of. Through navigation drawer
 a user can go to his account details in <i>MyAccountActivity</i> or can sign out his account and go back to <i>LogInActivity</i>.
 On click a floating action button a user can create a new group by being directed to <i>MakeGroupActivity</i>.
-By LongItemClicking a group in the ListView a user can delete a group. Every member of a group can delete a group, which might seem risky but I will explain my choice later on. On ItemClick on a group a user can see the contents of this group in <i>RoomActivity</i>.
+By LongItemClicking a group in the ListView a user can delete a group. Every member of a group can delete a group. On ItemClick on a group a user can see the contents of this group in <i>RoomActivity</i>.
 
 *RoomActivity*
 
