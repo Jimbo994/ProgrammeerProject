@@ -74,4 +74,10 @@
     <string name="vultaakin">Vul een Taak in</string>
     <string name="wachtopinlog">Inloggen...</string>
     <string name="inloggenmislukt">Inloggen mislukt.</string>
+    <string name="email_verzonden">E-mail verzonden.</string>
+    <string name="iets_misgegaan">Er is iets misgegaan.</string>
+    <string name="vulbijnaamin">Vul bijnaam in.</string>
+    <string name="ubentalingelogd">U bent al ingelogd met deze email</string>
+    <string name="vulgroepsnaamin">Vul groepsnaam in.</string>
+    <string name="voegledentoe">U moet eerst leden toevoegen.</string>
 </resources>

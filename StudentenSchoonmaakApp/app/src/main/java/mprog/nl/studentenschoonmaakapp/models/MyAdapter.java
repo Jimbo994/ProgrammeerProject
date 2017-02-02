@@ -17,7 +17,6 @@ import java.util.ArrayList;
 
 /**
  * Adapter for MakeGroupActivity.
- *
  */
 
 public class MyAdapter extends BaseAdapter {

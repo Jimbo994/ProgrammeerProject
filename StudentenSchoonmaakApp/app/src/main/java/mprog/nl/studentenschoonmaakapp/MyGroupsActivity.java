@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -54,6 +55,8 @@ public class MyGroupsActivity extends AppCompatActivity
     String hash_current_user;
     String email_current_user;
 
+    private FirebaseListAdapter mAdapter;
+
     Toolbar toolbar;
 
     @Override
@@ -69,6 +72,7 @@ public class MyGroupsActivity extends AppCompatActivity
         if (auth.getCurrentUser() != null){
             email_current_user = auth.getCurrentUser().getEmail();
             hash_current_user = String.valueOf((email_current_user.hashCode()));
+            Toast.makeText(this, hash_current_user, Toast.LENGTH_SHORT).show();
         } else{
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(this, LoginActivity.class));
@@ -93,9 +97,8 @@ public class MyGroupsActivity extends AppCompatActivity
 
         inflateNavigationDrawer();
         setListView();
-        setListViewClickListeners();
+        mAdapter.notifyDataSetChanged();
     }
-
 
     private void inflateNavigationDrawer() {
         //  Inflate navigation drawer
@@ -116,21 +119,20 @@ public class MyGroupsActivity extends AppCompatActivity
     }
 
     private void setListView() {
-        // FirebaseListAdapter that loads groups of a user.
-        FirebaseListAdapter<Group> mAdapter2 = new FirebaseListAdapter<Group>
+        // FireBaseListAdapter that loads groups of a user.
+        mAdapter = new FirebaseListAdapter<Group>
                 (this, Group.class, R.layout.custom_listview_groups, mDatabase) {
             @Override
             protected void populateView(View v, Group model, int position) {
                 TextView group = (TextView) v.findViewById(R.id.group_name);
-                group.setText(model.getGroupname());
+                String group_name = model.getGroupname();
+                group.setText(group_name);
             }
         };
 
         // Set adapter on ListView.
-        mGroups.setAdapter(mAdapter2);
-    }
+        mGroups.setAdapter(mAdapter);
 
-    private void setListViewClickListeners() {
         // OnItemClickListener Starts intent RoomActivity and sends through clicked groupId and name.
         mGroups.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -161,6 +163,7 @@ public class MyGroupsActivity extends AppCompatActivity
                     @Override
                     public void onClick(View view) {
                         deleteGroup(group_id);
+                        mAdapter.notifyDataSetChanged();
                         dialog.dismiss();
                     }
                 });
@@ -173,7 +176,6 @@ public class MyGroupsActivity extends AppCompatActivity
                 dialog.show();
                 return true;
             }
-
         });
     }
 

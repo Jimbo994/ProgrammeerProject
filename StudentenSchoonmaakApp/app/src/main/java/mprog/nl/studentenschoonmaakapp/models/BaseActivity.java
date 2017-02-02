@@ -12,7 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import mprog.nl.studentenschoonmaakapp.R;
 
-// This class contains functions to inflate Progressdialog, and dismisses when done.
+// This class contains functions to inflate ProgressDialog, and dismisses when done.
 
 public class BaseActivity extends AppCompatActivity {
 
