@@ -85,7 +85,8 @@ public class RoomActivity extends AppCompatActivity {
                 child(groupId).child("membernames");
 
         setListView();
-        setListViewClickListeners();
+        setListViewOnItemClickListener();
+        setListViewOnLongItemClickListener();
     }
 
     private void setListView() {
@@ -105,7 +106,7 @@ public class RoomActivity extends AppCompatActivity {
         mRooms.setAdapter(mAdapter);
     }
 
-    private void setListViewClickListeners() {
+    private void setListViewOnItemClickListener() {
         // OnItemClickListener starts TaskActivity and sends through room, DatabaseReference,
         // groupId and groupName.
         mRooms.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -121,6 +122,10 @@ public class RoomActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    private void setListViewOnLongItemClickListener() {
         // OnItemLongClickListener inflates dialog where user can delete rooms.
         mRooms.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -135,7 +140,6 @@ public class RoomActivity extends AppCompatActivity {
                 // Buttons in dialog.
                 Button remove = (Button) dialog.findViewById(R.id.remove_button);
                 Button cancel = (Button) dialog.findViewById(R.id.cancel_button);
-
                 // Inflate dialog.
                 dialog.show();
 

@@ -84,7 +84,6 @@ public class TaskActivity extends AppCompatActivity {
     private void setListView() {
 
         mTasks = (ListView) findViewById(R.id.tasks_listview);
-
         // initialize FirebaseListAdapters that retrieves and shows Task object form mDatabase.
         FirebaseListAdapter<Task> mAdapter = new FirebaseListAdapter<Task>(this, Task.class, R.layout.custom_listview_tasks, mDatabase) {
             @Override
@@ -98,22 +97,19 @@ public class TaskActivity extends AppCompatActivity {
                 date.setText(model.getTimestamp());
             }
         };
-
         mTasks.setAdapter(mAdapter);
     }
 
     // Sets onItemLongClickListener on ListView.
     private void setListViewClickListener() {
-
         mTasks.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Task task = (Task) mTasks.getItemAtPosition(i);
                 final String task_name = task.getTask();
-
                 final Dialog dialog = new Dialog(TaskActivity.this);
                 dialog.setContentView(R.layout.custom_dialog_edit_tasks);
 
-                // Edittext in dialog.
+                // EditText in dialog.
                 mEditField = (EditText) dialog.findViewById(R.id.field_edit);
 
                 // Buttons in dialog.
@@ -132,7 +128,6 @@ public class TaskActivity extends AppCompatActivity {
                         dialog.dismiss();
                     }
                 });
-
                 edit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

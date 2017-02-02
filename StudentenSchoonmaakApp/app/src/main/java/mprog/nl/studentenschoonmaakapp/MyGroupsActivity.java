@@ -95,10 +95,11 @@ public class MyGroupsActivity extends AppCompatActivity
 
         inflateNavigationDrawer();
         setListView();
-        setListViewClickListeners();
+        setListViewOnItemClickListener();
+        setListViewOnLongItemClickListener();
     }
 
-       private void inflateNavigationDrawer() {
+    private void inflateNavigationDrawer() {
         //  Inflate navigation drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -131,7 +132,7 @@ public class MyGroupsActivity extends AppCompatActivity
         mGroups.setAdapter(mAdapter);
     }
 
-    private void setListViewClickListeners() {
+    private void setListViewOnItemClickListener() {
         // OnItemClickListener Starts intent RoomActivity and sends through clicked groupId and name.
         mGroups.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -143,14 +144,15 @@ public class MyGroupsActivity extends AppCompatActivity
                 startActivity(groupdetail);
             }
         });
+    }
 
+    private void setListViewOnLongItemClickListener() {
         // OnItemLongClickListener inflates dialog where user can delete his/her group.
         mGroups.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Group group = (Group) mGroups.getItemAtPosition(i);
                 final String group_id = group.getGroupId();
-
                 final Dialog dialog = new Dialog(MyGroupsActivity.this);
                 dialog.setContentView(R.layout.custom_dialog_remove_group);
 
