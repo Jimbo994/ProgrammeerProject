@@ -90,4 +90,5 @@
     <string name="naamvb">Naam:</string>
     <string name="kamerph">Kamer: %s</string>
     <string name="verantwoordelijkph">Verantwoordelijk: %s</string>
+    <string name="appnaam">Studenten Schoonmaak app</string>
 </resources>

@@ -63,12 +63,15 @@ public class TaskActivity extends AppCompatActivity {
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(room);
 
         // Getting data from intent.
         groupId = getIntent().getStringExtra("groepid");
         groupName = getIntent().getStringExtra("groepnaam");
         ref = getIntent().getStringExtra("ref");
         room = getIntent().getStringExtra("kamer");
+
+        getSupportActionBar().setTitle(room);
 
         // Initialize DatabaseReference.
         mDatabase = FirebaseDatabase.getInstance().getReference().child("groups").child(groupId).child("tasks").child(room);

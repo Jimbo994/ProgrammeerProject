@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
@@ -83,6 +84,11 @@ public class RoomActivity extends AppCompatActivity {
         mDatabase_for_members = FirebaseDatabase.getInstance().getReference().child("groups").
                 child(groupId).child("membernames");
 
+        setListView();
+        setListViewClickListeners();
+    }
+
+    private void setListView() {
         // FireBaseListAdapter that loads rooms of group.
         mAdapter = new FirebaseListAdapter<Room>(this, Room.class, R.layout.custom_listview_room, mDatabase) {
             @Override
@@ -97,7 +103,9 @@ public class RoomActivity extends AppCompatActivity {
 
         // setAdapter on Listview.
         mRooms.setAdapter(mAdapter);
+    }
 
+    private void setListViewClickListeners() {
         // OnItemClickListener starts TaskActivity and sends through room, DatabaseReference,
         // groupId and groupName.
         mRooms.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -117,8 +125,8 @@ public class RoomActivity extends AppCompatActivity {
         mRooms.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                final String room_name = mRooms.getItemAtPosition(i).toString();
+                Room room = (Room) mRooms.getItemAtPosition(i);
+                final String room_name = room.getRoom();
 
                 // Initialize dialog and set View.
                 final Dialog dialog = new Dialog(RoomActivity.this);
@@ -146,31 +154,18 @@ public class RoomActivity extends AppCompatActivity {
                 });
                 mAdapter.notifyDataSetChanged();
                 return true;
-
             }
         });
     }
 
     //  Removes a room from database.
-    private void removeRoom(final String room_name){
+    private void removeRoom(final String room_name) {
         // Remove room under tasks.
         DatabaseReference ref_tasks = FirebaseDatabase.getInstance().getReference().child("groups").child(groupId).child("tasks");
         ref_tasks.child(room_name).removeValue();
 
         // Remove room under rooms.
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()){
-                    String current_room_name = ds.getValue(String.class);
-                    if (current_room_name.equals(room_name)){
-                        ds.getRef().removeValue();
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        });
+        mDatabase.child(room_name).removeValue();
     }
 
     // writes a room to database.
@@ -198,7 +193,6 @@ public class RoomActivity extends AppCompatActivity {
                 }
                 mSpinner.setAdapter(mMemberAdapter);
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });

@@ -35,9 +35,7 @@ import mprog.nl.studentenschoonmaakapp.models.Group;
 import mprog.nl.studentenschoonmaakapp.models.User;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -164,7 +162,7 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
                 final Dialog dialog = new Dialog(MakeGroupActivity.this);
                 dialog.setContentView(R.layout.custom_dialog_edit_member);
 
-                // Edittext in dialog.
+                // EditText in dialog.
                 mNameField = (EditText) dialog.findViewById(R.id.field_edit_member_name);
                 mEmailField = (EditText) dialog.findViewById(R.id.field_edit_member_email);
 
@@ -271,14 +269,9 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
         // DatabaseReference.
         DatabaseReference userref = FirebaseDatabase.getInstance().getReference().child("users").child(hash_email_current_user).child("groups");
 
-        // Create new Group object.
+        // Create new Group object and write to DataBase.
         Group group2 = new Group(group, mGroupId);
-
-        //Map Object and write to Database under users.
-        Map<String, Object> postvalues2 = group2.toMap();
-        Map<String, Object> childUpdates2 = new HashMap<>();
-        childUpdates2.put(mGroupId, postvalues2);
-        userref.updateChildren(childUpdates2);
+        userref.child(mGroupId).setValue(group2);
     }
 
     private void createGroupunderGroups(String hash_email_current_user, String group) {
@@ -355,7 +348,6 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
         String key = groupref2.push().getKey();
         groupref2.child("members").child(key).setValue(hash_email);
         groupref2.child("membernames").child(key).setValue(u.getName());
-
         return new AsyncResult<>();
     }
 
@@ -363,19 +355,7 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
     // with a invitation text.
     private Future<?> SendMail(User u) {
         String email = u.getEmail();
-        mAuth.sendPasswordResetEmail(email)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(MakeGroupActivity.this, R.string.email_verzonden,
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(MakeGroupActivity.this, R.string.iets_misgegaan,
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+        mAuth.sendPasswordResetEmail(email);
         return new AsyncResult<>();
     }
 
@@ -385,15 +365,12 @@ public class MakeGroupActivity extends AppCompatActivity implements View.OnClick
         if (TextUtils.isEmpty(mEmailField.getText().toString())) {
             mEmailField.setError(getString(R.string.vulemailin));
             result = false;
-
-        }else if (TextUtils.equals(mEmailField.getText().toString(), mEmail_current_user)){
+        } else if (TextUtils.equals(mEmailField.getText().toString(), mEmail_current_user)){
             mEmailField.setError(getString(R.string.ubentalingelogd));
             result = false;
-        }
-        else {
+        } else {
             mEmailField.setError(null);
-        }
-        if (TextUtils.isEmpty(mNameField.getText().toString())) {
+        } if (TextUtils.isEmpty(mNameField.getText().toString())) {
             mNameField.setError(getString(R.string.vulbijnaamin));
             result = false;
         } else {

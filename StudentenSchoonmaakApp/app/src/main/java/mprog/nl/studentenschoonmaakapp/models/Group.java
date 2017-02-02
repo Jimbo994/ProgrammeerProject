@@ -6,11 +6,7 @@
 
 package mprog.nl.studentenschoonmaakapp.models;
 
-import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This class contains a Group Object. This object contains the information of a Group,
@@ -31,20 +27,11 @@ public class Group {
         Group.groupId = groupId;
     }
 
-    @Exclude
-    public Map<String, Object> toMap() {
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("groupid", groupId);
-        result.put("groupname", groupName);
-
-        return result;
-    }
-
-    public String getGroupid() {
+    public String getGroupId() {
         return Group.groupId;
     }
 
-    public String getGroupname(){
+    public String getGroupName(){
         return Group.groupName;
     }
 }
