@@ -8,7 +8,7 @@ can be assigned to members of the group. In these respective rooms a list of tas
 ## Technical Design
 
 ### High level overview
-<img src="/docs/HighLevelOverview.png" width="350">
+<img src="/docs/HighLevelOverview.png" width="500">
 
 ### Detailed overview
 
